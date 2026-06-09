@@ -4,9 +4,9 @@
 import json
 import ollama
 
-from tools import score_signal, summarize_item, synthesize_digest, clean_llm_response, load_jsonl
+from tools import score_signal, summarize_item, synthesize_digest, clean_llm_response, load_jsonl, write_items, normalize_item_id
 from tools import OLLAMA_MODEL, ITEMS_FILE, SUMMARIES_FILE, SIGNALS_FILE, DIGEST_FILE
-from fetch_gmail import main as fetch_gmail
+from fetch_hn import fetch_top_stories
 
 MAX_STEPS = 40
 MAX_HISTORY_TURNS = 6  # recent assistant/observation pairs kept for recall
@@ -31,7 +31,7 @@ Actions (tool_args shown; use {} when noted):
 
 Every user message includes Current progress (counts, unscored ids, ids needing summary, Suggested next action). Follow Suggested next action when present. Do not invent item_ids.
 
-For score_signal and summarize_item, tool_args: {} is fine — Python picks the next id from Current progress. You may pass {"item_id": "gmail_..."} to choose explicitly; copy ids exactly from progress.
+For score_signal and summarize_item, tool_args: {} is fine — Python picks the next id from Current progress. You may pass {"item_id": "48446639"} to choose explicitly; copy ids exactly from progress.
 
 Respond with ONLY valid JSON (no markdown, no extra text):
 {
@@ -63,9 +63,9 @@ def json_to_python_items():
   """items.jsonl → dict keyed by item_id."""
   items = {}
   for item in load_jsonl(ITEMS_FILE):
-    item_id = item.get("item_id")
+    item_id = normalize_item_id(item.get("item_id"))
     if item_id:
-      items[item_id] = item
+      items[item_id] = {**item, "item_id": item_id}
   return items
 
 
@@ -77,21 +77,18 @@ def signals_by_id():
   """signals.jsonl → {item_id: signal}; last row wins if duplicated."""
   by_id = {}
   for signal in load_jsonl(SIGNALS_FILE):
-    item_id = signal.get("item_id")
+    item_id = normalize_item_id(signal.get("item_id"))
     if item_id:
       by_id[item_id] = signal
   return by_id
 
 
 def summarized_ids():
-  """Set of item_ids that have a row in summaries.jsonl."""
-
-  ids = set()
-  for row in load_jsonl(SUMMARIES_FILE):
-    item_id = row.get("item_id")
-    if item_id:
-      ids.add(item_id)
-  return ids
+  return {
+    normalize_item_id(row.get("item_id"))
+    for row in load_jsonl(SUMMARIES_FILE)
+    if row.get("item_id")
+  }
 
 
 
@@ -174,15 +171,11 @@ def record_turn(turn_history, assistant_content, observation):
     del turn_history[:-MAX_HISTORY_TURNS] # everything except last 6 turns
 
 
-def item_id_from_tool_args(tool_args):
-  if isinstance(tool_args, dict):
-    return tool_args.get("item_id") or tool_args.get("id")
-  return None
-
-
 def resolve_item_id(tool_args, allowed_ids, empty_error):
   """Use explicit item_id from the LLM, or auto-pick the first allowed id."""
-  item_id = item_id_from_tool_args(tool_args)
+  item_id = None
+  if isinstance(tool_args, dict):
+    item_id = normalize_item_id(tool_args.get("item_id") or tool_args.get("id"))
   if item_id:
     return item_id, None
   if not allowed_ids:
@@ -240,7 +233,12 @@ def run_tool(action, tool_args):
 
       item = items[item_id]
       result = summarize_item(
-        item["item_id"], item["sender"], item["subject"], item["body"], item["source"]
+        item["item_id"],
+        item["sender"],
+        item["subject"],
+        item["body"],
+        item["source"],
+        item.get("url") or "",
       )
       return f"{result}"
 
@@ -272,6 +270,13 @@ def run_tool(action, tool_args):
 
     case _:
       return f"Unknown action: {action}"
+
+
+
+
+
+
+
 
 
 def react_loop():
@@ -325,7 +330,11 @@ def react_loop():
 
 def main():
   clear_daily_files()
-  fetch_gmail()
+
+  print("Fetching Hacker News…")
+  hn_items = fetch_top_stories() or []
+
+  write_items(hn_items)
   react_loop()
   
 
