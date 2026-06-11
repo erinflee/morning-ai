@@ -1,61 +1,110 @@
 # Morning AI research agent
 
-**Vision:** A junior-analyst-style research agent that scans mixed sources, filters noise, summarizes what matters, highlights trends, and drops everything into one structured digest — ~10 minutes to read instead of checking 20 tabs.
+**Vision:** A personal **robotics morning scan** — mixed sources, short summaries, links to dig deeper. Built as a student portfolio project (APIs, LLMs, multi-agent pipeline, ReAct orchestrator).
 
-**Today:** Gmail newsletters → score → summarize → synthesize → Streamlit.  
-**Next:** More sources, smarter ranking, public deploy via GitHub Pages, optional second agent for counterpoints.
+**Today:** HN + arXiv + GitHub → score → summarize all high-signal → synthesize → GitHub Pages.  
+**For:** Staying oriented in robotics tech without reading 20 tabs — **not** replacing papers or expert feeds.
+
+---
+
+## Quality bar
+
+| Goal | What success looks like |
+|------|-------------------------|
+| **Learn agentic systems** | Multi-source fetch, tool dispatch, ReAct loop, scheduled daily run |
+| **Stay aware of robotics** | ~10 things worth noticing: news, papers to maybe open, repos to maybe clone |
+| **Not the goal** | Authoritative research digest, peer review, or "read this instead of the paper" |
+
+Keep the pipeline **simple**: score noise, summarize everything high-signal, prompts tuned for a scan — not domain-expert polish.
 
 ---
 
 ## Ultimate goal
 
-One useful morning report built from **many sources**, not one inbox:
+One useful morning report built from **many sources**, not one feed:
 
-| Source (planned) | Status |
-|------------------|--------|
-| Newsletters (Gmail) | ✅ `fetch_gmail.py` |
-| GitHub trending repos | Planned |
-| arXiv (cs.AI / cs.LG) | Planned |
-| Hacker News | Planned |
+| Source | Status |
+|--------|--------|
+| Hacker News | ✅ `fetch_hn.py` |
+| arXiv (cs.RO, cs.CV, cs.AI, cs.LG, cs.CL, cs.SY, cs.MA) | ✅ `fetch_arxiv.py` |
+| GitHub trending repos | ✅ `fetch_github.py` |
+| Newsletters (Gmail) | Removed — may return later |
 | AI subreddits | Planned |
 | X/Twitter lists, company blogs | Later |
 
-The agent should **rank by relevance and novelty**, summarize (not just forward links), and merge overlapping stories across sources. Longer term: a **second agent** (`challenge_digest`) that pushes back on conclusions and surfaces opposing viewpoints.
+The agent **filters noise**, summarizes high-signal items with links, and keeps the daily read scannable. Optional later: dedup, GitHub releases feed, report history.
+
+**Public reader:** Static site in `docs/` — see [`UI_PLAN.md`](UI_PLAN.md).
 
 ---
 
 ## Architecture (current)
 
 ```text
-fetch_gmail → items.jsonl                    (bootstrap — Python, before loop)
+agent.py main():
+  clear_daily_files()          # truncate summaries, signals, report (not items)
+  fetch_all_items()            # HN + arXiv + GitHub
+  write_items()                # → items.jsonl
+  react_loop()                 # ReAct until finish
 
-before_agent.py (hardcoded loop) → score_signal → summarize_item (high-signal only) 
-                                 → synthesize_digest → digest.jsonl
+fetch_hn.py:
+  HN API → 24h filter → Groq curation (≤6) → item dicts
+
+fetch_arxiv.py:
+  arXiv API → today's batch → Groq curation (3–4) → item dicts
+
+fetch_github.py:
+  GitHub search → Groq curation (≤4) → item dicts
+
 agent.py ReAct loop:
-  orchestrator (Ollama qwen2.5:3b) → pick tool → run_tool → observation → repeat until finish
-  progress rebuilt from JSONL each turn (no items_as_blurbs step)
+  orchestrator (Groq llama-3.3-70b) → pick tool → run_tool → observation → repeat until finish
+  progress rebuilt from JSONL each turn
 
 run_tool dispatches to tools.py:
-  score_signal      → Ollama — high/low signal → signals.jsonl
-  summarize_item    → Groq (llama-3.3-70b) — summary + topics → summaries.jsonl
-  synthesize_digest → Groq — merged report → digest.jsonl
-  finish            → blocked unless digest.jsonl has a row (or no high-signal items)
+  score_signal      → Groq — high/low signal → signals.jsonl
+  summarize_item    → Groq analyst + Groq reviewer → summaries.jsonl (all high-signal)
+  synthesize_report → Groq — merged report → report.jsonl
+  finish            → blocked unless report.jsonl has a row (or no high-signal items)
 
-app.py → load_jsonl(DIGEST_FILE) → Streamlit UI (local)
+scripts/export_site.py → docs/report.json (last report row, public-safe fields)
 
-launchd (8:00 AM) → scripts/daily_agent.sh → agent.py
+launchd (8:00 AM) → scripts/daily_agent.sh → agent.py → export_site.py
 ```
 
 **Two layers of LLM reasoning**
 
 | Layer | Where | Model | Job |
 |-------|-------|-------|-----|
-| **Orchestrator** | `react_loop` in `agent.py` | Ollama `qwen2.5:3b` | Workflow — which tool, which `item_id`, when to synthesize/finish |
-| **Specialists** | `tools.py` | Ollama (score) + Groq (summarize/synthesize) | Judgment — noise filter, per-item summary, digest synthesis |
+| **Orchestrator** | `react_loop` in `agent.py` | Groq `llama-3.3-70b` (`GROQ_API_KEY5`) | Workflow — which tool, which `item_id`, when to synthesize/finish |
+| **Specialists** | `tools.py` + `fetch_*.py` | Groq `llama-3.3-70b` | Judgment — source curation, noise filter, per-item summary, report synthesis |
 
 Python (`run_tool`) runs tools, enforces phase guards, and returns **observations** to the orchestrator. `format_progress_state()` injects counts, unscored ids, and suggested next action each turn.
 
-**Backup:** `before_agent.py` — hardcoded `for` loop (no ReAct), useful for debugging.
+**Prompts:** text files in `prompts/` loaded via `load_prompt()`:
+
+| Prompt | Used by |
+|--------|---------|
+| `build_message.txt` | Orchestrator |
+| `hacker_news_system.txt` | `fetch_hn.py` |
+| `arxiv_system.txt` | `fetch_arxiv.py` |
+| `github_system.txt` | `fetch_github.py` |
+| `score_signal_system.txt` | `score_signal` |
+| `analyst.txt`, `reviewer.txt` | `summarize_item` |
+| `synthesize_report.txt` | `synthesize_report` |
+
+---
+
+## Groq API keys
+
+| Env var | Role |
+|---------|------|
+| `GROQ_API_KEY1` | HN Curator (`fetch_hn.py`) |
+| `GROQ_API_KEY2` | arXiv Curator (`fetch_arxiv.py`) |
+| `GROQ_API_KEY3` | GitHub Curator (`fetch_github.py`) |
+| `GROQ_API_KEY4` | Research Desk — scorer, analyst, reviewer, editor (`tools.py`) |
+| `GROQ_API_KEY5` | Orchestrator (`agent.py`) |
+
+Optional: `GITHUB_TOKEN` in `.env` for higher GitHub API rate limits.
 
 ---
 
@@ -63,14 +112,15 @@ Python (`run_tool`) runs tools, enforces phase guards, and returns **observation
 
 | File | Contents |
 |------|----------|
-| `items.jsonl` | Raw sources (`id`, `source`, `subject`, `sender`, `date`, `url`, `body`) |
-| `signals.jsonl` | Per-item noise filter (`id`, `sender`, `high_signal`, `reason`, `trend_hint`) |
-| `summaries.jsonl` | Per-item analyst output (`id`, `sender`, `summary`, `topics`) |
-| `digest.jsonl` | Morning report (`title`, `report`, `themes`, `source_count`) — last line = current |
+| `items.jsonl` | Raw sources (`item_id`, `source`, `subject`, `author`, `url`, `body`) |
+| `signals.jsonl` | Per-item noise filter (`item_id`, `author`, `high_signal`, `reason`) |
+| `summaries.jsonl` | Per-item analyst output (`item_id`, `author`, `subject`, `url`, `summary`, `technical_breakthrough`, `limitations_or_critiques`, `topics`) |
+| `report.jsonl` | Morning report (`title`, `report`, `themes`, `source_count`, `section_urls`, `generated_at`) — last line = current |
+| `docs/report.json` | Exported public snapshot (no raw items) |
 
-Shared helper: `load_jsonl()` in `tools.py` (used by `agent.py`, `app.py`, `synthesize_digest`).
+Shared helper: `load_jsonl()` in `tools.py` (used by `agent.py`, `synthesize_report`).
 
-New fetchers should use the same item shape and distinct `item_id` prefixes (`gmail_…`, `hn_…`, `arxiv_…`).
+**Item id conventions:** HN uses numeric string ids; arXiv uses `arxiv_<id>`; GitHub uses `github_<owner_repo>`.
 
 ---
 
@@ -78,37 +128,58 @@ New fetchers should use the same item shape and distinct `item_id` prefixes (`gm
 
 | Function | Role |
 |----------|------|
+| `fetch_all_items()` | Merge HN + arXiv + GitHub fetchers |
 | `progress_sets()` | Rebuild scored / high-signal / unscored / needs-summary from JSONL |
 | `format_progress_state()` | Human-readable snapshot + suggested next action for orchestrator |
 | `resolve_item_id()` | Explicit `item_id` from LLM, or auto-pick first allowed id |
 | `run_tool(action, tool_args)` | Dispatch + phase guards → `tools.py` |
 | `react_loop()` | Thought → action → observation loop (`MAX_STEPS = 40`) |
-| `main()` | `clear_daily_files()` → `fetch_gmail()` → `react_loop()` |
+| `main()` | `clear_daily_files()` → `fetch_all_items()` → `write_items()` → `react_loop()` |
 
-**Orchestrator actions:** `score_signal`, `summarize_item`, `synthesize_digest`, `finish`
+**Orchestrator actions:** `score_signal`, `summarize_item`, `synthesize_report`, `finish`
 
-**`tool_args`:** `{}` auto-picks next id from progress; or `{"item_id": "gmail_..."}`.
+**`tool_args`:** `{}` auto-picks next id from progress; or `{"item_id": "48446639"}`.
 
 **Workflow rules (prompt + Python guards):**
 
 - Score **all** items before summarizing
-- Summarize every **high-signal** item only
-- `synthesize_digest` only after all high-signal items summarized
-- `finish` only when `digest.jsonl` has a row (or inbox had no high-signal items)
+- Summarize **every** `high_signal` item
+- `synthesize_report` only after all high-signal items summarized
+- `finish` only when `report.jsonl` has a row (or no high-signal items)
 
 ---
 
-## `tools.py` — specialists
+## Source fetchers
 
-| Function | Role |
-|----------|------|
-| `groq_chat()` | Groq API for summarize + synthesize (`GROQ_API_KEY` in `.env`) |
-| `score_signal()` | Ollama JSON filter → append `signals.jsonl` |
-| `summarize_item()` | Groq summary + topics → append `summaries.jsonl` |
-| `synthesize_digest()` | Groq merged digest → append `digest.jsonl` |
-| `clean_text()` / `text_rejection_reason()` | Strip template junk; reject placeholder summaries |
+### `fetch_hn.py`
 
-Prompts use **required keys + concrete JSON example** (not `<...>` placeholders).
+| Step | What |
+|------|------|
+| Fetch | Top story ids from HN Firebase API |
+| Filter | Story type, posted within last 24h |
+| Trim | Top 20 by HN score before Groq |
+| Curate | Groq picks up to **6** stories (`hacker_news_system.txt`) |
+| Body | HN text, or trafilatura article fetch, or title fallback |
+
+### `fetch_arxiv.py`
+
+| Step | What |
+|------|------|
+| Fetch | Latest daily batch (18:00 UTC cadence) across cs.RO/CV/AI/LG/CL/SY/MA |
+| Curate | Groq picks **3–4** papers (`arxiv_system.txt`; `min_pick` / `max_pick`) |
+| Body | Title + abstract |
+
+### `fetch_github.py`
+
+| Step | What |
+|------|------|
+| Search | Topic queries, pushed in last 3 days, stars 10–5000 |
+| Curate | Groq picks up to **4** repos (`github_system.txt`) |
+| Body | README excerpt |
+
+**Structural limitation (not LLM laziness):** GitHub search-by-topic surfaces *recently pushed repos*, not *what matters today*. Groq curation can't fix a weak candidate pool — it picks the best of noisy trending repos. **Future:** switch to **releases** on established repos (Foxglove, ROS packages, etc.) instead of new-repo discovery.
+
+Standalone: `python fetch_hn.py` (or arxiv/github modules) can write `items.jsonl` without running the full agent.
 
 ---
 
@@ -116,84 +187,88 @@ Prompts use **required keys + concrete JSON example** (not `<...>` placeholders)
 
 ### Done
 
-- [x] `fetch_gmail` → `items.jsonl`
-- [x] `score_signal`, `summarize_item`, `synthesize_digest` in `tools.py`
-- [x] Groq for summarize/synthesize; Ollama for score + orchestrator
-- [x] ReAct loop with progress block (no `items_as_blurbs`)
-- [x] Phase guards + `finish` digest check
-- [x] `app.py` — latest digest, title, report, themes
+- [x] Multi-source fetch — HN, arXiv, GitHub in `fetch_all_items()`
+- [x] `agent.py` bootstrap: fetch + write items + ReAct loop
+- [x] `score_signal`, `summarize_item`, `synthesize_report` in `tools.py`
+- [x] All LLM calls on Groq `llama-3.3-70b` (orchestrator, curators, desk)
+- [x] ReAct loop with progress block + phase guards
+- [x] Robotics / embodied AI focus in curator and synthesis prompts
 - [x] Daily schedule — `scripts/daily_agent.sh` + launchd plist
-- [x] End-to-end run verified (9 items → 1 high-signal → digest → Streamlit)
+- [x] Prompts externalized under `prompts/`
+- [x] Gmail pipeline removed
+- [x] GitHub Pages static UI — `docs/` + `scripts/export_site.py` (see [`UI_PLAN.md`](UI_PLAN.md))
+
+### Editorial pipeline (current)
+
+- Fetch caps: **≤6 HN + 3–4 arXiv + ≤4 GitHub** (~13 candidates)
+- Score all → summarize **all high-signal** → synthesize → export to `docs/report.json`
+- Report length follows how many items pass the noise filter (often ~8–10)
+
+### Optional later
+
+- [ ] Replace ReAct orchestrator with deterministic loop (simpler ops)
+- [ ] GitHub **releases** feed instead of topic search
+- [ ] Report history in UI
+- [ ] `fetch_reddit.py` or other sources
 
 ### Next — more sources
 
-- [ ] `fetch_hn.py`, `fetch_arxiv.py`, `fetch_github.py`, `fetch_reddit.py` → same `items.jsonl` shape
-- [ ] Source weighting + novelty (seen topics across days)
-- [ ] Merge duplicate stories across sources in synthesize step
-
-### Next — second agent
-
-- [ ] `challenge_digest` — counterarguments, missing angles, bias check
-- [ ] Optional section in UI or separate `challenges.jsonl`
+- [ ] `fetch_reddit.py` → same `items.jsonl` shape
+- [ ] Newsletters (if Gmail returns)
 
 ### Deferred — UI
 
-- [ ] Per-source breakdown in digest (which sources contributed)
-- [ ] Richer Streamlit sidebar (per-item summaries)
-- [ ] Source list + open in Gmail (API id ≠ web link — awkward)
+- [ ] Per-source breakdown in report (HN / arXiv / GitHub badges) — see [`UI_PLAN.md`](UI_PLAN.md)
+- [ ] Report history (pick past rows from `report.jsonl`)
 
 ---
 
-## Deployment & sharing (planned)
+## Deployment & sharing
 
-**Split producer and consumer:**
+**Split producer and consumer (shipped):**
 
 ```text
-[Private]  Mac cron or GitHub Actions     [Public]  GitHub Pages
-           agent.py + secrets                  static site reads digest.json
-           Gmail, Groq, Ollama (local)         no keys, no inbox
+[Private]  Mac launchd 8:00 AM          [Public]  GitHub Pages
+           agent.py + .env secrets           docs/ static site
+           Groq API keys                       reads docs/report.json
                     │
-                    └── export digest.json → commit to repo (e.g. docs/)
+                    └── export_site.py → docs/report.json
 ```
 
 | Piece | Where it runs | Public? |
 |-------|---------------|---------|
-| Agent (`agent.py`) | Mac (launchd) or GitHub Actions | No — needs secrets |
-| Ollama scoring | Local Mac only today | Not on Vercel/Pages |
-| Groq | API key in `.env` / GitHub Secrets | Key never exposed to readers |
-| Digest UI | GitHub Pages or Streamlit Cloud | Yes — anyone with link (if repo/site is public) |
+| Agent (`agent.py`) | Mac (launchd) | No — needs secrets |
+| Groq | API keys in `.env` | Keys never exposed to readers |
+| Report UI | GitHub Pages (`docs/`) or `python -m http.server 8080 --directory docs` | Yes — finished report only |
 
-**GitHub Pages flow (target):**
-
-1. Daily job produces digest; export last row to `docs/digest.json` (or similar).
-2. Commit + push to repo.
-3. GitHub Pages serves a small static page that fetches `digest.json` and renders title, report, themes.
-4. Share URL — readers see the **finished report only**, not raw emails or API keys.
+**Still manual:** git commit + push of `docs/report.json` after daily run.
 
 **Notes:**
 
-- Public repo → digest JSON is public. Use private repo + access controls only if you need restricted readers.
-- Before sharing widely, review digest content (summaries of *your* newsletters).
-- Cloud agent likely needs **Groq-only** (drop Ollama) if moved off Mac.
-- Streamlit Community Cloud is an alternative reader; still needs digest hosted at a URL or in repo.
+- Public repo → report JSON is public. Use private repo if you need restricted readers.
+- All-Groq stack is cloud-ready; no Ollama dependency today.
 
 ---
 
 ## Run (local)
 
 ```bash
-# Produce digest (manual)
+# Full pipeline (all sources + report + export)
 python agent.py
+python scripts/export_site.py
 
-# View digest
-streamlit run app.py
+# Fetch one source only
+python fetch_hn.py
+
+# Preview static site (local)
+python -m http.server 8080 --directory docs
 
 # Test scheduled script
 "/Users/erinlee/Agentic AI/scripts/daily_agent.sh"
 tail "/Users/erinlee/Agentic AI/logs/agent.log"
 ```
 
-**Step budget:** ~`inbox_items + high_signal_items + 2` minimum; `MAX_STEPS = 40` allows orchestrator retries.
+**Step budget:** ~`item_count + high_signal_count + 2` minimum; `MAX_STEPS = 40` allows orchestrator retries.
 
 ---
 
