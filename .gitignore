@@ -1,7 +1,35 @@
+# --- Secrets (never commit) ---
 .env
+.env.*
+!.env.example
+
 credentials.json
 token.json
-emails.jsonl
+
+# --- Private pipeline data (regenerated each run) ---
+items.jsonl
+summaries.jsonl
+signals.jsonl
+report.jsonl
+challenges.jsonl
 responses.jsonl
+emails.jsonl
+
+# --- Logs ---
+logs/
+
+# --- Python ---
 __pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- OS ---
 .DS_Store
+Thumbs.db
