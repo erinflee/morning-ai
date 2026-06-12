@@ -2,96 +2,70 @@ import re
 import requests
 import xml.etree.ElementTree as ET # ArXiv papers return XML not JSON format
 
-from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from prompts import load_prompt
-from tools import GROQ_KEY_ARXIV, groq_select_ids
+from datetime import datetime, timedelta, timezone
+from tools import GROQ_KEY_ARXIV, pick_item_ids, write_items
 
 load_dotenv()
 
 # arXiv announces Mon–Fri in a daily batch around this hour (UTC).
 # Papers in that batch are stamped ~17:59 UTC, so we match by announcement day.
 ARXIV_ANNOUNCE_HOUR_UTC = 18
-ARXIV_API = "http://export.arxiv.org/api/query"
-# later tells format of tags belonging to Atom or ArXiv
-# helps us find the entry for the tree (title, abstract, author, etc.)
+ARXIV_API = "https://export.arxiv.org/api/query"
+# XML namespace URIs must match the feed exactly (arXiv uses http, not https).
 ATOM_NS = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
+ARXIV_CATEGORIES = ("cs.RO", "cs.CV", "cs.AI", "cs.LG", "cs.CL", "cs.SY", "cs.MA")
 
+# API fetch limit (pre batch-day filter; may truncate large batches)
 MAX_CANDIDATES = 40
-MAX_GROQ_CANDIDATES = 20
-MAX_OUTPUT = 4
-MIN_OUTPUT = 3
+# Groq candidate pool (newest N from batch)
+MAX_PICK_OPTIONS = 20
+# Groq final selection target (prompt-only; not enforced in code)
+MIN_CURATED = 3
+MAX_CURATED = 4
 MAX_BODY_CHARS = 8000
 MAX_GROQ_BODY_CHARS = 1200
 USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/)"
 
-ARXIV_CATEGORIES = ("cs.RO", "cs.CV", "cs.AI", "cs.LG", "cs.CL", "cs.SY", "cs.MA")
+ARXIV_SYSTEM_PROMPT = load_prompt("arxiv_system.txt")
 
 
-def arxiv_id_from_entry(entry):
+# --- Atom entry parsing ---
+
+def entry_arxiv_id(entry):
     """Extract bare arXiv id (no version) from an Atom entry id URL."""
     raw_id = (entry.findtext("atom:id", default="", namespaces=ATOM_NS) or "").strip()
     match = re.search(r"arxiv\.org/abs/([^/\s]+)", raw_id)
     if not match:
         return ""
-    paper_id = match.group(1)
-    return re.sub(r"v\d+$", "", paper_id)
+    arxiv_id = match.group(1)
+    return re.sub(r"v\d+$", "", arxiv_id)
 
 
-def entry_published_dt(entry):
+def entry_announced_at(entry):
     """Parse Atom published timestamp to UTC datetime, or None on failure."""
-    published = (entry.findtext("atom:published", default="", namespaces=ATOM_NS) or "").strip()
-    if not published:
+    announced_raw = (entry.findtext("atom:published", default="", namespaces=ATOM_NS) or "").strip()
+    if not announced_raw:
         return None
     try:
-        # arXiv uses ISO-8601, e.g. 2024-06-10T12:34:56Z
-        if published.endswith("Z"):
-            published = published[:-1] + "+00:00"
-        return datetime.fromisoformat(published)
+        if announced_raw.endswith("Z"):
+            announced_raw = announced_raw[:-1] + "+00:00"
+        return datetime.fromisoformat(announced_raw)
     except ValueError:
         return None
 
 
-def previous_weekday(day):
-    """Step back one calendar day, skipping Saturday and Sunday."""
-    day -= timedelta(days=1)
-    while day.weekday() >= 5:
-        day -= timedelta(days=1)
-    return day
+def entry_title(entry):
+    """Return a single-line title from an Atom entry."""
+    title = (entry.findtext("atom:title", default="", namespaces=ATOM_NS) or "").strip()
+    return re.sub(r"\s+", " ", title)
 
 
-def latest_announcement_day(now=None):
-    """Calendar date (UTC) of the arXiv batch we expect to be current."""
-    now = now or datetime.now(timezone.utc)
-    day = now.date()
-
-    if day.weekday() >= 5:  # weekend -> Friday's batch
-        day -= timedelta(days=day.weekday() - 4)
-    elif now.hour < ARXIV_ANNOUNCE_HOUR_UTC:  # before today's drop -> previous weekday
-        day = previous_weekday(day)
-
-    return day
-
-
-def entries_for_batch_day(all_entries, batch_day):
-    """Keep parsed entries whose published date matches batch_day."""
-    matched = []
-    for entry in all_entries:
-        if not in_batch_on_day(entry, batch_day):
-            continue
-        paper_id = arxiv_id_from_entry(entry)
-        if not paper_id:
-            continue
-        matched.append(entry)
-    return matched
-
-
-def in_batch_on_day(entry, batch_day):
-    """True if this paper was published on the given announcement day (UTC)."""
-    published = entry_published_dt(entry)
-    if published is None:
-        return False
-    return published.date() == batch_day
+def entry_abstract(entry):
+    """Return a single-line abstract from an Atom entry."""
+    abstract = (entry.findtext("atom:summary", default="", namespaces=ATOM_NS) or "").strip()
+    return re.sub(r"\s+", " ", abstract)
 
 
 def entry_categories(entry):
@@ -114,48 +88,89 @@ def entry_authors(entry):
     return ", ".join(names) or "unknown"
 
 
-def paper_body(entry, categories):
-    """Build a readable body from abstract and metadata."""
-    title = (entry.findtext("atom:title", default="", namespaces=ATOM_NS) or "").strip()
-    title = re.sub(r"\s+", " ", title)
-    summary = (entry.findtext("atom:summary", default="", namespaces=ATOM_NS) or "").strip()
-    summary = re.sub(r"\s+", " ", summary)
-    primary = (entry.findtext("arxiv:primary_category", default="", namespaces=ATOM_NS) or "").strip()
-    if not primary and categories:
-        primary = categories[0]
+# --- Announcement batch ---
+
+def previous_weekday(day):
+    """Step back one calendar day, skipping Saturday and Sunday."""
+    day -= timedelta(days=1)
+    while day.weekday() >= 5:
+        day -= timedelta(days=1)
+    return day
+
+
+def latest_announcement_day(now=None):
+    """Calendar date (UTC) of the arXiv batch we expect to be current."""
+    now = now or datetime.now(timezone.utc)
+    day = now.date()
+
+    if day.weekday() >= 5:  # weekend -> Friday's batch
+        day -= timedelta(days=day.weekday() - 4)
+    elif now.hour < ARXIV_ANNOUNCE_HOUR_UTC:  # before today's drop -> previous weekday
+        day = previous_weekday(day)
+
+    return day
+
+
+def announced_on_day(entry, announcement_day):
+    """True if this paper was announced on the given day (UTC)."""
+    announced_at = entry_announced_at(entry)
+    if announced_at is None:
+        return False
+    return announced_at.date() == announcement_day
+
+
+def filter_by_announcement_day(feed_entries, announcement_day):
+    """Keep parsed entries whose announcement date matches announcement_day."""
+    batch_entries = []
+    for entry in feed_entries:
+        if not announced_on_day(entry, announcement_day):
+            continue
+        if not entry_arxiv_id(entry):
+            continue
+        batch_entries.append(entry)
+    return batch_entries
+
+
+# --- Item shaping ---
+
+def paper_body(entry, categories=None):
+    """Build a plain-text body from an Atom entry's title, categories, and abstract."""
+    categories = categories or entry_categories(entry)
+    title = entry_title(entry)
+    abstract = entry_abstract(entry)
+    primary_category = (entry.findtext("arxiv:primary_category", default="", namespaces=ATOM_NS) or "").strip()
+    if not primary_category and categories:
+        primary_category = categories[0]
 
     parts = [
         f"Title: {title}",
-        f"Categories: {', '.join(categories) or primary or 'unknown'}",
+        f"Categories: {', '.join(categories) or primary_category or 'unknown'}",
         "",
-        summary,
+        abstract,
     ]
     return "\n".join(parts).strip()[:MAX_BODY_CHARS]
 
 
 def paper_to_item(entry, body=None):
-    """Map an arXiv Atom entry to the shared items.jsonl item shape."""
-    paper_id = arxiv_id_from_entry(entry)
-    item_id = f"arxiv_{paper_id}"
-    title = (entry.findtext("atom:title", default="", namespaces=ATOM_NS) or "").strip()
-    title = re.sub(r"\s+", " ", title)
-    categories = entry_categories(entry)
-
+    """Map an arXiv Atom entry to dict in the shared items.jsonl item shape."""
+    arxiv_id = entry_arxiv_id(entry)
     return {
-        "item_id": item_id,
+        "item_id": f"arxiv_{arxiv_id}",
         "source": "arxiv",
-        "subject": title,
+        "subject": entry_title(entry),
         "author": entry_authors(entry),
-        "url": f"https://arxiv.org/abs/{paper_id}",
-        "body": body if body is not None else paper_body(entry, categories),
+        "url": f"https://arxiv.org/abs/{arxiv_id}",
+        "body": body if body is not None else paper_body(entry),
     }
 
 
-def fetch_recent_papers():
-    """Query arXiv for papers from the latest daily announcement batch (18:00 UTC cadence)."""
-    category_query = " OR ".join(f"cat:{cat}" for cat in ARXIV_CATEGORIES)
+# --- Fetch ---
+
+def fetch_feed_entries():
+    """Return all Atom entries from one API query (uncapped by announcement day)."""
+    search_query = " OR ".join(f"cat:{cat}" for cat in ARXIV_CATEGORIES)
     params = {
-        "search_query": category_query,
+        "search_query": search_query,
         "sortBy": "submittedDate",
         "sortOrder": "descending",
         "max_results": MAX_CANDIDATES,
@@ -173,58 +188,71 @@ def fetch_recent_papers():
         print(f"arXiv API error: {err}")
         return []
 
-    # REMEMBER -> ArXiv is in XML format, not JSON
-    root = ET.fromstring(response.text) # whole feed of ArXiv paper
-    all_entries = root.findall("atom:entry", ATOM_NS)
+    root = ET.fromstring(response.text)
+    return root.findall("atom:entry", ATOM_NS)
 
-    # Papers in a batch are stamped ~17:59 UTC on announcement day (just before 18:00).
-    batch_day = latest_announcement_day()
-    entries = entries_for_batch_day(all_entries, batch_day)
+
+def resolve_latest_batch(feed_entries):
+    """Pick the current announcement day and filter entries -> falling back to prior weekday if empty."""
+    announcement_day = latest_announcement_day()
+    batch_entries = filter_by_announcement_day(feed_entries, announcement_day)
 
     # After 18:00 UTC, today's batch may not be indexed yet — use the prior weekday.
-    if not entries:
-        fallback_day = previous_weekday(batch_day)
-        entries = entries_for_batch_day(all_entries, fallback_day)
-        if entries:
-            batch_day = fallback_day
+    if not batch_entries:
+        prior_day = previous_weekday(announcement_day)
+        batch_entries = filter_by_announcement_day(feed_entries, prior_day)
+        if batch_entries:
+            announcement_day = prior_day
 
-    print(
-        f"arXiv: {len(entries)} papers from {batch_day} batch "
-        f"(announced ~{ARXIV_ANNOUNCE_HOUR_UTC}:00 UTC, from {MAX_CANDIDATES} fetched)"
-    )
-    return entries
+    return batch_entries, announcement_day
 
 
-def fetch_top_papers():
-    """Filter recent arXiv papers, curate with Groq, and return item dicts for items.jsonl."""
-    entries = fetch_recent_papers()
-    if not entries:
+def fetch_latest_batch_entries():
+    """Query arXiv and return Atom <entry> elements from the latest announcement batch."""
+    feed_entries = fetch_feed_entries()
+    if not feed_entries:
         return []
 
-    trimmed = entries[:MAX_GROQ_CANDIDATES]
-    if len(entries) > MAX_GROQ_CANDIDATES:
-        print(f"arXiv: sending newest {MAX_GROQ_CANDIDATES} of {len(entries)} to Groq")
+    batch_entries, announcement_day = resolve_latest_batch(feed_entries)
+    print(
+        f"arXiv: {len(batch_entries)} papers from {announcement_day} batch "
+        f"(announced ~{ARXIV_ANNOUNCE_HOUR_UTC}:00 UTC, from {MAX_CANDIDATES} fetched)"
+    )
+    return batch_entries
+
+
+# --- Select using Groq ---
+
+def fetch_selected_papers():
+    """Select papers from the latest announcement batch with Groq -> return item dicts for items.jsonl."""
+    batch_entries = fetch_latest_batch_entries()
+    if not batch_entries:
+        return []
+
+    curation_entries = batch_entries[:MAX_PICK_OPTIONS]
+    if len(batch_entries) > MAX_PICK_OPTIONS:
+        print(f"arXiv: sending newest {MAX_PICK_OPTIONS} of {len(batch_entries)} to Groq")
 
     bodies_by_id = {}
-    groq_candidates = []
     entries_by_id = {}
+    curator_options = []
 
-    for entry in trimmed:
-        paper_id = arxiv_id_from_entry(entry)
-        item_id = f"arxiv_{paper_id}"
-        body = paper_body(entry, entry_categories(entry))
+    for entry in curation_entries:
+        arxiv_id = entry_arxiv_id(entry)
+        item_id = f"arxiv_{arxiv_id}"
+        body = paper_body(entry)
         bodies_by_id[item_id] = body
         entries_by_id[item_id] = entry
-        groq_candidates.append({
+        curator_options.append({
             "item_id": item_id,
-            "title": (entry.findtext("atom:title", default="", namespaces=ATOM_NS) or "").strip(),
+            "title": entry_title(entry),
             "categories": entry_categories(entry),
             "body": body[:MAX_GROQ_BODY_CHARS],
         })
 
-    selected_ids = groq_select_ids(
-        load_prompt("arxiv_system.txt"),
-        {"min_pick": MIN_OUTPUT, "max_pick": MAX_OUTPUT, "papers": groq_candidates},
+    selected_ids = pick_item_ids(
+        ARXIV_SYSTEM_PROMPT,
+        {"min_pick": MIN_CURATED, "max_pick": MAX_CURATED, "papers": curator_options},
         GROQ_KEY_ARXIV,
     )
     print(f"arXiv: LLM selected {len(selected_ids)} papers")
@@ -240,11 +268,9 @@ def fetch_top_papers():
 
 
 def main():
-    """Fetch curated arXiv papers and print a short summary."""
-    from tools import write_items
-
+    """Fetch selected arXiv papers and write them to items.jsonl."""
     print("Fetching arXiv…")
-    items = fetch_top_papers()
+    items = fetch_selected_papers()
     if items:
         write_items(items)
     return items
