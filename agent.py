@@ -257,7 +257,7 @@ def react_loop():
         llm_response = ""
         try:
             llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCH)
-            llm_action = clean_llm_response(llm_response)
+            parsed = clean_llm_response(llm_response)
         except json.JSONDecodeError:
             record_turn(turn_history, llm_response, "Invalid JSON. Respond with only valid JSON.")
             continue
@@ -265,9 +265,9 @@ def react_loop():
             print(f"Orchestrator Groq error: {err}")
             break
 
-        thought = llm_action.get("thought", "")
-        action = llm_action.get("action")
-        tool_args = llm_action.get("tool_args") or {}
+        thought = parsed.get("thought", "")
+        action = parsed.get("action")
+        tool_args = parsed.get("tool_args") or {}
 
         print(f"Step {step}")
         if thought:
