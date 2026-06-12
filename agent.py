@@ -11,11 +11,12 @@ from tools import (
     score_signal,
     summarize_item,
     synthesize_report,
-    clean_llm_response,
+    parse_llm_json,
     groq_chat,
     load_jsonl,
     write_items,
-    GROQ_KEY_ORCH,
+    items_by_id,
+    GROQ_KEY_ORCHESTRATOR,
     ITEMS_FILE,
     SUMMARIES_FILE,
     SIGNALS_FILE,
@@ -25,8 +26,8 @@ from tools import (
 MAX_STEPS = 40
 MAX_HISTORY_TURNS = 6  # short term memory -> recent llm response/observation convos kept for recall
 
-system_prompt = load_prompt("build_message.txt")
-user_prompt = (
+ORCHESTRATOR_SYSTEM_PROMPT = load_prompt("build_message.txt")
+ORCHESTRATOR_USER_PROMPT = (
     "Today's items from Hacker News, arXiv, and GitHub are already in items.jsonl. "
     "Produce the morning briefing with primary focus on robotics and embodied AI."
 )
@@ -40,49 +41,41 @@ def clear_daily_files():
 
 
 
-def items_by_id():
-    """Read items.jsonl -> dict {item_id: item info}.
-       Helps for fast lookup when scoring / summarizing."""
-    items = {}
-    for row in load_jsonl(ITEMS_FILE):
-        item_id = str(row.get("item_id") or "")
-        if item_id:
-            items[item_id] = {**row, "item_id": item_id}
-    return items
-
-
-
 def signals_by_id():
     """Read signals.jsonl -> dict {item_id: score row} 
-       Last row wins if duplicated (most recent)."""
+    
+    Last row wins if duplicated (most recent).
+    """
     signals = {}
-    for row in load_jsonl(SIGNALS_FILE): 
-        item_id = str(row.get("item_id") or "")
+    for signal in load_jsonl(SIGNALS_FILE): 
+        item_id = str(signal.get("item_id") or "")
         if item_id:
-            signals[item_id] = row
+            signals[item_id] = signal
     return signals
 
 
 
-def summarized_ids():
+def summarized_item_ids():
     """Return the set of item_ids that already have a row in summaries.jsonl."""
     return {
-        str(row.get("item_id") or "")
-        for row in load_jsonl(SUMMARIES_FILE)
-        if row.get("item_id")
+        str(summary_row.get("item_id") or "")
+        for summary_row in load_jsonl(SUMMARIES_FILE)
+        if summary_row.get("item_id")
     }
 
 
 
-def pipeline_state():
-    """Find scored, high-signal, unscored, and needs-summary item_id sets from JSONL.
-       Return pipeline state: *_ids keys are sets; *_id_list keys are sorted work queues.
-            *_ids -> id groups (all, scored, high-signal)
-            *_id_list -> what's left to do next"""
+def progress_status():
+    """Find scored, high-signal, unscored, and pending-summary item_id sets from JSONL.
+    
+    Return progress status: *_ids keys are sets; *_id_list keys are sorted work queues.
+        *_ids -> id groups (all, scored, high-signal)
+        *_id_list -> what's left to do next
+    """
     items = items_by_id()
     all_ids = set(items.keys())
     signals = signals_by_id()
-    summarized_ids_set = summarized_ids()
+    already_summarized_ids = summarized_item_ids()
 
     scored_ids = {
         item_id for item_id in all_ids
@@ -92,6 +85,7 @@ def pipeline_state():
         item_id for item_id in scored_ids
         if signals[item_id].get("high_signal") is True
     }
+    # Don't expose pending summaries until every item is scored (empty all_ids stays False).
     all_scored = bool(all_ids) and scored_ids == all_ids
 
     return {
@@ -99,37 +93,37 @@ def pipeline_state():
         "scored_ids": scored_ids,
         "high_signal_ids": high_signal_ids,
         "unscored_id_list": sorted(all_ids - scored_ids),
-        "needs_summary_id_list": sorted(high_signal_ids - summarized_ids_set) if all_scored else [],
+        "pending_summary_id_list": sorted(high_signal_ids - already_summarized_ids) if all_scored else [],
     }
 
 
 
 # replaces long chat history — agent reads what's left from JSONL files
-# long-term state -> build every call
-def format_pipeline_state():
-    """Shows short status text for the LLM during each orchestrator turn ("3 left to score...")"""
-    state = pipeline_state()
+# long-term progress -> rebuild every call
+def progress_summary():
+    """Short status text for the LLM each orchestrator turn ("3 left to score...")."""
+    status = progress_status()
 
-    if not state["all_ids"]:
+    if not status["all_ids"]:
         return "No items loaded."
 
-    summarized_high_signal_ids = state["high_signal_ids"] - set(state["needs_summary_id_list"])
+    summarized_high_signal_ids = status["high_signal_ids"] - set(status["pending_summary_id_list"])
     lines = [
-        f"Items: {len(state['all_ids'])} total",
-        f"Scored: {len(state['scored_ids'])}/{len(state['all_ids'])}",
-        f"High-signal pool: {len(state['high_signal_ids'])}",
-        f"Summarized: {len(summarized_high_signal_ids)}/{len(state['high_signal_ids']) or 0}",
+        f"Items: {len(status['all_ids'])} total",
+        f"Scored: {len(status['scored_ids'])}/{len(status['all_ids'])}",
+        f"High-signal pool: {len(status['high_signal_ids'])}",
+        f"Summarized: {len(summarized_high_signal_ids)}/{len(status['high_signal_ids']) or 0}",
     ]
-    if state["high_signal_ids"]:
-        lines.append(f"High-signal ids: {sorted(state['high_signal_ids'])}")
+    if status["high_signal_ids"]:
+        lines.append(f"High-signal ids: {sorted(status['high_signal_ids'])}")
 
-    if state["unscored_id_list"]:
-        next_id = state["unscored_id_list"][0]
-        lines.append(f"Unscored ids (score these next): {state['unscored_id_list']}")
+    if status["unscored_id_list"]:
+        next_id = status["unscored_id_list"][0]
+        lines.append(f"Unscored ids (score these next): {status['unscored_id_list']}")
         lines.append(f'Suggested next action: score_signal with tool_args {{"item_id": "{next_id}"}} or {{}}')
-    elif state["needs_summary_id_list"]:
-        next_id = state["needs_summary_id_list"][0]
-        lines.append(f"High-signal ids needing summarize: {state['needs_summary_id_list']}")
+    elif status["pending_summary_id_list"]:
+        next_id = status["pending_summary_id_list"][0]
+        lines.append(f"Pending summary ids (summarize these next): {status['pending_summary_id_list']}")
         lines.append(f'Suggested next action: summarize_item with tool_args {{"item_id": "{next_id}"}} or {{}}')
     elif not load_jsonl(REPORT_FILE):
         lines.append("Scoring and summarizing complete. Call synthesize_report, then finish.")
@@ -142,11 +136,13 @@ def format_pipeline_state():
 
 def build_messages(turn_history):
     """Assemble system + user + recent ReAct turns for the next Groq call.
-       (prompt + progress + last 6 turns) before Groq"""
-    progress_text = format_pipeline_state()
+       
+    (prompt + progress + last 6 turns) before Groq.
+    """
+    progress_summary_text = progress_summary()
     messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": f"{user_prompt}\n\nCurrent progress:\n{progress_text}"},
+        {"role": "system", "content": ORCHESTRATOR_SYSTEM_PROMPT},
+        {"role": "user", "content": f"{ORCHESTRATOR_USER_PROMPT}\n\nCurrent progress:\n{progress_summary_text}"},
     ]
     for llm_response, observation in turn_history[-MAX_HISTORY_TURNS:]:
         messages.append({"role": "assistant", "content": llm_response})
@@ -157,7 +153,9 @@ def build_messages(turn_history):
 
 def record_turn(turn_history, llm_response, observation):
     """Append one assistant/observation pair.
-       Keep only the last MAX_HISTORY_TURNS."""
+
+    Keep only the last MAX_HISTORY_TURNS.
+    """
     turn_history.append((llm_response, f"Observation: {observation}"))
     if len(turn_history) > MAX_HISTORY_TURNS:
         del turn_history[:-MAX_HISTORY_TURNS] # everything except last 6 turns
@@ -185,29 +183,29 @@ def run_tool(action, tool_args):
         # keep note of progress of how many scored before moving on
         case "score_signal":
             items = items_by_id()
-            state = pipeline_state()
-            item_id, error = resolve_item_id(tool_args, state["unscored_id_list"], "Error: all items already scored")
+            status = progress_status()
+            item_id, error = resolve_item_id(tool_args, status["unscored_id_list"], "Error: all items already scored")
             
             if error:
                 return error
             if item_id not in items:
-                return f"Error: unknown item_id {item_id!r}. Unscored ids: {state['unscored_id_list']}"
+                return f"Error: unknown item_id {item_id!r}. Unscored ids: {status['unscored_id_list']}"
 
             item = items[item_id]
-            scored_status, signal_row = score_signal(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
+            status_message, signal_row = score_signal(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
 
-            return f"{scored_status}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
+            return f"{status_message}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
 
 
         # only summarize sources that received high signal in signals.jsonl
         # keep note of progress of how many summarized before moving on
         case "summarize_item":
-            state = pipeline_state()
-            if state["unscored_id_list"]:
-                return f"Error: cannot summarize — score all items first. Unscored ids: {state['unscored_id_list']}"
+            status = progress_status()
+            if status["unscored_id_list"]:
+                return f"Error: cannot summarize — score all items first. Unscored ids: {status['unscored_id_list']}"
 
             items = items_by_id()
-            item_id, error = resolve_item_id(tool_args, state["needs_summary_id_list"], "Error: no high-signal items need summarizing")
+            item_id, error = resolve_item_id(tool_args, status["pending_summary_id_list"], "Error: no high-signal items need summarizing")
             
             if error:
                 return error
@@ -221,12 +219,12 @@ def run_tool(action, tool_args):
         # only create final report after all sources have been summarized in summaries.jsonl
         # cannot synthesize if unscored, no high signals, or no summaries
         case "synthesize_report":
-            state = pipeline_state()
-            if state["unscored_id_list"]:
-                return f"Error: cannot synthesize — unscored ids: {state['unscored_id_list']}"
-            if state["needs_summary_id_list"]:
-                return f"Error: cannot synthesize — need summaries for: {state['needs_summary_id_list']}"
-            if not state["high_signal_ids"]:
+            status = progress_status()
+            if status["unscored_id_list"]:
+                return f"Error: cannot synthesize — unscored ids: {status['unscored_id_list']}"
+            if status["pending_summary_id_list"]:
+                return f"Error: cannot synthesize — need summaries for: {status['pending_summary_id_list']}"
+            if not status["high_signal_ids"]:
                 return "Error: cannot synthesize — no high-signal items"
             return synthesize_report()
 
@@ -235,9 +233,9 @@ def run_tool(action, tool_args):
         case "finish":
             if load_jsonl(REPORT_FILE):
                 return None
-            state = pipeline_state()
+            status = progress_status()
 
-            if (not state["unscored_id_list"] and not state["needs_summary_id_list"] and not state["high_signal_ids"]):
+            if (not status["unscored_id_list"] and not status["pending_summary_id_list"] and not status["high_signal_ids"]):
                 return None
             return "Error: cannot finish — call synthesize_report first (report.jsonl is empty)."
 
@@ -250,14 +248,14 @@ def react_loop():
     """Run the thought → action → observation loop until finish or MAX_STEPS."""
 
     # short term memory of recent turns
-    # MAX past 6 turns -> full state lives in JSONL + Current progress block
+    # MAX past 6 turns -> full progress lives in JSONL + Current progress block
     turn_history = []
 
     for step in range(1, MAX_STEPS + 1):
         llm_response = ""
         try:
-            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCH)
-            parsed = clean_llm_response(llm_response)
+            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCHESTRATOR)
+            parsed = parse_llm_json(llm_response)
         except json.JSONDecodeError:
             record_turn(turn_history, llm_response, "Invalid JSON. Respond with only valid JSON.")
             continue
