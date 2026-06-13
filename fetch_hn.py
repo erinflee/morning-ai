@@ -1,87 +1,66 @@
+"""Fetch Hacker News top stories, filter, Groq-pick, and write items.jsonl."""
+
 import time
-import json
 import requests
 import trafilatura
 
 from html import unescape
 from dotenv import load_dotenv
 from prompts import load_prompt
-from tools import GROQ_KEY_HN, groq_select_ids, write_items
+from content_filters import marketing_filter_reason
+from tools import GROQ_KEY_HN, pick_item_ids, write_items
 
 load_dotenv()
 
-SECONDS_IN_24_HOURS = 24 * 60 * 60
+# Pipeline: top item ids -> 24h stories -> marketing filter -> Groq pick -> item dicts
 
-MAX_CANDIDATES = 50 # how many top-story ids to pull from HN API
-MAX_GROQ_CANDIDATES = 20 # trim to this many (by HN score) before Groq picks
-MAX_OUTPUT = 6  # final count Groq chooses
-MAX_ARTICLE_CHARS = 8000 # full body stored in items.jsonl
-MAX_GROQ_BODY_CHARS = 1200 # excerpt for Groq curation (keep under Groq 12k TPM/request)
-MIN_HN_TEXT_CHARS = 50 # shorter HN text is usually bluff —> fetch url instead
-ARTICLE_TIMEOUT = 15
+# --- Config ---
+
+HN_TOP_STORIES_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
+# Generic HN item endpoint (story, comment, job, poll, etc.)
+HN_ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
+
+# item ids from Hacker News topstories API (pre 24h filter)
+MAX_STORY_IDS = 50
+# top N by HN score before Groq picks
+MAX_PICK_OPTIONS = 20
+# Groq pick target (prompt-only -> not enforced in code)
+MAX_PICKS = 4
+MAX_BODY_CHARS = 8000
+MAX_GROQ_BODY_CHARS = 1200
+MIN_INLINE_TEXT_CHARS = 50  # HN post text before fetching linked article
+STORY_MAX_AGE_HOURS = 24
 USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/)"
 
-
-def fetch_story_ids():
-    """Fetch up to MAX_CANDIDATES top-story ids from the HackerNews Firebase API."""
-    try:
-        response = requests.get("https://hacker-news.firebaseio.com/v0/topstories.json", timeout=10)
-        response.raise_for_status()
-
-        data = response.json() # or json.loads(response.text)
-        data = data[:MAX_CANDIDATES]
-        return data
-
-    except requests.RequestException:
-        return None
+HN_SYSTEM_PROMPT = load_prompt("hacker_news_system.txt")
 
 
-
-
-def fetch_item(item_id):
-    """Fetch one HackerNews item dict by id, or None on network/API failure."""
-    try:
-        response = requests.get(f"https://hacker-news.firebaseio.com/v0/item/{item_id}.json", timeout=10)
-        response.raise_for_status()
-        story = response.json()    
-        return story
-
-    except requests.RequestException:
-        return None
-
-
+# --- Item shaping ---
+# story_body resolves post text or linked article; story_to_item -> items.jsonl dict.
 
 def fetch_article_body(url):
-    """Download a link post and extract readable article text."""
+    """Download a link post and pull readable article text from page."""
     if not url:
         return ""
 
     try:
-        # get HTML text from website
-        response = requests.get(url, timeout=ARTICLE_TIMEOUT, headers={"User-Agent": USER_AGENT})
+        response = requests.get(url, timeout=15, headers={"User-Agent": USER_AGENT})
         response.raise_for_status()
-
-        # convert HTML to plain text
-        # skip comments and tables
         text = trafilatura.extract(response.text, url=url, include_comments=False, include_tables=False)
         if not text:
             return ""
-        return text.strip()[:MAX_ARTICLE_CHARS]
+        return text.strip()[:MAX_BODY_CHARS]
     except (requests.RequestException, ValueError):
         return ""
 
 
-
 def story_body(story):
-    """Long HackerNews text, else fetched article URL, else short text, else title."""
-    # unescape -> HTML encoded to normal text
-    text = unescape((story.get("text") or "")).strip()
+    """Get Hacker News story text -> else fetched article URL -> else short text -> else title."""
+    text = unescape((story.get("text") or "")).strip() # unescape() -> turn HTML entities into symbols (ex: &amp -> &)
 
-    # Show/Launch HN often has a one-liner on HN and real content on the link
-    if len(text) >= MIN_HN_TEXT_CHARS:
-        return text[:MAX_ARTICLE_CHARS]
+    if len(text) >= MIN_INLINE_TEXT_CHARS:
+        return text[:MAX_BODY_CHARS]
 
-    # go to url and pull body
     url = story.get("url")
     if url:
         print(f"  Fetching article: {url}")
@@ -90,22 +69,22 @@ def story_body(story):
             return article
 
     title = (story.get("title") or "").strip()
-    if len(text) < MIN_HN_TEXT_CHARS and title:
-        return title[:MAX_ARTICLE_CHARS]
+    if len(text) < MIN_INLINE_TEXT_CHARS and title:
+        return title[:MAX_BODY_CHARS]
 
     if text:
-        return text[:MAX_ARTICLE_CHARS]
+        return text[:MAX_BODY_CHARS]
 
     return title
 
 
 def story_to_item(story, body=None):
-    """Map a HackerNews story dict to the shared items.jsonl item shape."""
-    item_id = story["id"]
+    """Map Hacker News story dict to the shared items.jsonl item shape."""
+    item_id = str(story["id"])
     title = story.get("title", "")
 
     return {
-        "item_id": str(item_id),
+        "item_id": item_id,
         "source": "hackernews",
         "subject": title,
         "author": f"HN:{story.get('by', 'unknown')}",
@@ -114,96 +93,131 @@ def story_to_item(story, body=None):
     }
 
 
-def normalize_story_id(item_id):
-    """Groq may return ids as int or string —> match HackerNews story keys so they are all same."""
-    if isinstance(item_id, int):
-        return item_id
-    if isinstance(item_id, str) and item_id.isdigit():
-        return int(item_id)
-    return item_id
+# --- Fetch ---
+# fetch_top_item_ids + filter_recent_stories: HN API -> story dicts from the last 24h.
 
-
-
-
-
-
-
-def fetch_top_stories():
-    """Filter recent HackerNews stories, curate with Groq, and return item dicts for items.jsonl."""
-    story_ids = fetch_story_ids()
-    if not story_ids:
-        print("No story ids found")
+def fetch_top_item_ids():
+    """Return up to MAX_STORY_IDS item ids from the Hacker News topstories API."""
+    try:
+        response = requests.get(HN_TOP_STORIES_URL, timeout=10)
+        response.raise_for_status()
+        return response.json()[:MAX_STORY_IDS]
+    except requests.RequestException as err:
+        print(f"HN API error: {err}")
         return []
 
-    last_24_hours = time.time() - SECONDS_IN_24_HOURS
-    passed_stories = []
 
-    for hn_id in story_ids:
-        story = fetch_item(hn_id)
+def fetch_hn_item(item_id):
+    """Fetch one Hacker News item dict by id (any type), or None on network/API failure."""
+    try:
+        response = requests.get(HN_ITEM_URL.format(item_id=item_id), timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException:
+        return None
+
+
+def filter_recent_stories(item_ids):
+    """Only keep stories from the last 24 hours (< STORY_MAX_AGE_HOURS)."""
+    story_window_start = time.time() - STORY_MAX_AGE_HOURS * 3600
+    stories = []
+
+    for item_id in item_ids:
+        story = fetch_hn_item(item_id)
         if not story:
             continue
         if story.get("type") != "story":
             continue
-        if story.get("time", 0) < last_24_hours:
+        if story.get("time", 0) < story_window_start:
             continue
-        passed_stories.append(story)
+        stories.append(story)
 
-    print(f"Checked {len(story_ids)} ids, {len(passed_stories)} passed filters")
-    if not passed_stories:
+    return stories
+
+
+def fetch_recent_stories():
+    """Pull top story ids and return recent story dicts."""
+    item_ids = fetch_top_item_ids()
+    if not item_ids:
         return []
 
-    passed_stories.sort(key=lambda s: s.get("score", 0), reverse=True)
-    trimmed_stories = passed_stories[:MAX_GROQ_CANDIDATES]
-    if len(passed_stories) > MAX_GROQ_CANDIDATES:
-        print(f"Trimmed to top {MAX_GROQ_CANDIDATES} by HN score")
+    stories = filter_recent_stories(item_ids)
+    print(f"HN: checked {len(item_ids)} ids, {len(stories)} passed filters")
+    return stories
 
-    stories_by_id = {story["id"]: story for story in trimmed_stories}
-    bodies_by_id = {}
-    groq_candidates = []
 
-    print(f"Fetching bodies for {len(trimmed_stories)} candidates...")
-    for story in trimmed_stories:
-        item_id = story["id"]
+# --- Groq pick ---
+# pick_options -> marketing filter -> groq_options -> pick_item_ids.
+
+def fetch_selected_stories():
+    """Filter recent Hacker News stories, pick with Groq, and return item dicts for items.jsonl."""
+    stories = fetch_recent_stories()
+    if not stories:
+        return []
+
+    stories.sort(key=lambda story: story.get("score", 0), reverse=True)
+    pick_options = stories[:MAX_PICK_OPTIONS]
+    if len(stories) > MAX_PICK_OPTIONS:
+        print(f"HN: sending top {MAX_PICK_OPTIONS} of {len(stories)} to Groq by score")
+
+    stories_by_item_id = {}
+    bodies_by_item_id = {}
+    groq_options = []
+
+    print(f"HN: fetching bodies for {len(pick_options)} options…")
+    pre_filter_drops = 0
+    for story in pick_options:
+        item_id = str(story["id"])
+        title = story.get("title", "")
         body = story_body(story)
-        bodies_by_id[item_id] = body
-        groq_candidates.append({
-            "item_id": str(item_id),
-            "title": story.get("title", ""),
+        drop_reason = marketing_filter_reason(title, body, story.get("url") or "", "hackernews")
+        if drop_reason:
+            pre_filter_drops += 1
+            print(f"  Pre-filter drop: {title[:70]} — {drop_reason}")
+            continue
+
+        stories_by_item_id[item_id] = story
+        bodies_by_item_id[item_id] = body
+        groq_options.append({
+            "item_id": item_id,
+            "title": title,
             "score": story.get("score", 0),
             "body": body[:MAX_GROQ_BODY_CHARS],
         })
 
-    selected_item_ids = groq_select_ids(
-        load_prompt("hacker_news_system.txt"),
-        {"max_pick": MAX_OUTPUT, "stories": groq_candidates},
+    if pre_filter_drops:
+        print(f"HN: pre-filter dropped {pre_filter_drops} marketing/brand-blog options")
+    if not groq_options:
+        print("HN: no options left after pre-filter")
+        return []
+
+    selected_ids = pick_item_ids(
+        HN_SYSTEM_PROMPT,
+        {"max_pick": MAX_PICKS, "stories": groq_options},
         GROQ_KEY_HN,
     )
-    print(f"LLM selected {len(selected_item_ids)} stories")
+    print(f"HN: LLM selected {len(selected_ids)} stories")
 
     items = []
-    for raw_id in selected_item_ids:
-        item_id = normalize_story_id(raw_id)
-        story = stories_by_id.get(item_id)
-        if story:
-            items.append(story_to_item(story, body=bodies_by_id.get(item_id)))
+    for item_id in selected_ids:
+        story = stories_by_item_id.get(item_id)
+        if not story:
+            continue
+        items.append(story_to_item(story, body=bodies_by_item_id.get(item_id, "")))
 
     return items
 
 
+# --- CLI ---
 
 def main():
-    """Fetch curated HackerNews stories and write them to items.jsonl."""
-    print('Fetching Hacker News...')
-    items = fetch_top_stories()
+    """Fetch selected HN stories and write them to items.jsonl."""
+    print("Fetching HN…")
+    items = fetch_selected_stories()
     if items:
         write_items(items)
     return items
 
 
-
-
 if __name__ == "__main__":
     main()
-
-
-
