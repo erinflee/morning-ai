@@ -1,3 +1,5 @@
+"""Fetch arXiv papers from the latest announcement batch, Groq-pick, and write items.jsonl."""
+
 import re
 import requests
 import xml.etree.ElementTree as ET # ArXiv papers return XML not JSON format
@@ -9,6 +11,10 @@ from tools import GROQ_KEY_ARXIV, pick_item_ids, write_items
 
 load_dotenv()
 
+# Pipeline: API feed -> weekday batch -> items.jsonl shape -> Groq pick -> item dicts
+
+# --- Config ---
+
 # arXiv announces Mon–Fri in a daily batch around this hour (UTC).
 # Papers in that batch are stamped ~17:59 UTC, so we match by announcement day.
 ARXIV_ANNOUNCE_HOUR_UTC = 18
@@ -17,13 +23,12 @@ ARXIV_API = "https://export.arxiv.org/api/query"
 ATOM_NS = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
 ARXIV_CATEGORIES = ("cs.RO", "cs.CV", "cs.AI", "cs.LG", "cs.CL", "cs.SY", "cs.MA")
 
-# API fetch limit (pre batch-day filter; may truncate large batches)
-MAX_CANDIDATES = 40
-# Groq candidate pool (newest N from batch)
+# Atom entries from arXiv API (pre batch-day filter; may truncate large batches)
+MAX_FEED_ENTRIES = 40
+# newest N from batch before Groq picks
 MAX_PICK_OPTIONS = 20
-# Groq final selection target (prompt-only; not enforced in code)
-MIN_CURATED = 3
-MAX_CURATED = 4
+# Groq pick target (prompt-only -> not enforced in code)
+MAX_PICKS = 4
 MAX_BODY_CHARS = 8000
 MAX_GROQ_BODY_CHARS = 1200
 USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/)"
@@ -32,6 +37,7 @@ ARXIV_SYSTEM_PROMPT = load_prompt("arxiv_system.txt")
 
 
 # --- Atom entry parsing ---
+# One helper per field on an <atom:entry> (arXiv API returns XML, not JSON).
 
 def entry_arxiv_id(entry):
     """Extract bare arXiv id (no version) from an Atom entry id URL."""
@@ -88,7 +94,9 @@ def entry_authors(entry):
     return ", ".join(names) or "unknown"
 
 
+
 # --- Announcement batch ---
+# Keep papers from the current weekday drop, or the prior weekday if today's batch is empty.
 
 def previous_weekday(day):
     """Step back one calendar day, skipping Saturday and Sunday."""
@@ -131,7 +139,9 @@ def filter_by_announcement_day(feed_entries, announcement_day):
     return batch_entries
 
 
+
 # --- Item shaping ---
+# paper_body builds Groq/desk text; paper_to_item maps to the shared items.jsonl dict.
 
 def paper_body(entry, categories=None):
     """Build a plain-text body from an Atom entry's title, categories, and abstract."""
@@ -164,7 +174,10 @@ def paper_to_item(entry, body=None):
     }
 
 
+
 # --- Fetch ---
+# fetch_feed_entries: HTTP query + XML parse.
+# resolve_latest_batch + fetch_latest_batch_entries: filter to the latest announcement day.
 
 def fetch_feed_entries():
     """Return all Atom entries from one API query (uncapped by announcement day)."""
@@ -173,7 +186,7 @@ def fetch_feed_entries():
         "search_query": search_query,
         "sortBy": "submittedDate",
         "sortOrder": "descending",
-        "max_results": MAX_CANDIDATES,
+        "max_results": MAX_FEED_ENTRIES,
     }
 
     try:
@@ -216,12 +229,14 @@ def fetch_latest_batch_entries():
     batch_entries, announcement_day = resolve_latest_batch(feed_entries)
     print(
         f"arXiv: {len(batch_entries)} papers from {announcement_day} batch "
-        f"(announced ~{ARXIV_ANNOUNCE_HOUR_UTC}:00 UTC, from {MAX_CANDIDATES} fetched)"
+        f"(announced ~{ARXIV_ANNOUNCE_HOUR_UTC}:00 UTC, from {MAX_FEED_ENTRIES} fetched)"
     )
     return batch_entries
 
 
-# --- Select using Groq ---
+
+# --- Groq pick ---
+# pick_options -> groq_options -> pick_item_ids -> entries_by_item_id / bodies_by_item_id lookups.
 
 def fetch_selected_papers():
     """Select papers from the latest announcement batch with Groq -> return item dicts for items.jsonl."""
@@ -229,21 +244,21 @@ def fetch_selected_papers():
     if not batch_entries:
         return []
 
-    curation_entries = batch_entries[:MAX_PICK_OPTIONS]
+    pick_options = batch_entries[:MAX_PICK_OPTIONS]
     if len(batch_entries) > MAX_PICK_OPTIONS:
         print(f"arXiv: sending newest {MAX_PICK_OPTIONS} of {len(batch_entries)} to Groq")
 
-    bodies_by_id = {}
-    entries_by_id = {}
-    curator_options = []
+    bodies_by_item_id = {}
+    entries_by_item_id = {}
+    groq_options = []
 
-    for entry in curation_entries:
+    for entry in pick_options:
         arxiv_id = entry_arxiv_id(entry)
         item_id = f"arxiv_{arxiv_id}"
         body = paper_body(entry)
-        bodies_by_id[item_id] = body
-        entries_by_id[item_id] = entry
-        curator_options.append({
+        bodies_by_item_id[item_id] = body
+        entries_by_item_id[item_id] = entry
+        groq_options.append({
             "item_id": item_id,
             "title": entry_title(entry),
             "categories": entry_categories(entry),
@@ -252,20 +267,22 @@ def fetch_selected_papers():
 
     selected_ids = pick_item_ids(
         ARXIV_SYSTEM_PROMPT,
-        {"min_pick": MIN_CURATED, "max_pick": MAX_CURATED, "papers": curator_options},
+        {"max_pick": MAX_PICKS, "papers": groq_options},
         GROQ_KEY_ARXIV,
     )
     print(f"arXiv: LLM selected {len(selected_ids)} papers")
 
     items = []
     for item_id in selected_ids:
-        entry = entries_by_id.get(item_id)
+        entry = entries_by_item_id.get(item_id)
         if entry is None:
             continue
-        items.append(paper_to_item(entry, body=bodies_by_id.get(item_id)))
+        items.append(paper_to_item(entry, body=bodies_by_item_id.get(item_id)))
 
     return items
 
+
+# --- CLI ---
 
 def main():
     """Fetch selected arXiv papers and write them to items.jsonl."""
