@@ -14,9 +14,9 @@ Actions (tool_args shown; use {} when noted):
 - synthesize_report — {}
 - finish — {}
 
-Every user message includes Current progress (counts, unscored ids, ids needing summary, Suggested next action). Follow Suggested next action when present.
+Every user message includes Current progress (counts, unscored ids, pending summary ids, Suggested next action). Follow Suggested next action when present.
 
-For score_signal and summarize_item, prefer tool_args {} — Python auto-picks the next id from progress. Only pass {"item_id": "..."} if copying exactly from the Unscored or needs-summary list in Current progress. Never invent or reuse an item_id from a prior turn if it is not in the current progress list.
+For score_signal and summarize_item, prefer tool_args {} — Python auto-picks the next id from progress. Only pass {"item_id": "..."} if copying exactly from the Unscored or pending-summary list in Current progress. Never invent or reuse an item_id from a prior turn if it is not in the current progress list.
 
 Respond with ONLY valid JSON (no markdown, no extra text):
 {
