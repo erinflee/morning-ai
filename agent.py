@@ -4,9 +4,9 @@
 import json
 
 from prompts import load_prompt
-from fetch_hn import fetch_top_stories
-from fetch_arxiv import fetch_top_papers
-from fetch_github import fetch_trending_repos
+from fetch_hn import fetch_selected_stories
+from fetch_arxiv import fetch_selected_papers
+from fetch_github import fetch_selected_repos
 from tools import (
     score_signal,
     summarize_item,
@@ -34,25 +34,22 @@ ORCHESTRATOR_USER_PROMPT = (
 
 
 
+# --- JSONL I/O ---
+
 def clear_daily_files():
     """Wipe yesterday's summaries, signals, and report JSONL files before a new daily run."""
     for path in (SUMMARIES_FILE, SIGNALS_FILE, REPORT_FILE):
         open(path, 'w', encoding='utf-8').close()
 
 
-
 def signals_by_id():
-    """Read signals.jsonl -> dict {item_id: score row} 
-    
-    Last row wins if duplicated (most recent).
-    """
+    """Read signals.jsonl -> dict {item_id: signal row}. Last row wins if duplicated."""
     signals = {}
-    for signal in load_jsonl(SIGNALS_FILE): 
+    for signal in load_jsonl(SIGNALS_FILE):
         item_id = str(signal.get("item_id") or "")
         if item_id:
             signals[item_id] = signal
     return signals
-
 
 
 def summarized_item_ids():
@@ -64,6 +61,8 @@ def summarized_item_ids():
     }
 
 
+
+# --- Progress ---
 
 def progress_status():
     """Find scored, high-signal, unscored, and pending-summary item_id sets from JSONL.
@@ -134,6 +133,8 @@ def progress_summary():
 
 
 
+# --- ReAct helpers ---
+
 def build_messages(turn_history):
     """Assemble system + user + recent ReAct turns for the next Groq call.
        
@@ -150,12 +151,8 @@ def build_messages(turn_history):
     return messages
 
 
-
 def record_turn(turn_history, llm_response, observation):
-    """Append one assistant/observation pair.
-
-    Keep only the last MAX_HISTORY_TURNS.
-    """
+    """Append one assistant/observation pair. Keep only the last MAX_HISTORY_TURNS."""
     turn_history.append((llm_response, f"Observation: {observation}"))
     if len(turn_history) > MAX_HISTORY_TURNS:
         del turn_history[:-MAX_HISTORY_TURNS] # everything except last 6 turns
@@ -175,6 +172,8 @@ def resolve_item_id(tool_args, allowed_id_list, empty_error):
 
 
 
+# --- Tool dispatch ---
+
 def run_tool(action, tool_args):
     """Match a ReAct action to toolkit -> return an observation string (None on finish is ok)."""
     match action:
@@ -185,7 +184,7 @@ def run_tool(action, tool_args):
             items = items_by_id()
             status = progress_status()
             item_id, error = resolve_item_id(tool_args, status["unscored_id_list"], "Error: all items already scored")
-            
+
             if error:
                 return error
             if item_id not in items:
@@ -195,7 +194,6 @@ def run_tool(action, tool_args):
             status_message, signal_row = score_signal(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
 
             return f"{status_message}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
-
 
         # only summarize sources that received high signal in signals.jsonl
         # keep note of progress of how many summarized before moving on
@@ -243,7 +241,6 @@ def run_tool(action, tool_args):
             return f"Unknown action: {action}"
 
 
-
 def react_loop():
     """Run the thought → action → observation loop until finish or MAX_STEPS."""
 
@@ -274,7 +271,7 @@ def react_loop():
 
         if action == "finish":
             observation = run_tool(action, tool_args)
-            
+
             if observation is None:
                 print("Done.")
                 break
@@ -289,27 +286,28 @@ def react_loop():
 
 
 
+# --- Bootstrap ---
+
 def fetch_all_items():
     """Run all source fetchers and return a merged item list."""
     items_list = []
 
     print("Fetching Hacker News…")
-    hn_items = fetch_top_stories() or []
+    hn_items = fetch_selected_stories() or []
     print(f"  HN: {len(hn_items)} items")
     items_list.extend(hn_items)
 
     print("Fetching arXiv…")
-    arxiv_items = fetch_top_papers() or []
+    arxiv_items = fetch_selected_papers() or []
     print(f"  arXiv: {len(arxiv_items)} items")
     items_list.extend(arxiv_items)
 
     print("Fetching GitHub…")
-    github_items = fetch_trending_repos() or []
+    github_items = fetch_selected_repos() or []
     print(f"  GitHub: {len(github_items)} items")
     items_list.extend(github_items)
 
     return items_list
-
 
 
 def main():
@@ -323,7 +321,6 @@ def main():
 
     write_items(items_list)
     react_loop()
-
 
 
 if __name__ == "__main__":
