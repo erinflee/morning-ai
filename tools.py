@@ -1,14 +1,27 @@
+"""Shared JSONL I/O, Groq calls, and desk pipeline tools (score, summarize, synthesize)."""
+
 import os
-import re
 import json
 from datetime import datetime, timezone
 from openai import OpenAI
 from dotenv import load_dotenv
 from prompts import load_prompt
-from content_filters import marketing_filter_reason
+from content_filters import (
+    clean_text,
+    clean_tags,
+    marketing_filter_reason,
+    report_reason,
+    summary_field_reason,
+    tags_reason,
+)
+
+load_dotenv()
+
+# Pipeline: JSONL I/O -> Groq calls -> score / summarize / synthesize
+
+# --- Config ---
 
 GROQ_MODEL = "llama-3.3-70b-versatile"
-load_dotenv()
 
 ITEMS_FILE = "items.jsonl"
 SUMMARIES_FILE = "summaries.jsonl"
@@ -29,28 +42,9 @@ REVIEWER_PROMPT = load_prompt("reviewer.txt")
 SCORE_SIGNAL_PROMPT = load_prompt("score_signal_system.txt")
 SYNTHESIZE_REPORT_PROMPT = load_prompt("synthesize_report.txt")
 
-MIN_TEXT_CHARS = 80
 
-SUMMARY_PLACEHOLDER_PHRASES = (
-    "who/what",
-    "why it matters",
-    "this summary captures",
-    "key developments, who",
-    "key developments who",
-)
-
-REPORT_PLACEHOLDER_PHRASES = (
-    "full morning briefing",
-    "cross-cutting theme",
-    "optional ## headings",
-    "recent announcements",
-    "significant advancements",
-    "this report",
-)
-
-
-
-# --- JSONL I/O ---
+# --- JSONL Input/Output ---
+# Read/write items, signals, summaries, and report rows on disk.
 
 def load_jsonl(path):
     """Load a JSONL file into a list of dicts -> return [] if the file is missing."""
@@ -68,7 +62,7 @@ def write_items(items, path=ITEMS_FILE):
     print(f"Wrote {len(items)} items to {path}")
 
 
-def items_by_id():
+def items_by_item_id():
     """Read items.jsonl -> dict {item_id: item info} for fast lookup."""
     items = {}
     for item in load_jsonl(ITEMS_FILE):
@@ -102,7 +96,8 @@ def latest_signal_row(item_id):
 
 
 
-# --- Groq helpers ---
+# --- Groq ---
+# groq_chat: JSON-mode completions. parse_llm_json: strip fences. pick_item_ids: fetch-time pick.
 
 def groq_chat(messages, api_key_env=GROQ_KEY_ANALYST):
     """Call Groq chat completions in JSON mode -> return the assistant message content string in JSON."""
@@ -150,71 +145,15 @@ def pick_item_ids(system_prompt, options_payload, api_key_env):
 
 
 
-# --- Text cleaning & validation ---
-
-def clean_text(text):
-    """Remove LLM template junk such as '<field: ...>' prefixes and stray trailing '>' characters.
-
-    Used in summarize_item (summary fields) and synthesize_report (title, report).
-    """
-    text = (text or "").strip()
-    text = re.sub(r"^<[^>]+:\s*", "", text, flags=re.IGNORECASE)
-    text = text.rstrip(">").strip()
-    return text
-
-
-def clean_tags(tags_list):
-    """Clean LLM topic/theme tags (lowercase strings only) -> return [] if input is not a list.
-
-    Used in summarize_item (topics) and synthesize_report (themes).
-    """
-    if not isinstance(tags_list, list):
-        return []
-
-    tags = []
-    for tag in tags_list:
-        if not isinstance(tag, str):
-            continue
-        tag = tag.strip().lower()
-        if tag.startswith("<") and tag.endswith(">"):
-            tag = tag[1:-1].strip()
-        if not tag:
-            continue
-        tags.append(tag)
-    return tags
-
-
-def invalid_text_reason(text, field, placeholder_phrases, min_chars=MIN_TEXT_CHARS):
-    """Return why text failed validation (empty, too short, placeholder, brackets), else None.
-
-    Used in summarize_item and synthesize_report before appending to JSONL.
-    """
-    text = (text or "").strip()
-    if not text:
-        return f"empty {field}"
-    if len(text) < min_chars:
-        return f"{field} too short ({len(text)} chars, need {min_chars}+)"
-
-    lower = text.lower()
-    for phrase in placeholder_phrases:
-        if phrase in lower:
-            return f"{field} looks like prompt placeholder text"
-
-    if text.startswith("<") or text.endswith(">"):
-        return f"{field} contains template angle brackets"
-
-    return None
-
-
-
 # --- Pipeline tools ---
+# score_signal, summarize_item, synthesize_report — called by the orchestrator in agent.py.
 
 def score_signal(item_id, author, subject, body, source="hackernews", url=""):
     """Score one item with Groq, append to signals.jsonl -> returns (status_message, signal_row)."""
 
-    marketing_skip_reason = marketing_filter_reason(subject, body, url, source)
-    if marketing_skip_reason:
-        signal_row = write_signal_row(item_id, author, False, f"Auto-filter: {marketing_skip_reason}")
+    drop_reason = marketing_filter_reason(subject, body, url, source)
+    if drop_reason:
+        signal_row = write_signal_row(item_id, author, False, f"Auto-filter: {drop_reason}")
         return f"Scored {author}", signal_row
 
     item_json = json.dumps({
@@ -288,24 +227,20 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
 
     summary_text_fields = {}
     for field_name, parsed, key, min_chars in (
-        ("summary", analyst_parsed, "summary", MIN_TEXT_CHARS),
-        ("technical_breakthrough", analyst_parsed, "technical_breakthrough", MIN_TEXT_CHARS),
+        ("summary", analyst_parsed, "summary", 80),
+        ("technical_breakthrough", analyst_parsed, "technical_breakthrough", 80),
         ("limitations_or_critiques", reviewer_parsed, "limitations_or_critiques", 40),
     ):
         field_text = clean_text(parsed.get(key) or "")
-        invalid_reason = invalid_text_reason(
-            field_text,
-            field=field_name,
-            placeholder_phrases=SUMMARY_PLACEHOLDER_PHRASES,
-            min_chars=min_chars,
-        )
-        if invalid_reason:
-            return f"Skipped {author}: {invalid_reason}"
+        drop_reason = summary_field_reason(field_text, field=field_name, min_chars=min_chars)
+        if drop_reason:
+            return f"Skipped {author}: {drop_reason}"
         summary_text_fields[field_name] = field_text
 
     topics = clean_tags(analyst_parsed.get("topics"))
-    if not topics:
-        return f"Skipped {author}: bad topics"
+    drop_reason = tags_reason(topics, label="topics")
+    if drop_reason:
+        return f"Skipped {author}: {drop_reason}"
 
     summary_row = {
         "item_id": str(item_id or ""),
@@ -323,7 +258,7 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
 
 def synthesize_report():
     """Merge summaries with Groq into one markdown report -> append to report.jsonl or return a skip reason."""
-    items = items_by_id()
+    items = items_by_item_id()
 
     summary_rows = []
     for summary_row in load_jsonl(SUMMARIES_FILE):
@@ -359,36 +294,20 @@ def synthesize_report():
     section_item_ids = parsed.get("section_item_ids")
     themes = clean_tags(parsed.get("themes"))
 
-    if not title:
-        return "Skipped report: bad title"
-    report_invalid_reason = invalid_text_reason(report_body, field="report", placeholder_phrases=REPORT_PLACEHOLDER_PHRASES)
-    
-    if report_invalid_reason:
-        return f"Skipped report: {report_invalid_reason}"
-    if "## " not in report_body:
-        return "Skipped report: report must use ## section headings"
-    if "### The Breakthrough" not in report_body or "### The Caveats" not in report_body:
-        return "Skipped report: report must use ### The Breakthrough and ### The Caveats subsections"
-    section_count = sum(
-        1 for line in report_body.splitlines()
-        if line.startswith("## ") and not line.startswith("###")
+    summary_rows_by_item_id = {summary_row["item_id"]: summary_row for summary_row in summary_rows}
+    drop_reason = report_reason(
+        title,
+        report_body,
+        section_item_ids,
+        len(summary_rows),
+        set(summary_rows_by_item_id),
+        themes,
     )
+    if drop_reason:
+        return f"Skipped report: {drop_reason}"
 
-    if section_count < len(summary_rows):
-        return f"Skipped report: need one ## section per summary ({section_count} sections, {len(summary_rows)} summaries)"
-    if not isinstance(section_item_ids, list) or len(section_item_ids) != section_count:
-        return f"Skipped report: section_item_ids must match ## section count ({section_count})"
-
-    summary_rows_by_id = {summary_row["item_id"]: summary_row for summary_row in summary_rows}
     section_item_ids = [str(item_id or "") for item_id in section_item_ids]
-    for item_id in section_item_ids:
-        if not item_id or item_id not in summary_rows_by_id:
-            return f"Skipped report: unknown section item_id {item_id!r}"
-
-    section_urls = [summary_rows_by_id[item_id].get("url") or "" for item_id in section_item_ids]
-
-    if not themes:
-        return "Skipped report: bad themes"
+    section_urls = [summary_rows_by_item_id[item_id].get("url") or "" for item_id in section_item_ids]
 
     report_entry = {
         "title": title,
