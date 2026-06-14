@@ -1,0 +1,109 @@
+# The Morning AI
+
+A daily, autonomous research briefing on robotics and AI. Every morning a small team of LLM agents scans Hacker News, arXiv, and GitHub, decides what is actually worth reading, summarizes it, and publishes a single short report to a static site.
+
+> "Robotics news, papers, and repos, picked so you don't have to live in 20 tabs."
+
+## Why I built it
+
+I used to keep up with robotics news by scrolling, closing, and alt-tabbing across many tech sites every morning before my coffee. The Morning AI automates that scan and produces one focused briefing a day.
+
+I also built it to learn agentic AI by actually building it. The aim was a complete, working system: several agents working together, an LLM making the picks at each source, a ReAct-style loop that decides the next action, and validation strict enough that a failed run stops itself instead of publishing something unreliable.
+
+## How it works
+
+The pipeline runs in two phases: a fetch phase that collects items from each source and picks out the best few, then a reasoning phase where an orchestrator works through them.
+
+```
+fetch (HN / arXiv / GitHub)  ->  items.jsonl
+        |
+        v
+  ReAct orchestrator loop:
+    score_signal     ->  signals.jsonl     (keep or drop each item)
+    summarize_item   ->  summaries.jsonl   (analyst drafts, reviewer critiques)
+    synthesize_report->  report.jsonl      (editor merges into one briefing)
+    finish
+        |
+        v
+  export_site.py  ->  docs/report.json  ->  static site (docs/)
+```
+
+### The agent roster
+
+Each role runs on Groq (`llama-3.3-70b-versatile`) with its own API key so rate limits are isolated per agent.
+
+| Role           | Module            | Job                                                                    |
+| -------------- | ----------------- | ---------------------------------------------------------------------- |
+| HN curator     | `fetch_hn.py`     | Discover and pre-rank Hacker News stories, then pick the most relevant |
+| arXiv curator  | `fetch_arxiv.py`  | Pull the latest announcement batch and pick standout papers            |
+| GitHub curator | `fetch_github.py` | Search recently active AI repos and pick the strongest                 |
+| Research desk  | `tools.py`        | Score each item for signal, then draft and review a summary            |
+| Orchestrator   | `agent.py`        | Run the daily ReAct loop and drive the pipeline to completion          |
+
+### Key design choices
+
+- **LLM as selector at each source.** Each fetcher trims its options to a short list and asks the model to choose, rather than relying on keyword rules alone. A code-level marketing filter runs first so promotional content never reaches the model.
+- **ReAct control loop.** The orchestrator ([agent.py](agent.py)) reasons one step at a time (thought, action, observation), reading progress from the JSONL files each turn instead of holding everything in memory.
+- **Strict output validation.** [content_filters.py](content_filters.py) rejects empty, too-short, placeholder, or malformed model output before it is written. A report must have the expected structure or it is dropped.
+- **Fail loudly.** [scripts/export_site.py](scripts/export_site.py) exits non-zero on a missing or empty report, and (in CI) on a stale one, so a broken run is visible instead of silently publishing yesterday's page.
+
+## Project structure
+
+```
+agent.py            Orchestrator and ReAct loop
+tools.py            Groq calls, JSONL I/O, score/summarize/synthesize tools
+content_filters.py  Input filtering and output validation
+fetch_hn.py         Hacker News curator
+fetch_arxiv.py      arXiv curator
+fetch_github.py     GitHub curator
+prompts/            System prompts for each agent role
+scripts/            daily_agent.sh runner, export_site.py site export
+docs/               Static site (index.html, app.js, report.json, team.json)
+```
+
+## Getting started
+
+Requires Python 3.12+ and a free [Groq API](https://console.groq.com/) account.
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Configure secrets
+cp .env.example .env
+# then fill in GROQ_API_KEY1..5 (one per agent), and optionally GITHUB_TOKEN
+
+# 3. Run the pipeline, then export the site
+python agent.py
+python scripts/export_site.py
+```
+
+`agent.py` writes the report to `report.jsonl`. `export_site.py` copies the latest report into `docs/report.json`, which the static site reads. Open `docs/index.html` to view the result locally.
+
+### Environment
+
+| Variable        | Purpose                                           |
+| --------------- | ------------------------------------------------- |
+| `GROQ_API_KEY1` | HN curator                                        |
+| `GROQ_API_KEY2` | arXiv curator                                     |
+| `GROQ_API_KEY3` | GitHub curator                                    |
+| `GROQ_API_KEY4` | Research desk (scorer, analyst, reviewer, editor) |
+| `GROQ_API_KEY5` | Orchestrator                                      |
+| `GITHUB_TOKEN`  | Optional, raises GitHub search rate limits        |
+
+Secrets live in `.env`, which is git-ignored and never committed.
+
+## Automation
+
+[scripts/daily_agent.sh](scripts/daily_agent.sh) runs the full pipeline and the site export in sequence, logging to `logs/`. It is scheduled to run at 08:00 daily (locally via launchd, and intended to move to GitHub Actions with the site served by GitHub Pages).
+
+## Tech stack
+
+- **Python 3.12** for the pipeline
+- **Groq** (`llama-3.3-70b-versatile`) via the OpenAI-compatible API
+- **requests** + **trafilatura** for fetching and article extraction
+- **Vanilla HTML/CSS/JS** for the static site, deployable on GitHub Pages
+
+## License
+
+No license yet. All rights reserved.
