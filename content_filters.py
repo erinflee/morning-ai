@@ -30,7 +30,7 @@ MARKETING_KEYWORDS = (
     "limited-time offer",
 )
 
-SUBSTANCE_KEYWORDS = (
+ENGINEERING_KEYWORDS = (
     "benchmark",
     "closed-loop",
     "dataset",
@@ -73,6 +73,29 @@ BRAND_BLOG_HOSTS = (
 
 BRAND_BLOG_PATH_MARKERS = ("/blog", "/press", "/newsroom", "/news/")
 
+# Robotics terms for HN story ranking (title/text/url metadata only).
+ROBOTICS_KEYWORDS = (
+    "robot",
+    "robotic",
+    "humanoid",
+    "manipulation",
+    "locomotion",
+    "drone",
+    "embodied",
+    "teleop",
+    "tactile",
+    "visuomotor",
+    "lidar",
+    "isaac",
+    "mujoco",
+    "autonomous",
+    "self-driving",
+    "gaussian splatting",
+)
+
+# HN pre-Groq ranking — robotics + engineering/deployment terms (not marketing rescue).
+STORY_RANK_KEYWORDS = tuple(dict.fromkeys(ROBOTICS_KEYWORDS + ENGINEERING_KEYWORDS))
+
 
 # --- Fetch filters: text helpers ---
 
@@ -80,16 +103,10 @@ def _combined_text(*parts):
     return " ".join(part.strip() for part in parts if part and part.strip()).lower()
 
 
-def has_marketing_signals(text):
-    """True when body/title looks like perks, pricing, or loyalty marketing."""
-    lower = _combined_text(text)
-    return any(keyword in lower for keyword in MARKETING_KEYWORDS)
-
-
-def has_engineering_substance(text):
-    """True when text mentions deployment, safety, benchmarks, or similar substance."""
-    lower = _combined_text(text)
-    return any(keyword in lower for keyword in SUBSTANCE_KEYWORDS)
+def story_rank_score(*parts):
+    """Count story-rank keywords in combined text — used to sort HN stories before Groq pick."""
+    lower = _combined_text(*parts)
+    return sum(1 for keyword in STORY_RANK_KEYWORDS if keyword in lower)
 
 
 def is_brand_blog_url(url):
@@ -121,11 +138,13 @@ def is_brand_blog_url(url):
 def marketing_filter_reason(subject="", body="", url="", source=""):
     """Return a drop reason for raw items, or None if the item should pass."""
     text = _combined_text(subject, body)
+    has_engineering = any(keyword in text for keyword in ENGINEERING_KEYWORDS)
+    has_marketing = any(keyword in text for keyword in MARKETING_KEYWORDS)
 
-    if source == "hackernews" and is_brand_blog_url(url) and not has_engineering_substance(text):
+    if source == "hackernews" and is_brand_blog_url(url) and not has_engineering:
         return "company blog URL without engineering or deployment substance"
 
-    if has_marketing_signals(text) and not has_engineering_substance(text):
+    if has_marketing and not has_engineering:
         return "marketing language without engineering or deployment substance"
 
     return None
@@ -200,16 +219,6 @@ def invalid_text_reason(text, field, placeholder_phrases, min_chars=MIN_TEXT_CHA
         return f"{field} contains template angle brackets"
 
     return None
-
-
-def summary_field_reason(text, field, min_chars=MIN_TEXT_CHARS):
-    """Return why a summary field failed validation, else None."""
-    return invalid_text_reason(
-        text,
-        field=field,
-        placeholder_phrases=SUMMARY_PLACEHOLDER_PHRASES,
-        min_chars=min_chars,
-    )
 
 
 def tags_reason(tags, label="topics"):
