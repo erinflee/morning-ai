@@ -1,7 +1,7 @@
 # LLM (Groq via OpenAI-compatible API)
-openai
-python-dotenv
+openai==2.30.0
+python-dotenv==1.0.1
 
 # HTTP (fetch_hn.py)
-requests
-trafilatura
+requests==2.33.0
+trafilatura==2.1.0
