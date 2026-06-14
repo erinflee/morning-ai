@@ -46,26 +46,6 @@ def clear_daily_files():
         open(path, 'w', encoding='utf-8').close()
 
 
-def signals_by_item_id():
-    """Read signals.jsonl -> dict {item_id: signal row}. Last row wins if duplicated."""
-    signals = {}
-    for signal in load_jsonl(SIGNALS_FILE):
-        item_id = str(signal.get("item_id") or "")
-        if item_id:
-            signals[item_id] = signal
-    return signals
-
-
-def summarized_item_ids():
-    """Return the set of item_ids that already have a row in summaries.jsonl."""
-    return {
-        str(summary_row.get("item_id") or "")
-        for summary_row in load_jsonl(SUMMARIES_FILE)
-        if summary_row.get("item_id")
-    }
-
-
-
 # --- Progress ---
 # progress_status: work queues from JSONL. progress_summary: short text for the orchestrator.
 
@@ -78,17 +58,25 @@ def progress_status():
     """
     items = items_by_item_id()
     all_ids = set(items.keys())
-    signals = signals_by_item_id()
-    already_summarized_ids = summarized_item_ids()
+    signals = {}
+    for signal in load_jsonl(SIGNALS_FILE):
+        item_id = str(signal.get("item_id") or "")
+        if item_id:
+            signals[item_id] = signal
+    already_summarized_ids = set()
+    for summary_row in load_jsonl(SUMMARIES_FILE):
+        item_id = str(summary_row.get("item_id") or "")
+        if item_id:
+            already_summarized_ids.add(item_id)
 
-    scored_ids = {
-        item_id for item_id in all_ids
-        if item_id in signals and isinstance(signals[item_id].get("high_signal"), bool)
-    }
-    high_signal_ids = {
-        item_id for item_id in scored_ids
-        if signals[item_id].get("high_signal") is True
-    }
+    scored_ids = set()
+    for item_id in all_ids:
+        if item_id in signals and isinstance(signals[item_id].get("high_signal"), bool):
+            scored_ids.add(item_id)
+    high_signal_ids = set()
+    for item_id in scored_ids:
+        if signals[item_id].get("high_signal") is True:
+            high_signal_ids.add(item_id)
     # Don't expose pending summaries until every item is scored (empty all_ids stays False).
     all_scored = bool(all_ids) and scored_ids == all_ids
 
@@ -181,9 +169,6 @@ def resolve_item_id(tool_args, allowed_id_list, empty_error):
 def run_tool(action, tool_args):
     """Match a ReAct action to toolkit -> return an observation string (None on finish is ok)."""
     match action:
-
-        # only label high signal and reason why for sources in items.jsonl
-        # keep note of progress of how many scored before moving on
         case "score_signal":
             items = items_by_item_id()
             status = progress_status()
@@ -199,8 +184,6 @@ def run_tool(action, tool_args):
 
             return f"{status_message}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
 
-        # only summarize sources that received high signal in signals.jsonl
-        # keep note of progress of how many summarized before moving on
         case "summarize_item":
             status = progress_status()
             if status["unscored_id_list"]:
@@ -217,9 +200,6 @@ def run_tool(action, tool_args):
             item = items[item_id]
             return summarize_item(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
 
-
-        # only create final report after all sources have been summarized in summaries.jsonl
-        # cannot synthesize if unscored, no high signals, or no summaries
         case "synthesize_report":
             status = progress_status()
             if status["unscored_id_list"]:
@@ -231,7 +211,6 @@ def run_tool(action, tool_args):
             return synthesize_report()
 
 
-        # finished execution. Final report will show up on UI daily
         case "finish":
             if load_jsonl(REPORT_FILE):
                 return None
