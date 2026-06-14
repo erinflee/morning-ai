@@ -251,7 +251,7 @@ Never commit `.env`, raw `items.jsonl`, or `report.jsonl`. **Do commit** `docs/r
 - [x] PNG pixel portraits for Erin + five agents
 - [x] `scripts/export_site.py` — `report.jsonl` → `docs/report.json`
 - [x] Hook export into `scripts/daily_agent.sh`
-- [x] Separate Groq keys per curator + desk + orchestrator
+- [x] Separate Groq keys per fetch source + desk + orchestrator
 - [ ] Enable GitHub Pages on remote and verify live URL
 - [ ] Optional: daily git push of updated `docs/report.json`
 - [ ] Surface `title`, `source_count`, and `### Connection` in report UI
