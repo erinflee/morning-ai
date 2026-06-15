@@ -16,6 +16,7 @@ from tools import (
     write_items,
     items_by_item_id,
     GROQ_KEY_ORCHESTRATOR,
+    GROQ_MODEL_FAST,
     ITEMS_FILE,
     SUMMARIES_FILE,
     SIGNALS_FILE,
@@ -27,7 +28,9 @@ from tools import (
 # --- Config ---
 
 MAX_STEPS = 40
-MAX_HISTORY_TURNS = 6  # short-term memory: recent assistant/observation turns kept for recall
+MAX_HISTORY_TURNS = 2  # short-term memory: recent assistant/observation turns kept for recall
+                       # (authoritative state is recomputed each turn in the "Current progress"
+                       #  block, so a short window is enough — just anti-repetition context)
 
 ORCHESTRATOR_SYSTEM_PROMPT = load_prompt("build_message.txt")
 ORCHESTRATOR_USER_PROMPT = (
@@ -237,7 +240,7 @@ def react_loop():
     for step in range(1, MAX_STEPS + 1):
         llm_response = ""
         try:
-            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCHESTRATOR)
+            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCHESTRATOR, model=GROQ_MODEL_FAST)
             parsed = parse_llm_json(llm_response)
         except json.JSONDecodeError:
             record_turn(turn_history, llm_response, "Invalid JSON. Respond with only valid JSON.")
