@@ -10,29 +10,22 @@ from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from prompts import load_prompt
-from tools import GROQ_KEY_GITHUB, pick_item_ids, write_items
+from tools import GROQ_KEY_GITHUB, MAX_GROQ_BODY_CHARS, USER_AGENT, pick_item_ids, write_items
 
 load_dotenv()
-
-# Pipeline: topic search -> deduped repos -> Groq pick -> item dicts
 
 # --- Config ---
 
 PUSHED_DAYS = 3  # repos active in the last 3 days (balance of fresh vs empty runs)
 GITHUB_SEARCH_URL = "https://api.github.com/search/repositories"
 
-# repos from GitHub search (pre dedupe/sort cap)
-MAX_SEARCH_REPOS = 30
-# most recently updated N before Groq picks
-MAX_PICK_OPTIONS = 20
-# Groq pick target (prompt-only -> not enforced in code)
-MAX_PICKS = 3
+MAX_SEARCH_REPOS = 30    # repos from GitHub search (pre dedupe/sort cap)
+MAX_PICK_OPTIONS = 20    # most recently updated N before Groq picks
+MAX_PICKS = 3            # Groq pick target (prompt-only, not enforced in code)
 MIN_STARS = 10
 MAX_STARS = 5000  # skip household-name megarepos (opencv, openpilot, etc.)
 MAX_BODY_CHARS = 8000
-MAX_GROQ_BODY_CHARS = 1200
 MAX_README_CHARS = 6000
-USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/erinlee316/morning-ai)"
 
 AI_TOPICS = (
     "robotics",
@@ -54,7 +47,6 @@ GITHUB_SYSTEM_PROMPT = load_prompt("github_system.txt")
 
 
 # --- Search helpers ---
-# GitHub API headers and stable item_id.
 
 def github_headers():
     """Build GitHub API headers; optional GITHUB_TOKEN raises rate limits."""
@@ -82,7 +74,6 @@ def pushed_since_date():
 
 
 # --- Item shaping ---
-# fetch_readme + repo_body build Groq text; repo_to_item -> items.jsonl dict.
 
 def fetch_readme(full_name):
     """Fetch and decode a repo README; return '' on failure."""
@@ -142,7 +133,6 @@ def repo_to_item(repo, body=None):
 
 
 # --- Fetch ---
-# search_repos: multi-query search, dedupe by full_name, cap at MAX_SEARCH_REPOS.
 
 def search_repos():
     """Search GitHub for recently pushed AI-related repositories."""
@@ -195,7 +185,6 @@ def search_repos():
 
 
 # --- Groq pick ---
-# pick_options -> groq_options -> pick_item_ids -> repos_by_item_id / bodies_by_item_id lookups.
 
 def fetch_selected_repos():
     """Search GitHub for active AI repos, pick with Groq, return item dicts for items.jsonl."""
