@@ -8,11 +8,11 @@ from html import unescape
 from dotenv import load_dotenv
 from prompts import load_prompt
 from content_filters import marketing_filter_reason, story_rank_score
-from tools import GROQ_KEY_HN, pick_item_ids, write_items
+from tools import GROQ_KEY_HN, MAX_GROQ_BODY_CHARS, USER_AGENT, pick_item_ids, write_items
 
 load_dotenv()
 
-# Pipeline: front page + Algolia topic search -> rank -> marketing filter -> fill top 20 -> Groq pick
+
 
 # --- Config ---
 
@@ -20,21 +20,15 @@ HN_TOP_STORIES_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 HN_ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
 ALGOLIA_HN_SEARCH_URL = "https://hn.algolia.com/api/v1/search_by_date"
 
-# front-page ids to check (pre 24h filter)
-MAX_FRONT_PAGE_IDS = 100
-# Groq pipeline limits — MAX_PICK_OPTIONS / MAX_BODY_CHARS / MAX_GROQ_BODY_CHARS are
-# intentionally mirrored across fetch_arxiv.py, fetch_github.py, fetch_hn.py.
+MAX_FRONT_PAGE_IDS = 100    # front-page ids to check (pre 24h filter)
+# MAX_PICK_OPTIONS / MAX_BODY_CHARS are mirrored across the three fetchers.
 MAX_PICK_OPTIONS = 20
-# Groq pick target (prompt-only -> not enforced in code)
-MAX_PICKS = 4
+MAX_PICKS = 4               # Groq pick target (prompt-only, not enforced in code)
 MAX_BODY_CHARS = 8000
-MAX_GROQ_BODY_CHARS = 1200
 MIN_INLINE_TEXT_CHARS = 50  # HN post text before fetching linked article
 STORY_MAX_AGE_HOURS = 24
-USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/erinlee316/morning-ai)"
 
 # Algolia discovery: one query per topic — surfaces robotics posts that miss the front page.
-# Broader terms ("robot", "robotics") catch daily posts; specific phrases catch niche stories on quiet days.
 HN_TOPICS = (
     "robot",
     "robotics",
@@ -50,8 +44,8 @@ MAX_HITS_PER_TOPIC = 20
 HN_SYSTEM_PROMPT = load_prompt("hacker_news_system.txt")
 
 
+
 # --- Item shaping ---
-# story_body resolves post text or linked article; story_to_item -> items.jsonl dict.
 
 def fetch_article_body(url):
     """Download a link post and pull readable article text from page."""
@@ -102,9 +96,8 @@ def story_to_item(story, body=None):
     }
 
 
-# --- Fetch ---
-# fetch_front_page_stories + search_stories_by_topic -> fetch_recent_stories (deduped).
 
+# --- Fetch ---
 
 def fetch_top_item_ids():
     """Return up to MAX_FRONT_PAGE_IDS item ids from the Hacker News topstories API."""
@@ -224,8 +217,8 @@ def rank_stories_for_pick(stories):
     )
 
 
+
 # --- Groq pick ---
-# rank -> walk down list: marketing filter + body fetch -> fill MAX_PICK_OPTIONS -> pick_item_ids.
 
 def fetch_selected_stories():
     """Discover HN stories, rank, pre-filter, pick with Groq, and return item dicts for items.jsonl."""
@@ -244,7 +237,7 @@ def fetch_selected_stories():
     groq_options = []
     pre_filter_drops = 0
 
-    print(f"HN: fetching bodies for ranked candidates…")
+    print("HN: fetching bodies for ranked stories…")
     for story in ranked_stories:
         if len(groq_options) >= MAX_PICK_OPTIONS:
             break
@@ -289,6 +282,7 @@ def fetch_selected_stories():
         items.append(story_to_item(story, body=bodies_by_item_id.get(item_id, "")))
 
     return items
+
 
 
 # --- CLI ---
