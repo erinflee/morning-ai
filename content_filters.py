@@ -1,8 +1,4 @@
-"""Content quality rules for pipeline inputs and LLM outputs.
-
-Input filters run on raw items (fetch_hn, score_signal).
-Output rules run on desk LLM text (summarize_item, synthesize_report).
-"""
+"""Content quality rules for pipeline inputs and LLM outputs."""
 
 import re
 from urllib.parse import urlparse
@@ -99,13 +95,9 @@ STORY_RANK_KEYWORDS = tuple(dict.fromkeys(ROBOTICS_KEYWORDS + ENGINEERING_KEYWOR
 
 # --- Fetch filters: text helpers ---
 
-def _combined_text(*parts):
-    return " ".join(part.strip() for part in parts if part and part.strip()).lower()
-
-
 def story_rank_score(*parts):
-    """Count story-rank keywords in combined text — used to sort HN stories before Groq pick."""
-    lower = _combined_text(*parts)
+    """Count story-rank keywords — used to sort HN stories before the Groq pick."""
+    lower = " ".join(part.strip() for part in parts if part and part.strip()).lower()
     return sum(1 for keyword in STORY_RANK_KEYWORDS if keyword in lower)
 
 
@@ -133,11 +125,12 @@ def is_brand_blog_url(url):
     return any(marker in path for marker in BRAND_BLOG_PATH_MARKERS)
 
 
+
 # --- Fetch filters: marketing drop ---
 
 def marketing_filter_reason(subject="", body="", url="", source=""):
     """Return a drop reason for raw items, or None if the item should pass."""
-    text = _combined_text(subject, body)
+    text = " ".join(part.strip() for part in (subject, body) if part and part.strip()).lower()
     has_engineering = any(keyword in text for keyword in ENGINEERING_KEYWORDS)
     has_marketing = any(keyword in text for keyword in MARKETING_KEYWORDS)
 
@@ -148,6 +141,7 @@ def marketing_filter_reason(subject="", body="", url="", source=""):
         return "marketing language without engineering or deployment substance"
 
     return None
+
 
 
 # --- Desk validation: constants ---
@@ -172,10 +166,11 @@ REPORT_PLACEHOLDER_PHRASES = (
 )
 
 
+
 # --- Desk validation: text cleaning ---
 
 def clean_text(text):
-    """Remove LLM template junk such as '<field: ...>' prefixes and stray trailing '>' characters."""
+    """Strip LLM template junk: '<field: ...>' prefixes and stray trailing '>'."""
     text = (text or "").strip()
     text = re.sub(r"^<[^>]+:\s*", "", text, flags=re.IGNORECASE)
     text = text.rstrip(">").strip()
@@ -183,7 +178,7 @@ def clean_text(text):
 
 
 def clean_tags(tags_list):
-    """Clean LLM topic/theme tags (lowercase strings only) -> return [] if input is not a list."""
+    """Clean LLM topic/theme tags to lowercase strings; [] if input is not a list."""
     if not isinstance(tags_list, list):
         return []
 
@@ -198,6 +193,7 @@ def clean_tags(tags_list):
             continue
         tags.append(tag)
     return tags
+
 
 
 # --- Desk validation: summary fields ---
@@ -226,6 +222,7 @@ def tags_reason(tags, label="topics"):
     if not tags:
         return f"bad {label}"
     return None
+
 
 
 # --- Desk validation: report ---
