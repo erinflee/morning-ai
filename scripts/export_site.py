@@ -1,10 +1,8 @@
 """Export last report.jsonl row → docs/report.json (public-safe fields only).
 
-Fails loudly (non-zero exit) on a bad run so a scheduled CI job goes red instead
-of silently deploying an empty or stale page:
-  - missing/empty report.jsonl or missing required keys -> always an error
-  - report not generated today (UTC) -> an error only in CI (RUNNING_IN_CI),
-    so local re-exports of an older report aren't blocked during testing.
+Fails loudly (non-zero exit) so a CI job goes red instead of deploying an empty/stale page:
+missing/empty report or required keys is always an error; a report not generated today (UTC)
+errors only in CI, so local re-exports of older reports aren't blocked.
 """
 
 import os
@@ -70,6 +68,7 @@ def main():
         "themes": row["themes"],
         "source_count": row.get("source_count", 0),
         "section_urls": row["section_urls"],
+        "section_titles": row.get("section_titles", []),
         "generated_at": row.get("generated_at")
         or datetime.now(timezone.utc).isoformat(),
     }
