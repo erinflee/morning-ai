@@ -51,7 +51,7 @@ fetch_hn.py:
   front page + Algolia topic search → rank → marketing filter → fill top 20 → Groq pick (≤4) → item dicts
 
 fetch_arxiv.py:
-  arXiv API → weekday batch → pick_options → Groq pick (≤4) → item dicts
+  arXiv API → two tracks (cs.RO + secondary) → pool (≤20) → Groq pick (≤4) → item dicts
 
 fetch_github.py:
   GitHub search → pick_options → Groq pick (≤3) → item dicts
@@ -78,8 +78,8 @@ launchd (8:00 AM) → scripts/daily_agent.sh → agent.py → export_site.py
 
 | Layer | Where | Model | Job |
 |-------|-------|-------|-----|
-| **Orchestrator** | `react_loop` in `agent.py` | Groq `llama-3.3-70b` (`GROQ_API_KEY5`) | Workflow — which tool, which `item_id`, when to synthesize/finish |
-| **Specialists** | `fetch_*.py`, `content_filters.py`, `tools.py` | Groq `llama-3.3-70b` | Fetch-time pick, marketing/noise filter, per-item summary, report synthesis |
+| **Orchestrator** | `react_loop` in `agent.py` | Groq `llama-3.3-70b` (`GROQ_API_KEY1`) | Workflow — which tool, which `item_id`, when to synthesize/finish |
+| **Specialists** | `fetch_*.py`, `content_filters.py`, `tools.py` | Groq `llama-3.3-70b` (`GROQ_API_KEY2`–`5`) | Fetch-time pick, marketing/noise filter, per-item summary, report synthesis |
 
 Python (`run_tool`) runs tools, enforces phase guards, and returns **observations** to the orchestrator. `progress_summary()` injects counts, unscored ids, and suggested next action each turn.
 
@@ -99,13 +99,15 @@ Python (`run_tool`) runs tools, enforces phase guards, and returns **observation
 
 ## Groq API keys
 
+Keys are assigned **per stage** (not per source), so each carries only its slice of the sequential run's per-minute token load.
+
 | Env var | Role |
 |---------|------|
-| `GROQ_API_KEY1` | HN fetch pick (`fetch_hn.py`) |
-| `GROQ_API_KEY2` | arXiv fetch pick (`fetch_arxiv.py`) |
-| `GROQ_API_KEY3` | GitHub fetch pick (`fetch_github.py`) |
-| `GROQ_API_KEY4` | Research Desk — scorer, analyst, reviewer, editor (`tools.py`) |
-| `GROQ_API_KEY5` | Orchestrator (`agent.py`) |
+| `GROQ_API_KEY1` | Orchestrator ReAct loop (`agent.py`) |
+| `GROQ_API_KEY2` | Signal scoring (`score_signal`) |
+| `GROQ_API_KEY3` | Analyst draft + report synthesis (`summarize_item` analyst, `synthesize_report`) |
+| `GROQ_API_KEY4` | Reviewer critique (`summarize_item` reviewer) |
+| `GROQ_API_KEY5` | Fetch-time source picks (HN + arXiv + GitHub) |
 
 Optional: `GITHUB_TOKEN` in `.env` for higher GitHub API rate limits.
 
@@ -117,8 +119,8 @@ Optional: `GITHUB_TOKEN` in `.env` for higher GitHub API rate limits.
 |------|----------|
 | `items.jsonl` | Raw sources (`item_id`, `source`, `subject`, `author`, `url`, `body`) |
 | `signals.jsonl` | Per-item noise filter (`item_id`, `author`, `high_signal`, `reason`) |
-| `summaries.jsonl` | Per-item analyst output (`item_id`, `author`, `subject`, `url`, `summary`, `technical_breakthrough`, `limitations_or_critiques`, `topics`) |
-| `report.jsonl` | Morning report (`title`, `report`, `themes`, `source_count`, `section_urls`, `generated_at`) — last line = current |
+| `summaries.jsonl` | Per-item desk output (`item_id`, `author`, `subject`, `display_title`, `url`, `summary`, `technical_breakthrough`, `limitations_or_critiques`, `topics`) |
+| `report.jsonl` | Morning report (`title`, `report`, `themes`, `source_count`, `section_titles`, `section_urls`, `generated_at`) — last line = current |
 | `docs/report.json` | Exported public snapshot (no raw items) |
 
 Shared helpers: `load_jsonl()`, `items_by_item_id()` in `tools.py`.
@@ -181,8 +183,8 @@ Fetch-time pick (`pick_item_ids()` in `tools.py`): each fetcher builds `pick_opt
 
 | Step | What |
 |------|------|
-| Fetch | Latest weekday announcement batch (18:00 UTC cadence) across cs.RO/CV/AI/LG/CL/SY/MA |
-| Trim | Newest `MAX_PICK_OPTIONS` (20) from batch |
+| Fetch | Two tracks: robotics (`cs.RO`, up to `MAX_ROBOTICS_OPTIONS` = 12 guaranteed slots) + secondary (`cs.CV/AI/LG/CL/SY/MA`) |
+| Trim | Combine into a pool of `MAX_PICK_OPTIONS` (20) — robotics first, then secondary fill |
 | Pick | Groq picks up to `MAX_PICKS` (**4**) papers (`arxiv_system.txt`; `max_pick`) |
 | Body | Title + categories + abstract |
 
@@ -283,8 +285,8 @@ python fetch_hn.py
 python -m http.server 8080 --directory docs
 
 # Test scheduled script
-"/Users/erinlee/Agentic AI/scripts/daily_agent.sh"
-tail "/Users/erinlee/Agentic AI/logs/agent.log"
+/Users/erinlee/agentic_ai/scripts/daily_agent.sh
+tail /Users/erinlee/agentic_ai/logs/agent.log
 ```
 
 **Step budget:** ~`item_count + high_signal_count + 2` minimum; `MAX_STEPS = 40` allows orchestrator retries.
@@ -297,6 +299,6 @@ Edit `Hour` / `Minute` in `scripts/com.erinlee.research-agent.plist`, then:
 
 ```bash
 launchctl unload ~/Library/LaunchAgents/com.erinlee.research-agent.plist
-cp "/Users/erinlee/Agentic AI/scripts/com.erinlee.research-agent.plist" ~/Library/LaunchAgents/
+cp /Users/erinlee/agentic_ai/scripts/com.erinlee.research-agent.plist ~/Library/LaunchAgents/
 launchctl load ~/Library/LaunchAgents/com.erinlee.research-agent.plist
 ```
