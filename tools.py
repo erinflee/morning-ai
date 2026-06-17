@@ -10,6 +10,7 @@ from prompts import load_prompt
 from content_filters import (
     clean_text,
     clean_tags,
+    display_title_or_fallback,
     marketing_filter_reason,
     report_reason,
     invalid_text_reason,
@@ -270,8 +271,10 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
         "source": source
     })
 
-    # Analyst drafts first; the reviewer critiques that draft (not the raw body), so the
-    # second call ships a few hundred tokens instead of the full article again.
+    # Analyst drafts first; the reviewer critiques that draft plus a few structured critique
+    # hooks (eval setup, baselines, scope, untested gaps) — not the raw body — so the second
+    # call still ships a few hundred tokens instead of the full article, while giving the
+    # reviewer concrete facts (and explicit absences) to ground a specific caveat.
     try:
         analyst_response = groq_chat([
             {"role": "system", "content": ANALYST_PROMPT},
@@ -291,6 +294,13 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
         "source": source,  # lets the reviewer tailor its caveat to the genre
         "summary": analyst_parsed.get("summary") or "",
         "technical_breakthrough": analyst_parsed.get("technical_breakthrough") or "",
+        # Critique hooks: concrete material (and explicit absences) so the reviewer names a
+        # specific weak link instead of defaulting to a generic "doesn't generalize" hedge.
+        # "none stated" baselines is itself the sharpest thing to flag.
+        "evaluation_setup": analyst_parsed.get("evaluation_setup") or "not specified",
+        "baselines_named": analyst_parsed.get("baselines_named") or "none stated",
+        "scope_of_claims": analyst_parsed.get("scope_of_claims") or "not specified",
+        "what_was_not_tested": analyst_parsed.get("what_was_not_tested") or "not specified",
     })
 
     try:
@@ -332,6 +342,9 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
         "item_id": str(item_id or ""),
         "author": author,
         "subject": subject,
+        # Reader-friendly headline for the UI; falls back to the raw subject when the model
+        # echoes the item_id or returns junk. The subject is kept as the safety net.
+        "display_title": display_title_or_fallback(analyst_parsed.get("display_title"), item_id, subject),
         "url": url or "",
         **summary_text_fields,
         "topics": topics,
@@ -394,9 +407,16 @@ def synthesize_report():
 
     section_item_ids = [str(item_id or "") for item_id in section_item_ids]
     section_urls = [summary_rows_by_item_id[item_id].get("url") or "" for item_id in section_item_ids]
-    # Headings come from the source's real subject (keyed by section_item_ids), not from
-    # whatever ## text the model wrote — it tends to echo the item_id.
-    section_titles = [summary_rows_by_item_id[item_id].get("subject") or "" for item_id in section_item_ids]
+    # Headings use the analyst's reader-friendly display_title (keyed by section_item_ids),
+    # falling back to the source's real subject — never the synthesizer's ## text, which
+    # tends to echo the item_id. display_title was already guarded against that echo at
+    # summarize time, so the subject fallback here is just for older rows missing the field.
+    section_titles = [
+        summary_rows_by_item_id[item_id].get("display_title")
+        or summary_rows_by_item_id[item_id].get("subject")
+        or ""
+        for item_id in section_item_ids
+    ]
 
     report_entry = {
         "title": title,
