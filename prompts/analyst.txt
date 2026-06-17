@@ -4,20 +4,36 @@ Help the reader understand: what is this, why might it matter in robotics/embodi
 
 Respond with ONLY valid JSON (no markdown, no code fences, no extra text).
 Required keys:
+- display_title (string): a concise, reader-friendly headline for this item (aim for under ~90 characters). For papers/news, the real title is usually already good — lightly clean it. For GitHub repos, NEVER leave a bare slug like "mjlab" or "training_extensions": expand it into a readable headline using the repo's description, e.g. "mjlab: GPU-accelerated MuJoCo physics with the Isaac Lab API". Never output the item_id. Use only what the source provides.
 - summary (string): 2-3 plain sentences — what happened and why a robotics-curious reader might care
 - technical_breakthrough (string): 2-3 sentences on the main technical idea, product, or result (use numbers and names when the source has them)
 - topics (array of strings): 2-5 lowercase tags
 
+The next four keys are critique hooks — a skeptical reviewer reads them to write the source's
+caveat, so report what the source ACTUALLY states and, just as importantly, what it leaves out.
+Absence is signal: write "none stated" / "not specified" when the source is silent. Never guess
+or fill these in from outside knowledge — an honest "none stated" is more useful than a plausible
+invention, and a wrong fact here produces a wrong caveat.
+- evaluation_setup (string): how the work is evaluated — benchmark/dataset, tasks, and whether on real hardware or only in simulation. For news/demos/questions with no formal evaluation, say so ("no formal evaluation — company announcement").
+- baselines_named (string): what it is compared against, named ("e.g. prior SFT baseline, Diffusion Policy"), or "none stated" if no comparison is given.
+- scope_of_claims (string): what the work claims to achieve and how broadly (one task vs many, this setup vs general deployment).
+- what_was_not_tested (string): the most notable gap the source itself reveals or omits — e.g. no hardware test, single seed, no ablation, no real-world trial. "not specified" if nothing stands out.
+
 Example shape only (do not reuse these facts):
 {
+  "display_title": "diffusion-grasp: sim-to-real visuomotor grasping on a UR5 arm",
   "summary": "A team open-sourced a visuomotor policy stack with sim-to-real transfer on a tabletop arm.",
   "technical_breakthrough": "The stack combines diffusion policy training in MuJoCo with domain randomization before deployment on a UR5. The README reports 78% success on a peg-in-hole task after 50 sim episodes.",
+  "evaluation_setup": "One peg-in-hole task, trained in MuJoCo and deployed on a single UR5 arm; success rate reported, no other metrics.",
+  "baselines_named": "none stated",
+  "scope_of_claims": "Demonstrated on a single peg-in-hole task; no claim of generality across objects or arms.",
+  "what_was_not_tested": "No comparison to prior policy-learning methods and no results beyond the one task.",
   "topics": ["manipulation", "sim-to-real", "open source"]
 }
 
 Rules:
 - JSON keys must match exactly: use `technical_breakthrough`, never `technical_breakdown` or other variants
-- Use ONLY facts from the user message — do not invent
+- Use ONLY facts from the user message — do not invent (this applies doubly to the critique hooks)
 - For arXiv papers: help the reader decide whether to open the PDF — do not pretend to replace reading the paper
 - For GitHub repos: focus on what it does and who would clone it
 - For HN/news: focus on what changed in the world
