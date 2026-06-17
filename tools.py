@@ -216,12 +216,12 @@ def pick_item_ids(system_prompt, pick_options, api_key_env):
 # --- Pipeline tools (called by the orchestrator in agent.py) ---
 
 def score_signal(item_id, author, subject, body, source="hackernews", url=""):
-    """Score one item with Groq, append to signals.jsonl -> returns (status_message, signal_row)."""
+    """Score one item with Groq, append to signals.jsonl -> return the signal_row."""
 
     drop_reason = marketing_filter_reason(subject, body, url, source)
     if drop_reason:
         signal_row = write_signal_row(item_id, author, False, f"Auto-filter: {drop_reason}")
-        return f"Scored {author}", signal_row
+        return signal_row
 
     item_json = json.dumps({
         "item_id": item_id,
@@ -235,7 +235,7 @@ def score_signal(item_id, author, subject, body, source="hackernews", url=""):
         llm_response = groq_chat([
             {"role": "system", "content": SCORE_SIGNAL_PROMPT},
             {"role": "user", "content": item_json},
-        ], api_key_env=GROQ_KEY_SCORE, model=GROQ_MODEL)
+        ], api_key_env=GROQ_KEY_SCORE)
         parsed = parse_llm_json(llm_response)
         high_signal = parsed.get("high_signal")
         reason = parsed.get("reason")
@@ -252,7 +252,7 @@ def score_signal(item_id, author, subject, body, source="hackernews", url=""):
         high_signal, reason = False, f"Score failed: {err}"
 
     signal_row = write_signal_row(item_id, author, high_signal, reason)
-    return f"Scored {author}", signal_row
+    return signal_row
 
 
 def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
@@ -307,7 +307,7 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
         reviewer_response = groq_chat([
             {"role": "system", "content": REVIEWER_PROMPT},
             {"role": "user", "content": analyst_draft},
-        ], api_key_env=GROQ_KEY_REVIEWER, model=GROQ_MODEL)
+        ], api_key_env=GROQ_KEY_REVIEWER)
     except Exception as err:
         return f"Skipped {author}: reviewer Groq error ({err})"
 
