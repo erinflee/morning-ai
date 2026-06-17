@@ -17,7 +17,6 @@ from tools import (
     write_items,
     items_by_item_id,
     GROQ_KEY_ORCHESTRATOR,
-    GROQ_MODEL,
     SUMMARIES_FILE,
     SIGNALS_FILE,
     REPORT_FILE,
@@ -101,7 +100,7 @@ def progress_summary():
         f"Items: {len(status['all_ids'])} total",
         f"Scored: {len(status['scored_ids'])}/{len(status['all_ids'])}",
         f"High-signal pool: {len(status['high_signal_ids'])}",
-        f"Summarized: {len(summarized_high_signal_ids)}/{len(status['high_signal_ids']) or 0}",
+        f"Summarized: {len(summarized_high_signal_ids)}/{len(status['high_signal_ids'])}",
     ]
     if status["high_signal_ids"]:
         lines.append(f"High-signal ids: {sorted(status['high_signal_ids'])}")
@@ -142,7 +141,7 @@ def record_turn(turn_history, llm_response, observation):
     """Append one assistant/observation pair. Keep only the last MAX_HISTORY_TURNS."""
     turn_history.append((llm_response, f"Observation: {observation}"))
     if len(turn_history) > MAX_HISTORY_TURNS:
-        del turn_history[:-MAX_HISTORY_TURNS] # everything except last 6 turns
+        del turn_history[:-MAX_HISTORY_TURNS] # everything except last 2 turns
 
 
 def resolve_item_id(tool_args, allowed_id_list, empty_error):
@@ -174,9 +173,9 @@ def run_tool(action, tool_args):
                 return f"Error: unknown item_id {item_id!r}. Unscored ids: {status['unscored_id_list']}"
 
             item = items[item_id]
-            status_message, signal_row = score_signal(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
+            signal_row = score_signal(item["item_id"], item["author"], item["subject"], item["body"], item["source"], item.get("url") or "")
 
-            return f"{status_message}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
+            return f"Scored {signal_row['author']}. high_signal={signal_row['high_signal']}, reason: {signal_row['reason']}"
 
         case "summarize_item":
             status = progress_status()
@@ -228,7 +227,7 @@ def react_loop():
     for step in range(1, MAX_STEPS + 1):
         llm_response = ""
         try:
-            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCHESTRATOR, model=GROQ_MODEL)
+            llm_response = groq_chat(build_messages(turn_history), api_key_env=GROQ_KEY_ORCHESTRATOR)
             parsed = parse_llm_json(llm_response)
         except json.JSONDecodeError:
             record_turn(turn_history, llm_response, "Invalid JSON. Respond with only valid JSON.")
