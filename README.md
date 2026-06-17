@@ -20,7 +20,7 @@ fetch (HN / arXiv / GitHub)  ->  items.jsonl
         v
   ReAct orchestrator loop:
     score_signal     ->  signals.jsonl     (keep or drop each item)
-    summarize_item   ->  summaries.jsonl   (analyst drafts, reviewer critiques)
+    summarize_item   ->  summaries.jsonl   (analyst drafts + critique hooks, reviewer writes the caveat)
     synthesize_report->  report.jsonl      (editor merges into one briefing)
     finish
         |
@@ -30,20 +30,23 @@ fetch (HN / arXiv / GitHub)  ->  items.jsonl
 
 ### The agent roster
 
-Each role runs on Groq (`llama-3.3-70b-versatile`) with its own API key so rate limits are isolated per agent.
+Every role runs on Groq (`llama-3.3-70b-versatile`). Because the pipeline is sequential, a key's per-minute token limit is the real bottleneck, so the stages are spread across five API keys — each carries only its own slice of the load instead of one key absorbing the whole run.
 
-| Role           | Module            | Job                                                                    |
-| -------------- | ----------------- | ---------------------------------------------------------------------- |
-| HN curator     | `fetch_hn.py`     | Discover and pre-rank Hacker News stories, then pick the most relevant |
-| arXiv curator  | `fetch_arxiv.py`  | Pull the latest announcement batch and pick standout papers            |
-| GitHub curator | `fetch_github.py` | Search recently active AI repos and pick the strongest                 |
-| Research desk  | `tools.py`        | Score each item for signal, then draft and review a summary            |
-| Orchestrator   | `agent.py`        | Run the daily ReAct loop and drive the pipeline to completion          |
+| Role           | Module            | Job                                                                    | Key  |
+| -------------- | ----------------- | --------------------------------------------------------------------- | ---- |
+| HN curator     | `fetch_hn.py`     | Discover and pre-rank Hacker News stories, then pick the most relevant | KEY5 |
+| arXiv curator  | `fetch_arxiv.py`  | Pull recent papers on two tracks and pick standout ones                | KEY5 |
+| GitHub curator | `fetch_github.py` | Search recently active AI repos and pick the strongest                 | KEY5 |
+| Research desk  | `tools.py`        | Score each item (KEY2), draft a summary (KEY3), review the draft (KEY4) | KEY2–4 |
+| Orchestrator   | `agent.py`        | Run the daily ReAct loop and drive the pipeline to completion          | KEY1 |
 
 ### Key design choices
 
 - **LLM as selector at each source.** Each fetcher trims its options to a short list and asks the model to choose, rather than relying on keyword rules alone. A code-level marketing filter runs first so promotional content never reaches the model.
 - **ReAct control loop.** The orchestrator ([agent.py](agent.py)) reasons one step at a time (thought, action, observation), reading progress from the JSONL files each turn instead of holding everything in memory.
+- **Specific caveats via critique hooks.** Every item ships with one honest caveat. Rather than hand the reviewer the raw article, the analyst extracts the facts a skeptic actually needs — the evaluation setup, named baselines (or `none stated`), the scope of the claims, and what went untested — and the reviewer writes the caveat from those. Surfacing absences explicitly (`baselines_named: none stated`) is what lets the caveat name a concrete gap instead of defaulting to a vague "doesn't generalize."
+- **Reader-friendly headlines.** The analyst also produces a display title for each item, so a bare repo slug like `mjlab` becomes `mjlab: GPU-accelerated MuJoCo physics with the Isaac Lab API` in the UI. A guard falls back to the source's real title if the model returns junk or echoes the internal item id.
+- **Five-key spread to fit a free-tier budget.** Each Groq key has its own per-minute token pool, so the pipeline pins each stage (orchestration, scoring, analyst, reviewer, fetch picks) to its own key. No single key carries the whole run's load, and a fetch whose key fails degrades to skipping that source rather than crashing the run.
 - **Strict output validation.** [content_filters.py](content_filters.py) rejects empty, too-short, placeholder, or malformed model output before it is written. A report must have the expected structure or it is dropped.
 - **Fail loudly.** [scripts/export_site.py](scripts/export_site.py) exits non-zero on a missing or empty report, and (in CI) on a stale one, so a broken run is visible instead of silently publishing yesterday's page.
 
@@ -57,7 +60,7 @@ fetch_hn.py         Hacker News curator
 fetch_arxiv.py      arXiv curator
 fetch_github.py     GitHub curator
 prompts/            System prompts for each agent role
-scripts/            daily_agent.sh runner, export_site.py site export
+scripts/            daily_agent.sh runner, export_site.py site export, regen_from_items.py (re-run the desk on cached items, no fetch)
 docs/               Static site (index.html, app.js, report.json, team.json)
 ```
 
@@ -71,7 +74,7 @@ pip install -r requirements.txt
 
 # 2. Configure secrets
 cp .env.example .env
-# then fill in GROQ_API_KEY1..5 (one per agent), and optionally GITHUB_TOKEN
+# then fill in GROQ_API_KEY1..5 (one per stage), and optionally GITHUB_TOKEN
 
 # 3. Run the pipeline, then export the site
 python agent.py
@@ -80,16 +83,18 @@ python scripts/export_site.py
 
 `agent.py` writes the report to `report.jsonl`. `export_site.py` copies the latest report into `docs/report.json`, which the static site reads. Open `docs/index.html` to view the result locally.
 
+When iterating on prompts, `python scripts/regen_from_items.py` re-runs the analyst → reviewer → synthesis steps on the items already in `items.jsonl` (reusing `signals.jsonl`, so no fetch and no re-scoring). It's the fast way to see prompt changes applied to the *same* stories before committing to a full run.
+
 ### Environment
 
-| Variable        | Purpose                                           |
-| --------------- | ------------------------------------------------- |
-| `GROQ_API_KEY1` | HN curator                                        |
-| `GROQ_API_KEY2` | arXiv curator                                     |
-| `GROQ_API_KEY3` | GitHub curator                                    |
-| `GROQ_API_KEY4` | Research desk (scorer, analyst, reviewer, editor) |
-| `GROQ_API_KEY5` | Orchestrator                                      |
-| `GITHUB_TOKEN`  | Optional, raises GitHub search rate limits        |
+| Variable        | Purpose                                       |
+| --------------- | --------------------------------------------- |
+| `GROQ_API_KEY1` | Orchestrator (ReAct loop)                     |
+| `GROQ_API_KEY2` | Signal scoring                                |
+| `GROQ_API_KEY3` | Analyst drafts and final synthesis            |
+| `GROQ_API_KEY4` | Draft reviewer                                |
+| `GROQ_API_KEY5` | Fetch-time source picks (HN / arXiv / GitHub) |
+| `GITHUB_TOKEN`  | Optional, raises GitHub search rate limits    |
 
 Secrets live in `.env`, which is git-ignored and never committed.
 
@@ -100,7 +105,7 @@ Secrets live in `.env`, which is git-ignored and never committed.
 ## Tech stack
 
 - **Python 3.12** for the pipeline
-- **Groq** (`llama-3.3-70b-versatile`) via the OpenAI-compatible API
+- **Groq** (`llama-3.3-70b-versatile`) via the OpenAI-compatible API, with the pipeline's stages spread across five API keys
 - **requests** + **trafilatura** for fetching and article extraction
 - **Vanilla HTML/CSS/JS** for the static site, deployable on GitHub Pages
 
