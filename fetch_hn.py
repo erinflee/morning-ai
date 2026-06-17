@@ -4,6 +4,7 @@ import time
 import requests
 import trafilatura
 
+from datetime import datetime
 from html import unescape
 from dotenv import load_dotenv
 from prompts import load_prompt
@@ -27,6 +28,10 @@ MAX_PICKS = 4               # Groq pick target (prompt-only, not enforced in cod
 MAX_BODY_CHARS = 8000
 MIN_INLINE_TEXT_CHARS = 50  # HN post text before fetching linked article
 STORY_MAX_AGE_HOURS = 24
+# HN time only proves a story is new *to HN*; an old article can resurface via a fresh
+# submission. When the linked page exposes its own publish date, drop it if it predates
+# this window. Undated pages (HN text posts, many repos) are kept — see article_too_old_reason.
+STORY_MAX_ARTICLE_AGE_DAYS = 7
 
 # Algolia discovery: one query per topic — surfaces robotics posts that miss the front page.
 HN_TOPICS = (
@@ -47,38 +52,77 @@ HN_SYSTEM_PROMPT = load_prompt("hacker_news_system.txt")
 
 # --- Item shaping ---
 
-def fetch_article_body(url):
-    """Download a link post and pull readable article text from page."""
+def article_text_and_date(url):
+    """Download a link post once; return (readable_text, publish_date).
+
+    publish_date is the article's own 'YYYY-MM-DD' from page metadata when present, else ''.
+    One download serves both the body and the staleness check — no second request.
+    """
     if not url:
-        return ""
+        return "", ""
 
     try:
         response = requests.get(url, timeout=15, headers={"User-Agent": USER_AGENT})
         response.raise_for_status()
-        text = trafilatura.extract(response.text, url=url, include_comments=False, include_tables=False)
-        if not text:
-            return ""
-        return text.strip()[:MAX_BODY_CHARS]
+        html = response.text
     except (requests.RequestException, ValueError):
-        return ""
+        return "", ""
+
+    text = trafilatura.extract(html, url=url, include_comments=False, include_tables=False) or ""
+    date = ""
+    try:
+        meta = trafilatura.extract_metadata(html)
+        if meta and meta.date:
+            date = meta.date
+    except Exception:
+        date = ""
+    return text.strip()[:MAX_BODY_CHARS], date
 
 
-def story_body(story):
-    """Get Hacker News story text -> else fetched article URL -> else short text or title."""
+def story_body_and_date(story):
+    """Get (body, article_date) for a story.
+
+    Body: HN inline text -> fetched article -> short text or title.
+    article_date: the linked article's own publish date ('YYYY-MM-DD') when one was
+    fetched and exposed it, else '' — HN text posts and undated pages have no article date.
+    """
     text = unescape((story.get("text") or "")).strip()
 
     if len(text) >= MIN_INLINE_TEXT_CHARS:
-        return text[:MAX_BODY_CHARS]
+        return text[:MAX_BODY_CHARS], ""
 
     url = story.get("url")
     if url:
         print(f"  Fetching article: {url}")
-        article = fetch_article_body(url)
+        article, date = article_text_and_date(url)
         if article:
-            return article
+            return article, date
 
     title = (story.get("title") or "").strip()
-    return (text or title)[:MAX_BODY_CHARS]
+    return (text or title)[:MAX_BODY_CHARS], ""
+
+
+def story_body(story):
+    """Body text only, for callers that don't filter on article age."""
+    return story_body_and_date(story)[0]
+
+
+def article_too_old_reason(article_date):
+    """Drop reason if a parseable article date predates the staleness window, else ''.
+
+    A missing/unparseable date is never grounds to drop — only a date we can read AND that
+    is older than STORY_MAX_ARTICLE_AGE_DAYS. This keeps undated repos/HN-text posts.
+    """
+    if not article_date:
+        return ""
+    try:
+        published = datetime.strptime(article_date[:10], "%Y-%m-%d")
+    except ValueError:
+        return ""
+    age_days = (datetime.now() - published).days
+    if age_days > STORY_MAX_ARTICLE_AGE_DAYS:
+        return f"article published {article_date[:10]} ({age_days}d ago > {STORY_MAX_ARTICLE_AGE_DAYS}d)"
+    return ""
 
 
 def story_to_item(story, body=None):
@@ -244,8 +288,11 @@ def fetch_selected_stories():
 
         item_id = str(story["id"])
         title = story.get("title", "")
-        body = story_body(story)
-        drop_reason = marketing_filter_reason(title, body, story.get("url") or "", "hackernews")
+        body, article_date = story_body_and_date(story)
+        drop_reason = (
+            marketing_filter_reason(title, body, story.get("url") or "", "hackernews")
+            or article_too_old_reason(article_date)
+        )
         if drop_reason:
             pre_filter_drops += 1
             print(f"  Pre-filter drop: {title[:70]} — {drop_reason}")
