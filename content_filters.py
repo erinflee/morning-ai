@@ -177,6 +177,23 @@ def clean_text(text):
     return text
 
 
+def display_title_or_fallback(raw_title, item_id, fallback):
+    """Clean an LLM-written display title; fall back to the real subject when it's unusable.
+
+    Guards the failure the synthesizer warns about — the model echoing the item_id (e.g.
+    "github_mujocolab_mjlab") or a bare slug instead of a readable headline — plus empties
+    and runaway sentences. Returns a trusted title or `fallback`.
+    """
+    title = clean_text(raw_title or "")
+    item_id = str(item_id or "")
+    if len(title) < 3 or len(title) > 160:
+        return fallback
+    flattened = title.lower().replace(" ", "_").replace("-", "_")
+    if item_id and (title.lower() == item_id.lower() or flattened == item_id.lower()):
+        return fallback
+    return title
+
+
 def clean_tags(tags_list):
     """Clean LLM topic/theme tags to lowercase strings; [] if input is not a list."""
     if not isinstance(tags_list, list):
