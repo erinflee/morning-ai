@@ -44,7 +44,7 @@ python -m http.server 8080 --directory docs
 # http://localhost:8080/#team      → The Newsroom
 ```
 
-**Deploy:** Push `docs/` to GitHub → **Settings → Pages → `main` → `/docs`** → `https://<user>.github.io/<repo>/`
+**Deploy:** GitHub Actions ([`.github/workflows/pages.yml`](.github/workflows/pages.yml)) uploads `docs/` and deploys on every push to `main` — **Settings → Pages → Source → GitHub Actions**. Live at `https://erinlee316.github.io/morning-ai/`.
 
 ---
 
@@ -69,7 +69,7 @@ python -m http.server 8080 --directory docs
 - Double-rule masthead border; centered tab nav with active underline
 - Responsive content max-width `72rem`
 
-**Note:** `marked` is loaded in `index.html` but **not used** — report rendering is fully custom in `app.js`. Safe to remove the CDN script later.
+**Note:** report rendering is fully custom in `app.js` — no markdown library. (The previously-unused `marked` CDN script has been removed from `index.html`.)
 
 ---
 
@@ -195,7 +195,7 @@ Config in [`docs/team.json`](docs/team.json) — edit copy and image paths there
 | Reviewer | `summarize_item` (reviewer) | Groq | `GROQ_API_KEY4` |
 | Editor | `synthesize_report` | Groq | `GROQ_API_KEY3` |
 
-**Daily schedule:** launchd **8:00 AM** (`scripts/com.erinlee.research-agent.plist`) → `daily_agent.sh` → `agent.py` → `export_site.py`.
+**Daily schedule:** GitHub Actions cron — [`daily-report.yml`](.github/workflows/daily-report.yml) at 13:00 UTC (**6 AM Pacific**) runs `agent.py` → `export_site.py` and pushes the result. (Local alternative: launchd `scripts/com.erinlee.research-agent.plist` → `daily_agent.sh`.)
 
 ---
 
@@ -223,9 +223,7 @@ Never commit `.env`, raw `items.jsonl`, or `report.jsonl`. **Do commit** `docs/r
 | `challenge_report` section | Second agent — see `AGENT_PLAN.md` |
 | Live stats on Team cards | Last run, items processed, from `logs/agent.log` |
 | Dark mode | Not implemented (light newsprint only) |
-| Auto git commit/push of `docs/report.json` after daily run | Manual push today |
 | OG / social meta tags | For link previews when sharing |
-| Remove unused `marked` CDN script | Cleanup |
 
 ---
 
@@ -233,11 +231,11 @@ Never commit `.env`, raw `items.jsonl`, or `report.jsonl`. **Do commit** `docs/r
 
 - [x] Tab names → **Today's Report** / **The Newsroom**
 - [x] Visual direction → newspaper / broadsheet (not generic cards)
-- [x] Host → GitHub Pages from `/docs`
+- [x] Host → GitHub Pages (Actions source, deploys `docs/`)
 - [x] PNG pixel portraits for all six roles
-- [ ] Enable GitHub Pages on remote and verify live URL
+- [x] Enable GitHub Pages on remote and verify live URL
+- [x] Auto-push `docs/report.json` after daily run (`daily-report.yml`)
 - [ ] Show report `title` in masthead or above lead story?
-- [ ] Auto-push `docs/report.json` after daily run?
 - [ ] Dark mode or stay newsprint-only?
 
 ---
@@ -253,6 +251,6 @@ Never commit `.env`, raw `items.jsonl`, or `report.jsonl`. **Do commit** `docs/r
 - [x] `scripts/export_site.py` — `report.jsonl` → `docs/report.json`
 - [x] Hook export into `scripts/daily_agent.sh`
 - [x] Separate Groq keys per stage (orchestrator / scoring / analyst+synthesis / reviewer / fetch picks)
-- [ ] Enable GitHub Pages on remote and verify live URL
-- [ ] Optional: daily git push of updated `docs/report.json`
+- [x] Enable GitHub Pages on remote and verify live URL
+- [x] Daily git push of updated `docs/report.json` (GitHub Actions)
 - [ ] Surface `title`, `source_count`, and `### Connection` in report UI
