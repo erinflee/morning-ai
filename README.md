@@ -4,6 +4,8 @@ A daily, autonomous research briefing on robotics and AI. Every morning a small 
 
 > "Robotics news, papers, and repos, picked so you don't have to live in 20 tabs."
 
+**Live site:** [erinlee316.github.io/morning-ai](https://erinlee316.github.io/morning-ai/) · **Architecture:** [system_design.md](system_design.md)
+
 ## Why I built it
 
 I used to keep up with robotics news by scrolling, closing, and alt-tabbing across many tech sites every morning before my coffee. The Morning AI automates that scan and produces one focused briefing a day.
@@ -61,7 +63,9 @@ fetch_arxiv.py      arXiv curator
 fetch_github.py     GitHub curator
 prompts/            System prompts for each agent role
 scripts/            daily_agent.sh runner, export_site.py site export
-docs/               Static site (index.html, app.js, report.json, team.json)
+docs/               Static site (index.html, css/, js/, assets/, report.json, team.json)
+.github/workflows/  daily-report.yml (scheduled pipeline) + pages.yml (deploy)
+system_design.md    Architecture overview with a Mermaid diagram
 ```
 
 ## Getting started
@@ -98,14 +102,19 @@ Secrets live in `.env`, which is git-ignored and never committed.
 
 ## Automation
 
-[scripts/daily_agent.sh](scripts/daily_agent.sh) runs the full pipeline and the site export in sequence, logging to `logs/`. It is scheduled to run at 08:00 daily (locally via launchd, and intended to move to GitHub Actions with the site served by GitHub Pages).
+The whole thing runs on GitHub Actions — no machine of mine needs to be awake.
+
+- **[.github/workflows/daily-report.yml](.github/workflows/daily-report.yml)** runs the pipeline on a cron schedule (`0 13 * * *` — 13:00 UTC, 6 AM Pacific), then commits the refreshed `docs/report.json` and the `*.jsonl` state back to `main`. The Groq keys are supplied from repository secrets.
+- **[.github/workflows/pages.yml](.github/workflows/pages.yml)** deploys `docs/` to GitHub Pages on every push to `main`, so the morning commit auto-publishes the new briefing.
+
+[scripts/daily_agent.sh](scripts/daily_agent.sh) is the equivalent local runner (pipeline + export, logging to `logs/`), kept for running the flow by hand off CI.
 
 ## Tech stack
 
 - **Python 3.12** for the pipeline
 - **Groq** (`llama-3.3-70b-versatile`) via the OpenAI-compatible API, with the pipeline's stages spread across five API keys
 - **requests** + **trafilatura** for fetching and article extraction
-- **Vanilla HTML/CSS/JS** for the static site, deployable on GitHub Pages
+- **Vanilla HTML/CSS/JS** for the static site, deployed on GitHub Pages via GitHub Actions
 
 ## License
 
