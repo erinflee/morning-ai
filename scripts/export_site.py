@@ -14,8 +14,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_JSONL = ROOT / "report.jsonl"
+ITEMS_JSONL = ROOT / "items.jsonl"
+SUMMARIES_JSONL = ROOT / "summaries.jsonl"
 OUT = ROOT / "docs" / "report.json"
 REQUIRED = ("title", "report", "themes", "section_urls")
+
+# Maps a fetched item's source string to the Newsroom card id it belongs to.
+SOURCE_TO_AGENT = {"hackernews": "hn", "arxiv": "arxiv", "github": "github"}
 
 # GitHub Actions (and most CI) set CI=true; gate the staleness check on it.
 RUNNING_IN_CI = os.environ.get("CI", "").lower() == "true"
@@ -45,9 +50,57 @@ def fail_if_stale(generated_at):
         )
 
 
+# --- Per-agent run times ---
+
+def load_rows(path):
+    """Read a JSONL file into a list of dicts; empty list if it's missing or blank."""
+    if not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").strip().splitlines():
+        if line:
+            rows.append(json.loads(line))
+    return rows
+
+
+def latest_iso(values):
+    """Most recent of a set of ISO timestamps. They share the +00:00 offset, so lexical max is chronological."""
+    stamps = [v for v in values if v]
+    return max(stamps) if stamps else None
+
+
+def compute_run_times(generated_at):
+    """When each Newsroom agent ran today, keyed by team.json id, for the per-agent run-time display.
+
+    Curators are timed by their items' fetched_at, the Research Desk by the latest summarized_at,
+    and the Orchestrator/Editor by the report's generated_at. Each falls back to generated_at.
+    """
+    fetched_by_agent = {"hn": [], "arxiv": [], "github": []}
+    for item in load_rows(ITEMS_JSONL):
+        agent_id = SOURCE_TO_AGENT.get(item.get("source"))
+        if agent_id and item.get("fetched_at"):
+            fetched_by_agent[agent_id].append(item["fetched_at"])
+
+    desk = latest_iso(row.get("summarized_at") for row in load_rows(SUMMARIES_JSONL))
+
+    return {
+        "orchestrator": generated_at,
+        "hn": latest_iso(fetched_by_agent["hn"]) or generated_at,
+        "arxiv": latest_iso(fetched_by_agent["arxiv"]) or generated_at,
+        "github": latest_iso(fetched_by_agent["github"]) or generated_at,
+        "research_desk": desk or generated_at,
+    }
+
+
 # --- Export ---
 
 def main():
+    """Read the latest report.jsonl row, validate it, and write the public docs/report.json.
+
+    Takes only the public-safe fields, attaches per-agent run times, and aborts (without
+    overwriting the published file) if no report exists, required fields are missing, or
+    the report is stale in CI.
+    """
     if not REPORT_JSONL.exists():
         raise SystemExit("No report.jsonl — pipeline produced no report. Not deploying.")
 
@@ -62,6 +115,7 @@ def main():
 
     fail_if_stale(row.get("generated_at"))
 
+    generated_at = row.get("generated_at") or datetime.now(timezone.utc).isoformat()
     out = {
         "title": row["title"],
         "report": row["report"],
@@ -69,8 +123,8 @@ def main():
         "source_count": row.get("source_count", 0),
         "section_urls": row["section_urls"],
         "section_titles": row.get("section_titles", []),
-        "generated_at": row.get("generated_at")
-        or datetime.now(timezone.utc).isoformat(),
+        "generated_at": generated_at,
+        "run_times": compute_run_times(generated_at),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
