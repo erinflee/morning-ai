@@ -1,6 +1,7 @@
 """Daily research agent: fetch sources → score → summarize → synthesize report."""
 
 import json
+from datetime import datetime, timezone
 
 from openai import APIError, BadRequestError
 from prompts import load_prompt
@@ -271,24 +272,32 @@ def react_loop():
 
 # --- Fetch ---
 
+def stamp_fetched_at(items):
+    """Tag each item with the moment its source was fetched (UTC ISO), for the Newsroom run-time display."""
+    fetched_at = datetime.now(timezone.utc).isoformat()
+    for item in items:
+        item["fetched_at"] = fetched_at
+    return items
+
+
 def fetch_all_items():
-    """Run all source fetchers and return a merged item list."""
+    """Run all source fetchers and return a merged item list, each item stamped with its fetch time."""
     items_list = []
 
     print("Fetching Hacker News…")
     hn_items = fetch_selected_stories() or []
     print(f"  HN: {len(hn_items)} items")
-    items_list.extend(hn_items)
+    items_list.extend(stamp_fetched_at(hn_items))
 
     print("Fetching arXiv…")
     arxiv_items = fetch_selected_papers() or []
     print(f"  arXiv: {len(arxiv_items)} items")
-    items_list.extend(arxiv_items)
+    items_list.extend(stamp_fetched_at(arxiv_items))
 
     print("Fetching GitHub…")
     github_items = fetch_selected_repos() or []
     print(f"  GitHub: {len(github_items)} items")
-    items_list.extend(github_items)
+    items_list.extend(stamp_fetched_at(github_items))
 
     return items_list
 
