@@ -1,0 +1,53 @@
+name: Daily research update
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    env:
+      GROQ_API_KEY1: ${{ secrets.GROQ_API_KEY1 }}
+      GROQ_API_KEY2: ${{ secrets.GROQ_API_KEY2 }}
+      GROQ_API_KEY3: ${{ secrets.GROQ_API_KEY3 }}
+      GROQ_API_KEY4: ${{ secrets.GROQ_API_KEY4 }}
+      GROQ_API_KEY5: ${{ secrets.GROQ_API_KEY5 }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run research pipeline
+        run: python agent.py
+
+      - name: Export static site
+        run: python scripts/export_site.py
+
+      - name: Commit generated updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/report.json report.jsonl items.jsonl signals.jsonl summaries.jsonl
+          if git diff --cached --quiet; then
+            echo "No content changes to commit."
+          else
+            git commit -m "chore: update daily research report"
+            git push
+          fi
