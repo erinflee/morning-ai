@@ -348,6 +348,9 @@ def summarize_item(item_id, author, subject, body, source="hackernews", url=""):
         "url": url or "",
         **summary_text_fields,
         "topics": topics,
+        # When the Research Desk processed this item; export_site.py takes the latest of these
+        # as the Desk's "last run" time on the Newsroom cards.
+        "summarized_at": datetime.now(timezone.utc).isoformat(),
     }
     with open(SUMMARIES_FILE, "a", encoding="utf-8") as file:
         file.write(json.dumps(summary_row) + "\n")
