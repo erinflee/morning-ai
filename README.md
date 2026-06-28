@@ -104,8 +104,8 @@ Secrets live in `.env`, which is git-ignored and never committed.
 
 The whole thing runs on GitHub Actions — no machine of mine needs to be awake.
 
-- **[.github/workflows/daily-report.yml](.github/workflows/daily-report.yml)** runs the pipeline on a cron schedule (`0 13 * * *` — 13:00 UTC, 6 AM Pacific), then commits the refreshed `docs/report.json` and the `*.jsonl` state back to `main`. The Groq keys are supplied from repository secrets.
-- **[.github/workflows/pages.yml](.github/workflows/pages.yml)** deploys `docs/` to GitHub Pages on every push to `main`, so the morning commit auto-publishes the new briefing.
+- **[.github/workflows/daily-report.yml](.github/workflows/daily-report.yml)** runs the pipeline on a cron schedule (`0 13 * * *` — 13:00 UTC, 6 AM Pacific), then commits the refreshed `docs/report.json` back to `main`. The Groq keys are supplied from repository secrets.
+- **[.github/workflows/pages.yml](.github/workflows/pages.yml)** deploys `docs/` to GitHub Pages on every push to `main`, and when the daily pipeline completes — since the pipeline's bot commit can't trigger a deploy via push, that `workflow_run` trigger is what auto-publishes each morning's briefing.
 
 [scripts/daily_agent.sh](scripts/daily_agent.sh) is the equivalent local runner (pipeline + export, logging to `logs/`), kept for running the flow by hand off CI.
 
