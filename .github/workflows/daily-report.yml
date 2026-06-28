@@ -43,7 +43,7 @@ jobs:
 
       - name: Commit generated updates
         run: |
-          git config user.name "erinlee316"
+          git config user.name "erinflee"
           git config user.email "erinlee316@gmail.com"
           git add docs/report.json
           if git diff --cached --quiet; then
