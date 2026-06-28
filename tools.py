@@ -32,7 +32,7 @@ SIGNALS_FILE = "signals.jsonl"
 REPORT_FILE = "report.jsonl"
 
 # Shared across all three source fetchers (HN/arXiv/GitHub).
-USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/erinlee316/morning-ai)"
+USER_AGENT = "AgenticAI-ResearchBot/1.0 (+https://github.com/erinflee/morning-ai)"
 MAX_GROQ_BODY_CHARS = 1200   # body chars sent per option at Groq pick time
 
 # Keep a fetch-pick batch under Groq's per-minute token limit (12k free tier). pick_item_ids
