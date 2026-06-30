@@ -24,7 +24,7 @@ load_dotenv()
 
 # --- Config ---
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 
 ITEMS_FILE = "items.jsonl"
 SUMMARIES_FILE = "summaries.jsonl"
