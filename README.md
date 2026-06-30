@@ -32,7 +32,7 @@ fetch (HN / arXiv / GitHub)  ->  items.jsonl
 
 ### The agent roster
 
-Every role runs on Groq (`llama-3.3-70b-versatile`). Because the pipeline is sequential, a key's per-minute token limit is the real bottleneck, so the stages are spread across five API keys — each carries only its own slice of the load instead of one key absorbing the whole run.
+Every role runs on Groq (`gpt-oss-120b`). Because the pipeline is sequential, a key's per-minute token limit is the real bottleneck, so the stages are spread across five API keys — each carries only its own slice of the load instead of one key absorbing the whole run.
 
 | Role           | Module            | Job                                                                    | Key  |
 | -------------- | ----------------- | --------------------------------------------------------------------- | ---- |
@@ -112,7 +112,7 @@ The whole thing runs on GitHub Actions — no machine of mine needs to be awake.
 ## Tech stack
 
 - **Python 3.12** for the pipeline
-- **Groq** (`llama-3.3-70b-versatile`) via the OpenAI-compatible API, with the pipeline's stages spread across five API keys
+- **Groq** (`gpt-oss-120b`) via the OpenAI-compatible API, with the pipeline's stages spread across five API keys
 - **requests** + **trafilatura** for fetching and article extraction
 - **Vanilla HTML/CSS/JS** for the static site, deployed on GitHub Pages via GitHub Actions
 
