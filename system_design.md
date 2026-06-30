@@ -25,7 +25,7 @@ flowchart TB
 
     SRC --> F --> SC
     SY --> EX
-    GROQ{{"Groq · llama-3.3-70b<br/>5 keys spread by stage"}} -.-> FETCH & DESK
+    GROQ{{"Groq · gpt-oss-120b<br/>5 keys spread by stage"}} -.-> FETCH & DESK
 
     classDef ext fill:#e7f0ff,stroke:#5b8def
     classDef llm fill:#f3e8ff,stroke:#9d5bd2
