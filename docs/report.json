@@ -1,36 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## UniLM-Nav\n\n### The Breakthrough\nUniLM-Nav introduces a unified framework that leverages a single multimodal large language model to perform zero\u2011shot last\u2011mile navigation for mobile manipulators. The system jointly handles view selection, task\u2011conditioned affordance grounding, and base\u2011pose inference without any task\u2011specific training, eliminating manual pose annotations. It outperforms the prior MoTo method by 3.13\u202fpercentage points on the OVMM benchmark and is demonstrated on a Unitree quadruped robot equipped with a 6\u2011DoF arm.\n\n### The Caveats\nThe paper reports only simulation gains and a single qualitative real\u2011world demo, offering no quantitative on\u2011robot performance or broader baseline comparisons.\n\n## RynnWorld-4D\n\n### The Breakthrough\nRynnWorld\u20114D is a diffusion\u2011based 4D embodied world model that predicts synchronized RGB, depth, and optical flow from a single RGB\u2011D image and a language instruction, and directly outputs robot actions via an attached inverse\u2011dynamics head in one forward pass. Trained on a newly curated 254.4\u202fM\u2011frame egocentric manipulation dataset, it achieves state\u2011of\u2011the\u2011art results on real\u2011world dexterous bimanual manipulation tasks that require precise spatial and temporal coordination.\n\n### The Caveats\nThe work reports state\u2011of\u2011the\u2011art performance but does not compare against any existing baselines, leaving the claimed improvement unverified.\n\n## Lift3D-VLA\n\n### The Breakthrough\nLift3D\u2011VLA extends vision\u2011language\u2011action models with explicit 3D point\u2011cloud reasoning by aligning point clouds with pretrained 2D positional embeddings and introducing Geometry\u2011Centric Masked Autoencoding, which jointly reconstructs current geometry and predicts future point clouds. A layer\u2011wise temporal action model predicts coherent action chunks, improving manipulation performance in both simulation and real\u2011world settings.\n\n### The Caveats\nThe reported gains are unsubstantiated because the prior VLA baselines it claims to beat are not named or described, making the comparison unverifiable.\n\n## LingBot-VLA 2.0\n\n### The Breakthrough\nLingBot\u2011VLA\u202f2.0 is an open\u2011weights foundation model that combines vision, language, and action to control 20 robot embodiments, leveraging a heterogeneous pre\u2011training set of 50\u202fk\u202fh robot trajectories plus 10\u202fk\u202fh egocentric videos and mapping all embodiments into a 55\u2011dimensional canonical state/action vector. Sparse Mixture\u2011of\u2011Experts layers in the action expert preserve embodiment\u2011specific patterns, while DINO\u2011Video semantic priors and LingBot\u2011Depth geometric cues enable predictive dynamics.\n\n### The Caveats\nDespite claiming real\u2011world applicability, the model is evaluated only in simulation with no hardware experiments or comparisons to contemporary VLA baselines beyond its own 1.0 predecessor.\n\n## Neural-ESO\n\n### The Breakthrough\nNeural\u2011ESO presents a dual\u2011pathway architecture that combines a neural network disturbance predictor with a traditional extended state observer, enforcing a Lipschitz bound on the learned component and proving uniform ultimate boundedness of the closed\u2011loop error dynamics. Experiments on a quadrotor landing task under strong ground\u2011effect disturbances show improved accuracy\u2011robustness trade\u2011offs versus recent baselines.\n\n### The Caveats\nThe paper names no concrete baselines, making it impossible to verify whether its gains truly outperform existing disturbance\u2011rejection methods.\n\n## Robots-as-a-Service\n\n### The Breakthrough\nThe article describes a robotics\u2011as\u2011a\u2011service model where providers retain ownership of robots, bundle maintenance, software upgrades, and remote engineering support, and lease the hardware to users through subscription or lease agreements, allowing access to advanced robots without large capital outlays and enabling rapid hardware iteration.\n\n### The Caveats\nThe article\u2019s claims of cost savings and faster access are unbacked by any empirical data, user studies, or comparative cost analysis.\n\n### Priority\nUniLM-Nav is the best starting point today because it delivers a concrete zero\u2011shot mobile manipulation system that works on a real quadruped robot and shows a clear performance edge over the previous state of the art.\n\n### One action\nTry replicating UniLM\u2011Nav\u2019s view\u2011selection and affordance\u2011grounding pipeline on your own mobile platform, or explore its open\u2011source code for direct integration.\n\n### What to watch\nSeveral VLA\u2011style works (LingBot\u2011VLA\u202f2.0, Lift3D\u2011VLA, and UniLM\u2011Nav) illustrate a trend toward unifying vision, language, and action with geometry\u2011aware or zero\u2011shot capabilities; upcoming benchmarks and hardware evaluations will reveal which approach scales best to real\u2011world manipulation.",
+  "report": "## GeoGS-SLAM\n\n### The Breakthrough\nThe authors introduce GeoGS, a geometry\u2011only variant of 3D Gaussian splatting that removes colour and opacity parameters, cutting per\u2011primitive storage by more than 80% and speeding up convergence while improving geometric accuracy on synthetic and real\u2011world benchmarks.\n\n### The Caveats\nThe paper never evaluates against existing appearance\u2011based 3DGS or SLAM baselines, so the claimed superiority is unsubstantiated.\n\n## Dual Latent Memory in Vision\u2011Language\u2011Action Models for Robotic Manipulation\n\n### The Breakthrough\nLaMem\u2011VLA embeds past experience as latent memory tokens inside a vision\u2011language\u2011action pipeline via four modules\u2014curator, seeker, condenser, and weaver\u2014allowing memory to be interleaved with current observation and instruction, and showing performance gains on SimplerEnv and LIBERO simulators.\n\n### The Caveats\nPerformance gains are reported without naming any baseline methods, leaving superiority unclear.\n\n## ELEANOR: 85\u202fcm 3D\u2011printed soft arm inspired by the elephant trunk\n\n### The Breakthrough\nELEANOR is an 85\u202fcm soft continuum arm fabricated with a tapered backbone and dense tendon bundles that replicate longitudinal and oblique muscle actions, enabling whole\u2011body grasping of objects of varied shapes in qualitative demos.\n\n### The Caveats\nOnly qualitative demonstrations are provided and no comparison to existing continuum\u2011robot baselines, so the claimed dexterity and scalability remain unverified.\n\n## EmbodiedGen V2: An Agentic, Simulation\u2011Ready 3D World Engine for Embodied AI\n\n### The Breakthrough\nEmbodiedGen V2 automatically creates simulation\u2011ready 3D worlds with 96.5% human acceptance and 98.6% collision\u2011free success, boosting simulation\u2011to\u2011real task success from 21.7% to 75.0% in robot experiments.\n\n### The Caveats\nThe work provides no baseline or prior\u2011art comparison, making the magnitude of improvement unclear.\n\n## TorchRL: PyTorch\u2011native reinforcement learning library for robotics and control\n\n### The Breakthrough\nTorchRL 0.13 centres on a TensorDict data model and modular components for policies, environments, collectors, and replay buffers, adding Triton\u2011accelerated recurrent nets, async prioritized replay, and new transforms for robotics and multi\u2011agent tasks.\n\n### The Caveats\nThe announcement lacks empirical performance results on robotics or other RL tasks.\n\n## Google Cloud Robotics Core: Open\u2011source fleet management on Kubernetes\n\n### The Breakthrough\nThe platform integrates Kubernetes federation with bidirectional robot\u2011cloud communication, packaging apps as Helm charts and exposing unified APIs for ML, logging, and monitoring, plus Terraform scripts for provisioning.\n\n### The Caveats\nNo real\u2011world hardware deployments, performance benchmarks, or baseline comparisons are presented.\n\n## NHTSA orders autonomous vehicle firms to stop blocking first responders\n\n### The Breakthrough\nNHTSA directed autonomous\u2011vehicle developers to add reliable detection of flashing lights, fire, smoke, cones and other emergency cues, making emergency\u2011scene handling a functional safety requirement in upcoming vehicle\u2011safety standards.\n\n### The Caveats\nThe directive provides no concrete evaluation criteria or independent verification standards, leaving its practical impact unclear.\n\n## New Jersey robotaxi law would require lidar, potentially banning Tesla's camera\u2011only fleet\n\n### The Breakthrough\nProposed legislation would mandate a three\u2011sensor suite (camera, lidar, radar) and a three\u2011year pilot with 50\u202fk supervised miles before removing safety drivers, which could bar Tesla\u2019s camera\u2011only robotaxis in the state.\n\n### The Caveats\nThe proposal offers no empirical evidence that multi\u2011sensor hardware improves safety or is feasible for deployment.\n\n### Priority\nBecause GeoGS\u2011SLAM delivers a storage\u2011efficient dense mapping method that can immediately improve perception pipelines for monocular robots, it offers the most actionable hardware\u2011agnostic advance today.\n\n### One action\nIntegrate the GeoGS pipeline into your monocular SLAM stack or prototype a lightweight dense mapping module to test the reported 80% storage reduction.",
   "themes": [
-    "vision-language-action",
+    "slam",
     "manipulation",
-    "mobile-manipulation",
-    "robust-control",
-    "robotics-as-a-service"
+    "soft-robotics",
+    "simulation",
+    "policy"
   ],
-  "source_count": 6,
+  "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2607.06537",
-    "https://arxiv.org/abs/2607.06559",
-    "https://arxiv.org/abs/2607.06564",
-    "https://github.com/robbyant/lingbot-vla-v2",
-    "https://arxiv.org/abs/2607.06535",
-    "https://www.bbc.com/news/articles/c4gymkg9lr2o"
+    "https://arxiv.org/abs/2607.07452",
+    "https://arxiv.org/abs/2607.07608",
+    "https://arxiv.org/abs/2607.07622",
+    "https://arxiv.org/abs/2607.07459",
+    "https://github.com/pytorch/rl",
+    "https://github.com/googlecloudrobotics/core",
+    "https://techcrunch.com/2026/07/08/feds-demand-autonomous-vehicle-companies-stop-interfering-with-first-responders/",
+    "https://www.theverge.com/transportation/962309/new-jersey-robotaxi-bill-lidar-tesla"
   ],
   "section_titles": [
-    "UniLM-Nav: Zero-Shot Open-Vocabulary Last-Mile Navigation for Mobile Manipulation",
-    "RynnWorld-4D: 4D Embodied World Models for Robotic Manipulation",
-    "Lift3D-VLA: 3D Geometry and Dynamics-Aware Vision-Language-Action for Manipulation",
-    "LingBot-VLA 2.0: Open\u2011weights vision\u2011language\u2011action model for 20 robot embodiments",
-    "Neural-ESO: A Dual-Pathway Architecture for Provably Robust Learning-Based Control",
-    "Robots-as-a-Service: rentals from hospital delivery bots to home humanoids"
+    "GeoGS-SLAM: Geometry-Only Gaussian Splatting for Dense Monocular SLAM",
+    "Dual Latent Memory in Vision-Language-Action Models for Robotic Manipulation",
+    "ELEANOR: 85\u202fcm 3D\u2011printed soft arm inspired by the elephant trunk",
+    "EmbodiedGen V2: An Agentic, Simulation-Ready 3D World Engine for Embodied AI",
+    "TorchRL: PyTorch\u2011native reinforcement learning library for robotics and control",
+    "Google Cloud Robotics Core: Open\u2011source fleet management on Kubernetes",
+    "NHTSA orders autonomous vehicle firms to stop blocking first responders",
+    "New Jersey robotaxi law would require lidar, potentially banning Tesla's camera\u2011only fleet"
   ],
-  "generated_at": "2026-07-08T15:31:00.326141+00:00",
+  "generated_at": "2026-07-09T16:03:13.606137+00:00",
   "run_times": {
-    "orchestrator": "2026-07-08T15:31:00.326141+00:00",
-    "hn": "2026-07-08T15:23:43.740432+00:00",
-    "arxiv": "2026-07-08T15:24:19.515208+00:00",
-    "github": "2026-07-08T15:31:00.326141+00:00",
-    "research_desk": "2026-07-08T15:27:37.529819+00:00"
+    "orchestrator": "2026-07-09T16:03:13.606137+00:00",
+    "hn": "2026-07-09T15:58:11.356038+00:00",
+    "arxiv": "2026-07-09T15:58:37.453673+00:00",
+    "github": "2026-07-09T15:59:33.809793+00:00",
+    "research_desk": "2026-07-09T16:02:43.719522+00:00"
   }
 }
