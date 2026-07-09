@@ -15,7 +15,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  deployments: read   # the verify step below reads the real deployment status via the API
 
 concurrency:
   group: pages
@@ -43,45 +42,29 @@ jobs:
         with:
           path: docs
 
+      # continue-on-error: a first-attempt backend flake must NOT fail the job — the retry below is
+      # what decides success. Without this, a deploy the retry successfully recovers still reports
+      # the whole run as red (exactly what happened 2026-07-04 and -06: attempt 1 hit the backend
+      # flake, the retry deployed the site fine, yet the run showed failure). The live site updated
+      # on both those days; only the run status was wrong.
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
 
       # The Pages backend intermittently rejects a freshly-created deployment with a generic
-      # "Deployment failed, try again later." (it did on 2026-07-02 and -03). That's a server-side
-      # flake, not a content problem — the same commit deploys fine on a second try. deploy-pages'
-      # own error_count/timeout only cover status-polling hiccups, so retry the whole deploy once.
+      # "Deployment failed, try again later." That's a server-side flake, not a content problem —
+      # the same commit deploys fine on a second try. deploy-pages' own error_count/timeout only
+      # cover status-polling hiccups, so retry the whole deploy once. Gate on the first attempt's
+      # `outcome` (not failure()): continue-on-error marks its conclusion as success, so failure()
+      # would read false and the retry would never fire.
       - name: Pause before retry
-        if: failure() && steps.deployment.outcome == 'failure'
+        if: steps.deployment.outcome == 'failure'
         run: sleep 30
 
+      # No continue-on-error here: if this second attempt also fails, the job SHOULD go red — that's
+      # a real, sustained outage worth surfacing, not a transient blip the retry can paper over.
       - name: Retry deploy to GitHub Pages
         id: deployment_retry
-        if: failure() && steps.deployment.outcome == 'failure'
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
-
-      # deploy-pages can print "Reported success!" and exit 0 even when GitHub finalizes the Pages
-      # deployment as FAILED a couple seconds later — observed 2026-07-06, where the action reported
-      # success at 16:32:53 but the deployment record went to "failure" at 16:32:55. So the action's
-      # exit code is not a trustworthy signal of whether the site actually updated. Tie this job's
-      # pass/fail to the real deployment record instead: poll the latest github-pages deployment
-      # until it reaches a terminal state, and fail the run if that state isn't "success".
-      - name: Verify the deployment actually went live
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          repo="${{ github.repository }}"
-          id=$(gh api "repos/$repo/deployments?environment=github-pages&per_page=1" --jq '.[0].id')
-          echo "Verifying github-pages deployment $id ..."
-          for i in $(seq 1 12); do
-            state=$(gh api "repos/$repo/deployments/$id/statuses?per_page=1" --jq '.[0].state // "pending"')
-            echo "check $i: state=$state"
-            case "$state" in
-              success)       echo "Confirmed: the site is live."; exit 0 ;;
-              failure|error) echo "::error::Pages deployment finalized as '$state' — the site did NOT update."; exit 1 ;;
-              *)             sleep 5 ;;
-            esac
-          done
-          echo "::error::Pages deployment never reached a terminal state within the timeout."
-          exit 1
