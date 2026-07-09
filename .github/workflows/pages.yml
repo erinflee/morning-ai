@@ -15,6 +15,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  deployments: read   # the verify step below reads the real deployment status via the API
 
 concurrency:
   group: pages
@@ -58,3 +59,29 @@ jobs:
         id: deployment_retry
         if: failure() && steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
+
+      # deploy-pages can print "Reported success!" and exit 0 even when GitHub finalizes the Pages
+      # deployment as FAILED a couple seconds later — observed 2026-07-06, where the action reported
+      # success at 16:32:53 but the deployment record went to "failure" at 16:32:55. So the action's
+      # exit code is not a trustworthy signal of whether the site actually updated. Tie this job's
+      # pass/fail to the real deployment record instead: poll the latest github-pages deployment
+      # until it reaches a terminal state, and fail the run if that state isn't "success".
+      - name: Verify the deployment actually went live
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          repo="${{ github.repository }}"
+          id=$(gh api "repos/$repo/deployments?environment=github-pages&per_page=1" --jq '.[0].id')
+          echo "Verifying github-pages deployment $id ..."
+          for i in $(seq 1 12); do
+            state=$(gh api "repos/$repo/deployments/$id/statuses?per_page=1" --jq '.[0].state // "pending"')
+            echo "check $i: state=$state"
+            case "$state" in
+              success)       echo "Confirmed: the site is live."; exit 0 ;;
+              failure|error) echo "::error::Pages deployment finalized as '$state' — the site did NOT update."; exit 1 ;;
+              *)             sleep 5 ;;
+            esac
+          done
+          echo "::error::Pages deployment never reached a terminal state within the timeout."
+          exit 1
