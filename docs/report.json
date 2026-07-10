@@ -1,40 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## GeoGS-SLAM\n\n### The Breakthrough\nThe authors introduce GeoGS, a geometry\u2011only variant of 3D Gaussian splatting that removes colour and opacity parameters, cutting per\u2011primitive storage by more than 80% and speeding up convergence while improving geometric accuracy on synthetic and real\u2011world benchmarks.\n\n### The Caveats\nThe paper never evaluates against existing appearance\u2011based 3DGS or SLAM baselines, so the claimed superiority is unsubstantiated.\n\n## Dual Latent Memory in Vision\u2011Language\u2011Action Models for Robotic Manipulation\n\n### The Breakthrough\nLaMem\u2011VLA embeds past experience as latent memory tokens inside a vision\u2011language\u2011action pipeline via four modules\u2014curator, seeker, condenser, and weaver\u2014allowing memory to be interleaved with current observation and instruction, and showing performance gains on SimplerEnv and LIBERO simulators.\n\n### The Caveats\nPerformance gains are reported without naming any baseline methods, leaving superiority unclear.\n\n## ELEANOR: 85\u202fcm 3D\u2011printed soft arm inspired by the elephant trunk\n\n### The Breakthrough\nELEANOR is an 85\u202fcm soft continuum arm fabricated with a tapered backbone and dense tendon bundles that replicate longitudinal and oblique muscle actions, enabling whole\u2011body grasping of objects of varied shapes in qualitative demos.\n\n### The Caveats\nOnly qualitative demonstrations are provided and no comparison to existing continuum\u2011robot baselines, so the claimed dexterity and scalability remain unverified.\n\n## EmbodiedGen V2: An Agentic, Simulation\u2011Ready 3D World Engine for Embodied AI\n\n### The Breakthrough\nEmbodiedGen V2 automatically creates simulation\u2011ready 3D worlds with 96.5% human acceptance and 98.6% collision\u2011free success, boosting simulation\u2011to\u2011real task success from 21.7% to 75.0% in robot experiments.\n\n### The Caveats\nThe work provides no baseline or prior\u2011art comparison, making the magnitude of improvement unclear.\n\n## TorchRL: PyTorch\u2011native reinforcement learning library for robotics and control\n\n### The Breakthrough\nTorchRL 0.13 centres on a TensorDict data model and modular components for policies, environments, collectors, and replay buffers, adding Triton\u2011accelerated recurrent nets, async prioritized replay, and new transforms for robotics and multi\u2011agent tasks.\n\n### The Caveats\nThe announcement lacks empirical performance results on robotics or other RL tasks.\n\n## Google Cloud Robotics Core: Open\u2011source fleet management on Kubernetes\n\n### The Breakthrough\nThe platform integrates Kubernetes federation with bidirectional robot\u2011cloud communication, packaging apps as Helm charts and exposing unified APIs for ML, logging, and monitoring, plus Terraform scripts for provisioning.\n\n### The Caveats\nNo real\u2011world hardware deployments, performance benchmarks, or baseline comparisons are presented.\n\n## NHTSA orders autonomous vehicle firms to stop blocking first responders\n\n### The Breakthrough\nNHTSA directed autonomous\u2011vehicle developers to add reliable detection of flashing lights, fire, smoke, cones and other emergency cues, making emergency\u2011scene handling a functional safety requirement in upcoming vehicle\u2011safety standards.\n\n### The Caveats\nThe directive provides no concrete evaluation criteria or independent verification standards, leaving its practical impact unclear.\n\n## New Jersey robotaxi law would require lidar, potentially banning Tesla's camera\u2011only fleet\n\n### The Breakthrough\nProposed legislation would mandate a three\u2011sensor suite (camera, lidar, radar) and a three\u2011year pilot with 50\u202fk supervised miles before removing safety drivers, which could bar Tesla\u2019s camera\u2011only robotaxis in the state.\n\n### The Caveats\nThe proposal offers no empirical evidence that multi\u2011sensor hardware improves safety or is feasible for deployment.\n\n### Priority\nBecause GeoGS\u2011SLAM delivers a storage\u2011efficient dense mapping method that can immediately improve perception pipelines for monocular robots, it offers the most actionable hardware\u2011agnostic advance today.\n\n### One action\nIntegrate the GeoGS pipeline into your monocular SLAM stack or prototype a lightweight dense mapping module to test the reported 80% storage reduction.",
+  "report": "## DexVerse: Modular Benchmark for Dexterous Manipulation\n\n### The Breakthrough\nThe authors release DexVerse, a large\u2011scale modular benchmark covering 100 dexterous manipulation tasks across multiple robot arms and hands, with visual randomization and 3,180 teleoperated demos. It bundles three robot arms, six hands, and provides synchronized proprioceptive, RGB, depth, and point\u2011cloud data, plus a VR teleoperation interface. The benchmark evaluates several policies, exposing sizable gaps in generalization, making it a new standard for multi\u2011embodiment manipulation research.\n\n### The Caveats\nOnly 19 of the 100 tasks are evaluated, and all results are in simulation, so the benchmark\u2019s claimed generality and robustness remain unproven.\n\n## FabriVLA: Lightweight Vision-Language-Action Model\n\n### The Breakthrough\nFabriVLA couples a 1B\u2011parameter InternVL3.5 vision\u2011language backbone with a flow\u2011matching action head and gated self\u2011attention, trained in a single stage from the pretrained VLM. The compact model attains a 90.0% tier\u2011average success rate on the Meta\u2011World MT50 suite of 50 manipulation tasks despite its small size.\n\n### The Caveats\nThe reported 90\u202f% success is unanchored because the paper provides no comparison to existing baselines on Meta\u2011World MT50.\n\n## ContactMimic: Humanoid Contact Control\n\n### The Breakthrough\nCONTACTMIMIC jointly predicts keypoint trajectories and binary contact signals, using a contact\u2011following reward and trajectory augmentation to decouple contact from pose. The policy outperforms pure keypoint trackers on ten simulated human\u2011object interaction motions and transfers to five real\u2011world motions on a humanoid platform.\n\n### The Caveats\nReal\u2011world validation is limited to a single humanoid platform on only five motions, so broader contact controllability is unverified.\n\n## Humanoid Teleoperated Surgery on Pigs\n\n### The Breakthrough\nA humanoid robot was teleoperated to manipulate surgical tools on live pigs, marking the first demonstration of a humanoid platform assisting in biologically relevant surgery. The system shows that a humanoid can serve as a remote surgical assistant.\n\n### The Caveats\nThe demonstration offers only an unquantified single run with no baseline or performance metrics, so the claimed surgical breakthrough is unsupported.\n\n## 1X 25\u2011DOF Tendon\u2011Driven Hand\n\n### The Breakthrough\n1X unveiled a tendon\u2011driven robotic hand with 25 independent joints, substantially increasing articulation compared with typical grippers and promising finer finger coordination and richer grasp repertoires.\n\n### The Caveats\nThe announcement provides no performance metrics, real\u2011world testing, or comparison to existing hands, leaving its claimed dexterity unverified.\n\n## LingBot\u2011VA 2.0 Video\u2011Action Model\n\n### The Breakthrough\nLingBot\u2011VA 2.0 replaces reconstruction\u2011focused VAEs with a semantic visual\u2011action tokenizer, uses a causal pretraining regime and a sparse MoE backbone, and adds asynchronous inference that predicts future latents while actions execute, enabling high\u2011frequency closed\u2011loop manipulation.\n\n### The Caveats\nThe work reports only anecdotal few\u2011shot robot trials with no quantitative metrics or comparison to existing baselines, so its performance relative to prior methods is unclear.\n\n## Zero2Robot Interactive Textbook\n\n### The Breakthrough\nZero2Robot provides a browser\u2011based interactive textbook that stitches together a full robot\u2011learning stack\u2014from hand\u2011coded physics to quantized vision\u2011language models\u2014in runnable scripts that run on free Colab T4 or a laptop, and demonstrates massive parallel training of up to 4096 simulated robots and a reproducible simulation\u2011to\u2011real pipeline.\n\n### The Caveats\nBecause it includes no formal evaluation or baseline comparison, the tutorial\u2019s claim of a complete robot\u2011learning pipeline is unverified beyond the single demo script.\n\n## GPT\u20115.6 Deployment Safety Docs\n\n### The Breakthrough\nOpenAI released a deployment\u2011safety PDF and an API guide for GPT\u20115.6, detailing risk categories, mitigation strategies, and endpoint specifications that enable developers to integrate the newest, more capable LLM into applications.\n\n### The Caveats\nThe post provides only safety guidelines and API specs, with no hardware or embodied\u2011AI experiments to show the framework works in real\u2011world robotics.\n\n### Priority\nDexVerse offers the most comprehensive, immediately usable benchmark for evaluating and comparing manipulation approaches across many embodiments, making it the ideal entry point today.\n\n### One action\nDownload the DexVerse dataset and run your own policy on the released 100 tasks to gauge performance gaps.\n\n### What to watch\nDexVerse provides a standardized testbed while FabriVLA and ContactMimic showcase lightweight models aiming to solve tasks within that space; LingBot\u2011VA 2.0 explores video\u2011action pretraining for generalizable control. Watching how these approaches perform on DexVerse will reveal which architectures scale best for real\u2011world manipulation.",
   "themes": [
-    "slam",
     "manipulation",
-    "soft-robotics",
-    "simulation",
-    "policy"
+    "benchmark",
+    "vision-language",
+    "hardware",
+    "medical"
   ],
   "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2607.07452",
-    "https://arxiv.org/abs/2607.07608",
-    "https://arxiv.org/abs/2607.07622",
-    "https://arxiv.org/abs/2607.07459",
-    "https://github.com/pytorch/rl",
-    "https://github.com/googlecloudrobotics/core",
-    "https://techcrunch.com/2026/07/08/feds-demand-autonomous-vehicle-companies-stop-interfering-with-first-responders/",
-    "https://www.theverge.com/transportation/962309/new-jersey-robotaxi-bill-lidar-tesla"
+    "https://arxiv.org/abs/2607.08751",
+    "https://arxiv.org/abs/2607.08575",
+    "https://arxiv.org/abs/2607.08742",
+    "https://www.youtube.com/watch?v=Qp0eiQL6vB8",
+    "https://twitter.com/AGkorthos/status/2075260614805459243",
+    "https://arxiv.org/abs/2607.08639",
+    "https://zero2robot.com/",
+    "https://openai.com/index/gpt-5-6/"
   ],
   "section_titles": [
-    "GeoGS-SLAM: Geometry-Only Gaussian Splatting for Dense Monocular SLAM",
-    "Dual Latent Memory in Vision-Language-Action Models for Robotic Manipulation",
-    "ELEANOR: 85\u202fcm 3D\u2011printed soft arm inspired by the elephant trunk",
-    "EmbodiedGen V2: An Agentic, Simulation-Ready 3D World Engine for Embodied AI",
-    "TorchRL: PyTorch\u2011native reinforcement learning library for robotics and control",
-    "Google Cloud Robotics Core: Open\u2011source fleet management on Kubernetes",
-    "NHTSA orders autonomous vehicle firms to stop blocking first responders",
-    "New Jersey robotaxi law would require lidar, potentially banning Tesla's camera\u2011only fleet"
+    "DexVerse: Modular Benchmark for Multi-Task, Multi-Embodiment Dexterous Manipulation",
+    "FabriVLA: A Lightweight Vision-Language-Action Model for Precise Multi-Task Manipulation",
+    "ContactMimic: Humanoid object interaction via contact control",
+    "Humanoid robots perform first teleoperated surgery on pigs",
+    "1X unveils new 25\u2011DOF tendon\u2011driven robotic hand",
+    "LingBot-VA 2.0: Video\u2011Action Foundation Model for Generalizable Robot Control",
+    "Zero2Robot: free open\u2011source interactive textbook for robot learning",
+    "GPT-5.6 deployment safety doc and API guide shared on Hacker News"
   ],
-  "generated_at": "2026-07-09T16:03:13.606137+00:00",
+  "generated_at": "2026-07-10T15:38:28.585102+00:00",
   "run_times": {
-    "orchestrator": "2026-07-09T16:03:13.606137+00:00",
-    "hn": "2026-07-09T15:58:11.356038+00:00",
-    "arxiv": "2026-07-09T15:58:37.453673+00:00",
-    "github": "2026-07-09T15:59:33.809793+00:00",
-    "research_desk": "2026-07-09T16:02:43.719522+00:00"
+    "orchestrator": "2026-07-10T15:38:28.585102+00:00",
+    "hn": "2026-07-10T15:33:15.593235+00:00",
+    "arxiv": "2026-07-10T15:33:53.452327+00:00",
+    "github": "2026-07-10T15:38:28.585102+00:00",
+    "research_desk": "2026-07-10T15:36:49.937658+00:00"
   }
 }
