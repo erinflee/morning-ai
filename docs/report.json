@@ -1,41 +1,38 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Isaac Sim-to-Real Quadruped\n\n### The Breakthrough\nA reinforcement\u2011learning framework trained in Nvidia Isaac Sim transfers zero\u2011shot to a real Unitree Go1, matching the built\u2011in controller on velocity tracking while handling larger disturbances and reaching 2.0\u202fm/s linear and 1.8\u202frad/s angular speeds.\n\n### The Caveats\nThe work evaluates only a single Go1 robot and offers no comparison to existing RL or model\u2011based locomotion baselines.\n\n## NICO Sim-to-Real Grasping\n\n### The Breakthrough\nThe pipeline combines YOLO hand/object detection, stereo fisheye vision, a nonlinear calibration model and a visual\u2011feedback loop, eliminating external trackers and achieving the highest overall tabletop grasp success across the workspace.\n\n### The Caveats\nGains are reported only against the authors' own baselines; no comparison to existing sim\u2011to\u2011real methods or other robots is provided.\n\n## RoboHarness Policy Orchestration\n\n### The Breakthrough\nRoboHarness builds a multi\u2011modal execution memory and a Memory Bridge that retrieves prior trajectories and guides handoffs between heterogeneous controllers, delivering substantial zero\u2011shot long\u2011horizon planning gains and out\u2011of\u2011distribution robustness on benchmarks and real\u2011robot trials.\n\n### The Caveats\nThe paper supplies no named baseline comparisons, making the magnitude of improvement unclear.\n\n## FM-VLA Force Memory for Manipulation\n\n### The Breakthrough\nFM\u2011VLA encodes force time\u2011series into low\u2011dimensional latent tokens via a VAE and conditions a vision\u2011language\u2011action model, achieving >80\u202f% success on three memory\u2011dependent contact\u2011rich tasks with minimal inference overhead.\n\n### The Caveats\nNo baseline is presented, so the reported improvement is unsubstantiated.\n\n## daft-physical-ai Data Library\n\n### The Breakthrough\nThe library offers Daft UDFs for lazy hand\u2011tracking (MediaPipe or WiLoR) and reward scoring with a 4\u202fB\u2011parameter Robometer model, reading LeRobot datasets up to 15\u00d7 faster and reporting MediaPipe detection\u202f=\u202f100\u202f% and PCK@0.1/0.2/0.3\u202f=\u202f49/84/96 on EgoDex.\n\n### The Caveats\nSpeed and accuracy gains are unverified against existing preprocessing frameworks.\n\n## Agent Swarms for SQLite Build\n\n### The Breakthrough\nA planner/worker tree\u2011decomposed swarm uses strong planner agents to generate sub\u2011goals and cheap worker agents to execute them, reaching 80\u202f% of a held\u2011out SQLite test suite in four hours with ~1,000 commits/s, outperforming the prior version by severalfold.\n\n### The Caveats\nValidation is limited to a single SQLite build; broader applicability is not demonstrated.\n\n## AndroidEnv RL Library\n\n### The Breakthrough\nAndroidEnv wraps a real\u2011time Android emulator as an RL environment with a hybrid action space (continuous touch coordinates plus discrete touch/lift) and high\u2011resolution RGB observations that preserve exact UI dynamics.\n\n### The Caveats\nThe repository provides no RL algorithm benchmarks or hardware tests to confirm practical usefulness.\n\n## ExecuTorch Edge Runtime\n\n### The Breakthrough\nExecuTorch AOT\u2011compiles PyTorch models into a portable .pte file, supporting 12+ hardware back\u2011ends with a 50\u202fKB base footprint, enabling one\u2011click switching between CPU, GPU, NPU, and custom accelerators for on\u2011device AI.\n\n### The Caveats\nHardware\u2011specific speedups and deployment claims lack benchmarks or comparisons to existing runtimes.\n\n## RoSys All-Python Robot Framework\n\n### The Breakthrough\nRoSys replaces ROS middleware with an asyncio\u2011driven pure\u2011Python architecture, coupling NiceGUI for a web UI and providing a simulation layer with time\u2011acceleration, aiming for lock\u2011free parallelism and easy offloading of CPU\u2011heavy tasks.\n\n### The Caveats\nNo performance benchmarks, real\u2011world robot tests, or ROS comparisons are provided.\n\n### Priority\nThe Isaac Sim-to-Real quadruped result is the most immediate hardware breakthrough, showing zero\u2011shot transfer of a high\u2011performance locomotion policy to a real robot.\n\n### One action\nDownload the released policy and try reproducing the zero\u2011shot transfer on your own quadruped platform.\n\n### What to watch\nSeveral papers this week push sim\u2011to\u2011real pipelines\u2014Isaac\u2019s quadruped locomotion, NICO\u2019s calibrated grasping, and RoboHarness\u2019s memory\u2011driven policy orchestration\u2014watch for follow\u2011up benchmarks and broader robot evaluations.",
+  "report": "## SceniX + World Labs\n\n### The Breakthrough\nSceniX has built a high\u2011resolution, physics\u2011accurate simulation platform validated in lab demos and live deployments on real robotic hardware, integrating graphics, machine learning, and control pipelines. The platform enables tighter closed\u2011loop perception\u2011action integration and large\u2011scale cloud training, now backed by World Labs funding, compute, and hardware testbeds.\n\n### The Caveats\nThe announcement provides no independent validation or public benchmark of the claimed high\u2011fidelity simulation, so its real\u2011world performance remains unproven.\n\n## Waymo robotaxi safety report\n\n### The Breakthrough\nA study from Hunter College and Open Plans normalizes major crashes and deaths to mileage, finding Waymo\u2019s robotaxis incur a serious\u2011injury rate 1.5\u00d7 higher than NYC for\u2011hire vehicles while overall injury\u2011causing crashes are 67% lower per million miles.\n\n### The Caveats\nThe study\u2019s per\u2011mile injury rate hinges on an ill\u2011defined \u201cserious injury\u201d metric and Waymo\u2019s limited mileage data, making the comparison to Uber/Lyft unreliable.\n\n## AgileRL 10\u00d7 faster RL training\n\n### The Breakthrough\nAgileRL introduces an evolutionary hyperparameter\u2011optimization loop that automatically evolves hyperparameters during training, delivering up to 10\u00d7 faster training than conventional Optuna sweeps on benchmark RL and LLM tasks, and includes evolvable LLM fine\u2011tuning (CISPO) outperforming ART and TRL on the GEM Sudoku Hard benchmark.\n\n### The Caveats\nThe reported 10\u00d7 speedups come only from unspecified simulated RL benchmarks with no real\u2011world robot experiments, so it\u2019s unclear whether the gains translate to actual robotics workloads.\n\n## Gizmo AI scene generator\n\n### The Breakthrough\nGizmo converts natural\u2011language prompts and up to three reference images into parameterized 3D primitives with editable physics parameters, exporting scenes to USD, MJCF, and SDF for Isaac Sim, MuJoCo, and Gazebo in 5\u201315\u202fmin for articulated objects, and bundles a catalog of 3,000+ physics\u2011ready assets for immediate use.\n\n### The Caveats\nThe advertised physics\u2011ready scenes are unverified, since the demo provides no physics fidelity or robot\u2011policy evaluation and offers no baseline comparison.\n\n## Pareto YouTube\u2011style data platform\n\n### The Breakthrough\nPareto treats robotics datasets like YouTube videos, using resumable versioned uploads, a Temporal\u2011driven workflow that shards episodes across GPU embedding workers, and stores raw media in object storage while indexing multimodal vectors in LanceDB; a Rust\u2011based ONNX SigLIP\u20112 server provides low\u2011latency text embeddings for fast preview and synchronized playback without loading full datasets.\n\n### The Caveats\nThe claim of a YouTube\u2011scale, searchable robotics data platform is unsubstantiated, as no performance metrics, real\u2011world benchmarks, or hardware\u2011scale testing are provided.\n\n## BlueOS modular OS for ROVs/USVs\n\n### The Breakthrough\nBlueOS offers a Docker\u2011based, lightweight stack that bundles video routing, autopilot integration (ArduSub, ArduRover, ArduPilot/PX4), and a modular services API into Docker images that run on Raspberry\u202fPi\u2011class SBCs, with stable, beta, and bleeding\u2011edge release channels.\n\n### The Caveats\nThe platform\u2019s claimed low\u2011CPU usage and vehicle\u2011agnostic performance are unsubstantiated, as no benchmarks, latency measurements, or real\u2011world deployments are presented.\n\n## crowd-dataset dashcam pedestrian analysis\n\n### The Breakthrough\nThe crowd\u2011dataset pipeline automatically downloads YouTube dashcam videos, maps city metadata, runs state\u2011of\u2011the\u2011art YOLOv11 detection, and packages the results into a cross\u2011country pedestrian behavior dataset hosted on Kaggle, with a reproducible uv\u2011managed environment for rapid replication.\n\n### The Caveats\nThe repository provides no verification that YOLOv11 detections are accurate on the downloaded dashcam footage nor any downstream AV experiments, so the dataset\u2019s claimed usefulness for safety research remains unproven.\n\n### Priority\nSceniX\u2019s high\u2011fidelity simulation promises to close the reality gap for embodied AI, and its new World Labs backing could soon deliver publicly accessible, cloud\u2011scale testbeds for robotics researchers.\n\n### One action\nSign up for World Labs early\u2011access or request a demo of SceniX\u2019s simulation to evaluate its fidelity for your projects.\n\n### What to watch\nThe coming weeks may reveal whether SceniX\u2019s high\u2011resolution physics engine, Gizmo\u2019s editable scene generation, and Pareto\u2019s YouTube\u2011style data platform converge into a unified pipeline for rapid sim\u2011to\u2011real training; keep an eye on benchmark releases or open\u2011source releases that validate their claimed fidelity and scalability.",
   "themes": [
-    "sim-to-real",
-    "manipulation",
-    "policy-orchestration",
-    "tooling"
+    "simulation",
+    "robotics",
+    "autonomous-vehicles",
+    "tools",
+    "data"
   ],
-  "source_count": 9,
+  "source_count": 7,
   "section_urls": [
-    "https://arxiv.org/abs/2607.18135",
-    "https://arxiv.org/abs/2607.18210",
-    "https://arxiv.org/abs/2607.18060",
-    "https://arxiv.org/abs/2607.18231",
-    "https://www.eventual.ai/blog/announcing-daft-physical-ai",
-    "https://cursor.com/blog/agent-swarm-model-economics",
-    "https://github.com/google-deepmind/android_env",
-    "https://github.com/pytorch/executorch",
-    "https://github.com/zauberzeug/rosys"
+    "https://runtimewire.com/article/fei-fei-li-scenix-joins-world-labs",
+    "https://gothamist.com/news/are-waymo-robotaxis-actually-safer-than-nyc-uber-and-taxi-drivers",
+    "https://github.com/AgileRL/AgileRL",
+    "https://runtimewire.com/article/gizmo-generates-editable-3d-environments-for-robot-training-from-text-and-images",
+    "https://hebbianrobotics.com/blog/youtube-system-design-for-robotics-data-infrastructure",
+    "https://github.com/bluerobotics/BlueOS",
+    "https://github.com/crowd-dataset/crowd"
   ],
   "section_titles": [
-    "Isaac Sim-to-Real: RL Locomotion for Quadrupeds using Isaac Sim",
-    "Optimizing sim-to-real grasping on the low-cost humanoid robot NICO",
-    "RoboHarness: Memory-Driven Orchestration of Heterogeneous Robot Policies for Long-Horizon Planning",
-    "FM-VLA: Force-based Memory Boosts Vision-Language-Action for Contact-Rich Tasks",
-    "daft-physical-ai: Python library to turn robot video into training\u2011ready data",
-    "Agent swarms hit 80% SQLite build success using planner/worker tree decomposition",
-    "AndroidEnv: Python library turning Android devices into RL environments",
-    "ExecuTorch: PyTorch\u2019s unified on\u2011device AI runtime for mobile, embedded and edge",
-    "RoSys: All\u2011Python robot system with web UI and asyncio"
+    "Fei\u2011Fei Li announces SceniX joins World Labs to boost high\u2011fidelity robotics simulation",
+    "Report finds Waymo robotaxis have 1.5\u00d7 higher serious\u2011injury crash rate per mile than NYC for\u2011hire fleet",
+    "AgileRL: RLOps library delivering 10\u00d7 faster RL training via evolutionary hyperparameter optimization",
+    "Gizmo beta lets robotics teams generate editable 3D environments from text and images",
+    "Pareto: YouTube\u2011style open\u2011source data platform for robotics multimodal datasets",
+    "BlueOS: modular open\u2011source operating system for ROVs, USVs and other robots",
+    "crowd-dataset: YouTube dashcam extraction + YOLOv11 pedestrian analysis for cross\u2011cultural AV safety"
   ],
-  "generated_at": "2026-07-21T15:15:21.349320+00:00",
+  "generated_at": "2026-07-22T15:10:11.437114+00:00",
   "run_times": {
-    "orchestrator": "2026-07-21T15:15:21.349320+00:00",
-    "hn": "2026-07-21T15:05:23.248420+00:00",
-    "arxiv": "2026-07-21T15:06:01.598899+00:00",
-    "github": "2026-07-21T15:07:03.487536+00:00",
-    "research_desk": "2026-07-21T15:11:18.539333+00:00"
+    "orchestrator": "2026-07-22T15:10:11.437114+00:00",
+    "hn": "2026-07-22T15:05:35.527544+00:00",
+    "arxiv": "2026-07-22T15:10:11.437114+00:00",
+    "github": "2026-07-22T15:06:26.689162+00:00",
+    "research_desk": "2026-07-22T15:09:35.895414+00:00"
   }
 }
