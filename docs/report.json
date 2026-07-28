@@ -1,41 +1,37 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Variable Impedance Plug\u2011Play Framework\n\n### The Breakthrough\nThe authors present a robot\u2011agnostic compliant\u2011control framework that plugs into ROS control via standardized joint and Cartesian interfaces. Its plugin\u2011based architecture exposes URDF\u2011derived kinematics and lets the Cartesian impedance controller rotate stiffness and damping axes online, enabling task\u2011dependent compliance across heterogeneous manipulators. Real\u2011robot demos show contact\u2011rich manipulation with variable impedance without code changes.\n\n### The Caveats\nOnly qualitative demos are provided and there is no quantitative comparison to existing compliant\u2011control methods.\n\n## Conformal Constraint Tightening for Chance\u2011Constrained Planning\n\n### The Breakthrough\nA planner\u2011agnostic method uses conformal prediction to compute a probabilistic bound on trajectory error for robots with unknown dynamics, then tightens planning constraints so that feasibility under an approximate model guarantees chance\u2011constrained satisfaction on the true system. Simulations report markedly higher task\u2011completion rates than planning with the nominal model alone.\n\n### The Caveats\nThe probabilistic guarantees are demonstrated only in simulation against a single baseline, with no real\u2011robot experiments or ablation of the conformal bound.\n\n## ViTacWorld Visuo\u2011Tactile World Model\n\n### The Breakthrough\nViTacWorld trains a unified visuo\u2011tactile world model by pretraining on large public tactile datasets and a custom simulator, then fine\u2011tuning on real\u2011world rollouts; the model predicts aligned image and tactile observations conditioned on robot actions, enabling synthetic rollouts for data augmentation and policy evaluation. It is the first framework to generate visuo\u2011tactile trajectories for contact\u2011rich manipulation.\n\n### The Caveats\nGains are reported without naming prior visuo\u2011tactile baselines, so superiority over existing methods is unsubstantiated.\n\n## Robot\u2011Factored World Models via Rendering\n\n### The Breakthrough\nThe approach factors out action realization and robot rendering, feeding a camera\u2011aware RGB/depth context plus a rendered URDF robot geometry to the predictive model. This improves video prediction across different robot embodiments and allows manipulation videos to be generated from human demonstrations via retargeted rendering, beating vector\u2011conditioned baselines in simulation.\n\n### The Caveats\nResults are limited to simulation and have never been validated on real robot hardware.\n\n## Curious Robots Learn Language via Curiosity\n\n### The Breakthrough\nA virtual robot equipped with a predictive\u2011coding PV\u2011RNN and a curiosity reward learns language concepts twice as fast as a non\u2011curious counterpart; exposing it to 48 versus 180 verb\u2011adjective\u2011object combos raises generalization from 25% to 85%, and the learning curve mirrors toddler behavior.\n\n### The Caveats\nThe study benchmarks only against a non\u2011curious version of the same system, providing no comparison to stronger language\u2011grounded robots or large\u2011scale models.\n\n## Optical Memory Link for Low\u2011Energy AI Updates\n\n### The Breakthrough\nCornell Tech integrates photodiodes into SRAM cells so that patterned light directly flips bits, demonstrating a 14\u00d714\u2011bit static light matrix write without analog conversion and proposing scaling to gigabit\u2011per\u2011second links for edge AI parameter updates.\n\n### The Caveats\nEnergy savings and gigabit\u2011per\u2011second performance are unsubstantiated; only a single low\u2011resolution write on a lab\u2011bench prototype is shown, with no robot integration.\n\n## dora: Rust\u2011Based Low\u2011Latency Dataflow Middleware\n\n### The Breakthrough\nDORA offers a Rust dataflow framework with zero\u2011copy shared\u2011memory IPC built on Zenoh SHM and Apache Arrow, achieving 10\u201117\u00d7 lower latency and 3\u201110\u00d7 higher throughput versus ROS2 Python, while supporting multi\u2011language nodes, hot\u2011reloading, observability, and soft real\u2011time scheduling.\n\n### The Caveats\nLatency and throughput gains are demonstrated only with synthetic micro\u2011benchmarks, without hardware\u2011in\u2011the\u2011loop robot experiments or large\u2011scale multi\u2011robot tests.\n\n## Opentrons Open\u2011Source Lab Automation Stack\n\n### The Breakthrough\nThe Opentrons repository bundles a Python API, cross\u2011platform desktop app, and drag\u2011and\u2011drop protocol designer for Flex and OT\u20112 robots, allowing scientists to script liquid\u2011handling experiments that run directly on hardware with minimal setup.\n\n### The Caveats\nNo performance benchmarks or hardware robustness tests are provided, leaving reliability on real robots unclear.\n\n## ForzaHorizon6 VisionAI Racing Agent\n\n### The Breakthrough\nA camera\u2011only closed\u2011loop racing agent uses a ResNet\u201118 backbone on three stacked frames to predict lane offset, waypoints, speed, and tyre slip, feeding these geometry quantities to a controller; it reaches 84\u201192% of the game AI\u2019s mean speed across three cars on 29\u202fkm courses without per\u2011car adaptation.\n\n### The Caveats\nResults are benchmarked only against the game\u2019s built\u2011in AI and internal variants, with no comparison to existing imitation\u2011learning or reinforcement\u2011learning baselines.\n\n### Priority\nThe plug\u2011play variable\u2011impedance framework is the most actionable today because it delivers real\u2011robot compliant control improvements that can be adopted immediately on existing ROS\u2011based manipulators.\n\n### One action\nIntegrate the plugin\u2011based compliant controller into your ROS\u2011controlled arm to experiment with online rotation of stiffness and damping axes.",
+  "report": "## ArmnetBench v0.1\n\n### The Breakthrough\nArmnetBench v0.1 deploys a farm of inexpensive SO-101 robot arms to run manipulation policies in parallel, delivering 2,518 rollouts across 12 tasks with three\u2011way quality labels and releasing 600 human\u2011scored demonstrations. The benchmark supplies both policy outcomes and high\u2011quality demo data in LeRobot\u202fv3.0 and RoboMeter formats, and its initial leaderboard compares seven policies trained on just 50 demonstrations per task.\n\n### The Caveats\nThe leaderboard includes no established baselines, so the reported policy performance cannot be meaningfully compared to prior manipulation methods.\n\n## KAI: Kinematic\u2011Aware Interface\n\n### The Breakthrough\nKAI embeds interpretable geometric and kinematic priors into manipulation policies, achieving an average 82.9% success rate on six simulated tasks while using only half the demonstration data of baselines, and maintaining over 70% success when co\u2011trained with human videos in cluttered real\u2011world scenes.\n\n### The Caveats\nThe paper claims data\u2011efficient gains over baselines but never names or quantitatively compares against any existing method, so the reported improvement is unsubstantiated.\n\n## Handheld Guidewire Actuator\n\n### The Breakthrough\nA compact handheld device combines motorized tendon actuation with a joystick and switch to control feeding, rotation, and bending of up to 1.5\u202fm of a tendon\u2011driven steerable guidewire, demonstrated in an anatomically accurate phantom aorta.\n\n### The Caveats\nThe paper presents only a qualitative phantom demonstration and names no baseline or quantitative metrics, so any claim of improved clinician control is unsubstantiated.\n\n## NEO: Language\u2011guided NeRF Editing\n\n### The Breakthrough\nNEO enables language\u2011guided object removal with multiview\u2011consistent progressive inpainting, edits NeRF weights directly via a teacher\u2011student distillation scheme, and introduces the first quantitative benchmark for NeRF editing in manipulation contexts, showing superior performance over prior methods.\n\n### The Caveats\nThe paper reports superior performance but does not name or compare against any existing NeRF\u2011editing baselines, leaving the claimed advantage unverified.\n\n## 39k+ Hours of Open Robot Data\n\n### The Breakthrough\nMore than 39,535 hours of robot telemetry, sensor streams, and possible video recordings are now publicly accessible, intended to support data\u2011driven approaches such as learning from demonstration and large\u2011scale perception models.\n\n### The Caveats\nThe post provides no details on the dataset\u2019s format, sensor modalities, annotation quality, or any downstream benchmark results, leaving its practical value unclear.\n\n## SAGE Cognition Kernel\n\n### The Breakthrough\nSAGE implements a 12\u2011step \u201cconsciousness loop\u201d that adds persistent identity, trust scoring, metabolic budgeting, plugin selection, and policy governance to a frozen LLM, enabling continual inference on edge devices like Jetson boards.\n\n### The Caveats\nSAGE\u2019s purported cognition gains are unsubstantiated, as the repository offers no formal evaluation, baseline comparison, or public hardware trials.\n\n## Telnyx Kimi K3 Inference API\n\n### The Breakthrough\nTelnyx hosts the 2.8\u202fT\u2011parameter Kimi\u202fK3 model on dedicated GPUs with region\u2011specific low\u2011latency inference, an OpenAI\u2011compatible endpoint, built\u2011in prompt caching, and transparent per\u2011token pricing.\n\n### The Caveats\nThe promised low\u2011latency, region\u2011specific inference is unsubstantiated, as Telnyx provides no independent latency or throughput measurements for Kimi\u202fK3.\n\n### Priority\nArmnetBench offers a concrete, real\u2011world evaluation platform that can immediately accelerate manipulation research by providing repeatable rollouts and benchmark data.\n\n### One action\nVisit the ArmnetBench repository, clone the benchmark, and run a baseline policy to gauge current performance.\n\n### What to watch\nArmnetBench, KAI, and NEO illustrate three complementary trends: large\u2011scale real\u2011world benchmarking, data\u2011efficient priors for articulated manipulation, and scene\u2011editing tools that let robots plan in edited 3D environments. Their progress together could shrink the gap between simulation and deployment.",
   "themes": [
-    "compliant control",
-    "motion planning",
-    "world models",
-    "robotic middleware"
+    "manipulation",
+    "benchmarks",
+    "datasets",
+    "medical-robotics"
   ],
-  "source_count": 9,
+  "source_count": 7,
   "section_urls": [
-    "https://arxiv.org/abs/2607.22483",
-    "https://arxiv.org/abs/2607.22409",
-    "https://arxiv.org/abs/2607.22530",
-    "https://arxiv.org/abs/2607.22535",
-    "https://www.oist.jp/news-center/news/2026/7/24/curious-robots-mimic-how-children-can-learn-understand-language",
-    "https://spectrum.ieee.org/ai-in-robotics",
-    "https://github.com/dora-rs/dora",
-    "https://github.com/Opentrons/opentrons",
-    "https://github.com/Ayin1412/ForzaHorizon6-VisionAI"
+    "https://arxiv.org/abs/2607.24481",
+    "https://arxiv.org/abs/2607.24493",
+    "https://arxiv.org/abs/2607.24629",
+    "https://arxiv.org/abs/2607.24538",
+    "https://datasets.bot/",
+    "https://github.com/dp-web4/SAGE",
+    "https://telnyx.com/release-notes/kimi-k3-telnyx-inference"
   ],
   "section_titles": [
-    "Plug, Play, and Comply: A Modular Framework for Online Variable Impedance with Arbitrarily Oriented Compliance Axes",
-    "Conformal Constraint Tightening for Chance-Constrained Motion Planning with Unknown Dynamics",
-    "ViTacWorld: Scaling Visuo\u2011Tactile World Models for Contact\u2011Rich Robot Manipulation",
-    "Robot-Factored World Models via Robot Rendering",
-    "Curious robots mimic how children learn language",
-    "Optical Memory Link Uses Light to Directly Write SRAM, Promising Low\u2011Energy AI Updates",
-    "dora: Rust-based low\u2011latency dataflow middleware for robotics AI",
-    "Opentrons: Open-source API and app for automating biology protocols on Flex and OT\u20112 robots",
-    "ForzaHorizon6-VisionAI: Camera\u2011only closed\u2011loop racing agent using a geometry control interface"
+    "ArmnetBench v0.1: Parallel Real-World Evaluation on a Low-Cost Arm Farm",
+    "KAI: A Kinematic-Aware Interface for Data-Efficient Articulated Object Manipulation",
+    "Handheld actuation mechanism for tendon\u2011driven robotic guidewire",
+    "NEO: language-guided NeRF editing for continuous robot manipulation",
+    "39,535+ hours of open robot data released",
+    "SAGE: a cognition kernel that adds identity, trust, and governance to frozen LLMs",
+    "Telnyx launches Kimi K3 2.8T LLM via low\u2011latency Inference API"
   ],
-  "generated_at": "2026-07-27T15:50:01.863215+00:00",
+  "generated_at": "2026-07-28T15:29:04.838956+00:00",
   "run_times": {
-    "orchestrator": "2026-07-27T15:50:01.863215+00:00",
-    "hn": "2026-07-27T15:43:28.603144+00:00",
-    "arxiv": "2026-07-27T15:44:04.436773+00:00",
-    "github": "2026-07-27T15:45:06.840370+00:00",
-    "research_desk": "2026-07-27T15:49:15.487622+00:00"
+    "orchestrator": "2026-07-28T15:29:04.838956+00:00",
+    "hn": "2026-07-28T15:23:21.397528+00:00",
+    "arxiv": "2026-07-28T15:24:12.890717+00:00",
+    "github": "2026-07-28T15:25:07.803079+00:00",
+    "research_desk": "2026-07-28T15:27:29.640405+00:00"
   }
 }
