@@ -1,37 +1,36 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## ArmnetBench v0.1\n\n### The Breakthrough\nArmnetBench v0.1 deploys a farm of inexpensive SO-101 robot arms to run manipulation policies in parallel, delivering 2,518 rollouts across 12 tasks with three\u2011way quality labels and releasing 600 human\u2011scored demonstrations. The benchmark supplies both policy outcomes and high\u2011quality demo data in LeRobot\u202fv3.0 and RoboMeter formats, and its initial leaderboard compares seven policies trained on just 50 demonstrations per task.\n\n### The Caveats\nThe leaderboard includes no established baselines, so the reported policy performance cannot be meaningfully compared to prior manipulation methods.\n\n## KAI: Kinematic\u2011Aware Interface\n\n### The Breakthrough\nKAI embeds interpretable geometric and kinematic priors into manipulation policies, achieving an average 82.9% success rate on six simulated tasks while using only half the demonstration data of baselines, and maintaining over 70% success when co\u2011trained with human videos in cluttered real\u2011world scenes.\n\n### The Caveats\nThe paper claims data\u2011efficient gains over baselines but never names or quantitatively compares against any existing method, so the reported improvement is unsubstantiated.\n\n## Handheld Guidewire Actuator\n\n### The Breakthrough\nA compact handheld device combines motorized tendon actuation with a joystick and switch to control feeding, rotation, and bending of up to 1.5\u202fm of a tendon\u2011driven steerable guidewire, demonstrated in an anatomically accurate phantom aorta.\n\n### The Caveats\nThe paper presents only a qualitative phantom demonstration and names no baseline or quantitative metrics, so any claim of improved clinician control is unsubstantiated.\n\n## NEO: Language\u2011guided NeRF Editing\n\n### The Breakthrough\nNEO enables language\u2011guided object removal with multiview\u2011consistent progressive inpainting, edits NeRF weights directly via a teacher\u2011student distillation scheme, and introduces the first quantitative benchmark for NeRF editing in manipulation contexts, showing superior performance over prior methods.\n\n### The Caveats\nThe paper reports superior performance but does not name or compare against any existing NeRF\u2011editing baselines, leaving the claimed advantage unverified.\n\n## 39k+ Hours of Open Robot Data\n\n### The Breakthrough\nMore than 39,535 hours of robot telemetry, sensor streams, and possible video recordings are now publicly accessible, intended to support data\u2011driven approaches such as learning from demonstration and large\u2011scale perception models.\n\n### The Caveats\nThe post provides no details on the dataset\u2019s format, sensor modalities, annotation quality, or any downstream benchmark results, leaving its practical value unclear.\n\n## SAGE Cognition Kernel\n\n### The Breakthrough\nSAGE implements a 12\u2011step \u201cconsciousness loop\u201d that adds persistent identity, trust scoring, metabolic budgeting, plugin selection, and policy governance to a frozen LLM, enabling continual inference on edge devices like Jetson boards.\n\n### The Caveats\nSAGE\u2019s purported cognition gains are unsubstantiated, as the repository offers no formal evaluation, baseline comparison, or public hardware trials.\n\n## Telnyx Kimi K3 Inference API\n\n### The Breakthrough\nTelnyx hosts the 2.8\u202fT\u2011parameter Kimi\u202fK3 model on dedicated GPUs with region\u2011specific low\u2011latency inference, an OpenAI\u2011compatible endpoint, built\u2011in prompt caching, and transparent per\u2011token pricing.\n\n### The Caveats\nThe promised low\u2011latency, region\u2011specific inference is unsubstantiated, as Telnyx provides no independent latency or throughput measurements for Kimi\u202fK3.\n\n### Priority\nArmnetBench offers a concrete, real\u2011world evaluation platform that can immediately accelerate manipulation research by providing repeatable rollouts and benchmark data.\n\n### One action\nVisit the ArmnetBench repository, clone the benchmark, and run a baseline policy to gauge current performance.\n\n### What to watch\nArmnetBench, KAI, and NEO illustrate three complementary trends: large\u2011scale real\u2011world benchmarking, data\u2011efficient priors for articulated manipulation, and scene\u2011editing tools that let robots plan in edited 3D environments. Their progress together could shrink the gap between simulation and deployment.",
+  "report": "## HiFi-UMI: High-fidelity robot-free data enables zero-robot post-training of manipulation policies\n\n### The Breakthrough\nThe authors introduce HiFi-UMI, a portable system that captures ultra\u2011wide\u2011FoV, microsecond\u2011synchronized robot\u2011free demonstrations with 3\u202fmm end\u2011effector accuracy, building a 2,000\u2011hour dataset. Policies trained solely on this data reach up to 85% success on a precision insertion task, matching teleoperated baselines, and additional 4,000\u202fhours of pre\u2011training further improve performance on unseen tasks.\n\n### The Caveats\nThe experiments are confined to the same robot that recorded the data, with no cross\u2011hardware evaluation, so it remains unclear whether the learned policies truly generalize to other robots.\n\n## SAM3D-Guided Object-Centric Representation Alignment for Vision-Language-Action Models\n\n### The Breakthrough\nA frozen SAM3D model provides dense 3\u2011D object embeddings that are aligned to intermediate visual features of a VLA policy, allowing manipulation without depth or masks at test time. The method reports 99.1% success on the LIBERO benchmark and an average episode length of 4.11 on CALVIN, with real\u2011world gains in long\u2011horizon tasks.\n\n### The Caveats\nThe paper reports high success rates but never compares against any existing VLA or object\u2011aware baselines, so it\u2019s unclear whether the gains are due to the SAM3D alignment or other factors.\n\n## S2A2: Audio\u2011Visual Imitation Learning for Manipulation Using Acoustic Spatial Cues\n\n### The Breakthrough\nS2A2 fuses visual features with acoustic spatial information (sound source direction) and spectral audio cues within a single imitation\u2011learning policy, enabling robots to locate and manipulate objects using sound. Experiments in simulation and on a real robot outperform existing policies on tasks that require both spatial positioning and timbre discrimination.\n\n### The Caveats\nThe paper never ablates the visual\u2011only and audio\u2011only variants, so the reported gains could stem from the visual baseline alone and the contribution of acoustic cues remains unproven.\n\n## Modular Robotic Catheters for Endovascular Aneurysm Repair\n\n### The Breakthrough\nThe work presents a 2\u2011segment, 4\u2011DOF steerable catheter with an expandable tendon\u2011driven actuation platform, fabricated via thermal fiber drawing and laser micro\u2011machining; simulation and in\u2011vitro phantom tests demonstrate enhanced bending stiffness and steerability for fenestrated/branched endovascular aneurysm repair.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing catheters, so the claimed procedural\u2011time reduction and enhanced handling of complex cases remain unsubstantiated.\n\n## Genki Robotics to launch first robot product and open OS to developers\n\n### The Breakthrough\nGenki Robotics plans to release its first consumer robot later this year and will open its operating system through an app\u2011store\u2011like marketplace, letting third\u2011party developers create, sell, and install robot behaviors to accelerate software innovation.\n\n### The Caveats\nThe announcement offers no hardware prototypes, performance data, or real\u2011world testing, so the promised robot launch and open\u2011OS marketplace remain unverified.\n\n## TurboFieldfare: Swift/Metal engine runs Gemma 4\u201126B on M\u2011series Macs with 2\u202fGB RAM\n\n### The Breakthrough\nTurboFieldfare is an open\u2011source Swift/Metal inference engine that streams 4\u2011bit quantized Gemma 4\u201126B weights from SSD, keeping RAM usage around 2\u202fGB on Apple silicon; it attains 5\u20116\u202ftok/s on an M2 Air and 31\u201135\u202ftok/s on an M5 Pro and includes an experimental OpenAI\u2011compatible local server.\n\n### The Caveats\nThe demo provides no comparison to existing inference engines, so it\u2019s unclear whether the claimed 2\u202fGB RAM footprint and token\u2011per\u2011second speeds constitute a real improvement.\n\n### Priority\nHiFi-UMI is the most actionable breakthrough because it delivers a large, high\u2011quality dataset and demonstrates that manipulation policies can be trained without any post\u2011training robot runs.\n\n### One action\nDownload the HiFi\u2011UMI dataset and evaluate your own manipulation policy on the provided benchmarks.\n\n### What to watch\nHiFi\u2011UMI, SAM3D\u2011guided VLA alignment, and S2A2 all pursue data\u2011centric or multimodal routes to improve robot manipulation\u2014watch how quickly the community adopts high\u2011fidelity robot\u2011free demos, 3\u2011D object priors, and acoustic cues, and whether cross\u2011hardware validation emerges.",
   "themes": [
     "manipulation",
-    "benchmarks",
     "datasets",
-    "medical-robotics"
+    "multimodal",
+    "medical-robotics",
+    "robotics-software"
   ],
-  "source_count": 7,
+  "source_count": 6,
   "section_urls": [
-    "https://arxiv.org/abs/2607.24481",
-    "https://arxiv.org/abs/2607.24493",
-    "https://arxiv.org/abs/2607.24629",
-    "https://arxiv.org/abs/2607.24538",
-    "https://datasets.bot/",
-    "https://github.com/dp-web4/SAGE",
-    "https://telnyx.com/release-notes/kimi-k3-telnyx-inference"
+    "https://arxiv.org/abs/2607.25895",
+    "https://arxiv.org/abs/2607.25912",
+    "https://arxiv.org/abs/2607.26047",
+    "https://arxiv.org/abs/2607.25807",
+    "https://asia.nikkei.com/editor-s-picks/interview/japan-s-genki-robotics-to-launch-first-product-this-year-says-ceo",
+    "https://github.com/drumih/turbo-fieldfare"
   ],
   "section_titles": [
-    "ArmnetBench v0.1: Parallel Real-World Evaluation on a Low-Cost Arm Farm",
-    "KAI: A Kinematic-Aware Interface for Data-Efficient Articulated Object Manipulation",
-    "Handheld actuation mechanism for tendon\u2011driven robotic guidewire",
-    "NEO: language-guided NeRF editing for continuous robot manipulation",
-    "39,535+ hours of open robot data released",
-    "SAGE: a cognition kernel that adds identity, trust, and governance to frozen LLMs",
-    "Telnyx launches Kimi K3 2.8T LLM via low\u2011latency Inference API"
+    "HiFi-UMI: High-fidelity robot-free data enables zero-robot post-training of manipulation policies",
+    "SAM3D-Guided Object-Centric Representation Alignment for Vision-Language-Action Models",
+    "S2A2: Audio\u2011Visual Imitation Learning for Manipulation Using Acoustic Spatial Cues",
+    "Modular Robotic Catheters for Endovascular Aneurysm Repair",
+    "Genki Robotics to launch first robot product and open OS to developers",
+    "TurboFieldfare: Swift/Metal engine runs Gemma 4\u201126B on M\u2011series Macs with 2\u202fGB RAM"
   ],
-  "generated_at": "2026-07-28T15:29:04.838956+00:00",
+  "generated_at": "2026-07-29T15:35:26.282842+00:00",
   "run_times": {
-    "orchestrator": "2026-07-28T15:29:04.838956+00:00",
-    "hn": "2026-07-28T15:23:21.397528+00:00",
-    "arxiv": "2026-07-28T15:24:12.890717+00:00",
-    "github": "2026-07-28T15:25:07.803079+00:00",
-    "research_desk": "2026-07-28T15:27:29.640405+00:00"
+    "orchestrator": "2026-07-29T15:35:26.282842+00:00",
+    "hn": "2026-07-29T15:31:24.942467+00:00",
+    "arxiv": "2026-07-29T15:32:03.412928+00:00",
+    "github": "2026-07-29T15:33:06.016487+00:00",
+    "research_desk": "2026-07-29T15:35:01.673567+00:00"
   }
 }
