@@ -1,42 +1,42 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Geek+ autonomous mobile robots reshape UK warehouse logistics\n\n### The Breakthrough\nGeek+ is deploying fleets of fully autonomous wheeled robots that glide under storage racks, lift entire shelves, and navigate via QR\u2011code floor markers and safety fencing. The system is marketed as plug\u2011and\u2011play and coordinates thousands of robots across ten UK sites, promising faster picking and higher storage density.\n\n### The Caveats\nThe performance claims rely solely on company announcements with no quantitative baseline or long\u2011term reliability data.\n\n## SymmGrid: Super-Scaling On-Robot Learning with Parallelized Symmetries\n\n### The Breakthrough\nSymmGrid builds a symmetry tree over the MDP and applies invariant transformations, including homographies for visual warping, to generate a geometric grid of synthetic experiences. This parallelized augmentation yields 1.37\u20112.17\u00d7 wall\u2011clock speed\u2011ups and 1.09\u20111.27\u00d7 success\u2011rate gains, achieving up to 2.59\u00d7 normalized AUC improvement on real\u2011world tasks like peg\u2011insertion and cable routing.\n\n### The Caveats\nThe paper does not name concrete baselines, so the reported speedups lack a verifiable reference point.\n\n## TurboVLA: Real-Time Vision-Language-Action Model at 32\u202fHz\n\n### The Breakthrough\nTurboVLA replaces the conventional V\u2192L\u2192A pipeline with a bidirectional vision\u2011language interaction module, using lightweight encoders and a 0.2\u202fB\u2011parameter decoder to run at 32\u202fHz with <1\u202fGB VRAM on an RTX\u202f4090. It achieves 97.7% average success on the LIBERO manipulation benchmark with 31.2\u202fms latency per inference step.\n\n### The Caveats\nNo prior VLA baselines are cited, leaving its claim of matching or surpassing larger policies unsubstantiated.\n\n## DL-VINS-Factory ROS2: TensorRT\u2011accelerated learned visual\u2011inertial odometry for Jetson\n\n### The Breakthrough\nThe stack swaps classic hand\u2011crafted features for deep learned front\u2011ends (e.g., SuperPoint) and uses TensorRT to deliver real\u2011time VIO on Jetson devices, with modular support for mono, stereo, and optional DINOv2\u2011based loop closure. Benchmark results on EuRoC, NTU\u2011VIRAL, and SubT\u2011MRS are reported against established baselines.\n\n### The Caveats\nEvaluations are limited to recorded ROS\u2011bag datasets on Jetson hardware; real\u2011robot tests and non\u2011Jetson platforms are absent.\n\n## BioVLN: Simulation Platform for Visual\u2011Language Navigation in Biomedical Labs\n\n### The Breakthrough\nBioVLN introduces a three\u2011region instrument representation (body, clearance, operation area) and generates 47 procedural scenes with 1,667 episodes. Geometric exploration achieves 74.4\u201187.5% success, while sampling multiple operation\u2011area positions raises success to 83.3\u201192.5% and reduces unsafe proximity.\n\n### The Caveats\nResults are compared only to a simplistic geometric\u2011exploration baseline, with no reference to existing VLN methods.\n\n## HumanCLAW: Evaluating Vision-Language Models via Decoupled Full\u2011Body Action\n\n### The Breakthrough\nHumanCLAW decouples high\u2011level VLM decision making from motor execution by converting skill tokens into sub\u2011second physics\u2011based full\u2011body motions, creating a 1,218\u2011episode benchmark across 41 indoor scenes. Evaluation of nine SOTA VLMs shows a maximum 16.8% success rate, exposing a gap in embodied self\u2011awareness.\n\n### The Caveats\nAll results are confined to simulation; real\u2011world robot experiments are missing.\n\n## Ken Goldberg: Data avalanche \u2013 engineering plus learning for robotics\n\n### The Breakthrough\nGoldberg proposes a \"data avalanche\" strategy: deploy hybrid engineered\u2011plus\u2011learning systems to harvest massive task\u2011specific datasets in production, exemplified by Ambi Robotics' four\u2011year, 22\u2011year\u2011equivalent picking data that enabled a new grasp model for hard items.\n\n### The Caveats\nThe talk offers only anecdotal case studies without formal evaluation or baseline comparisons.\n\n## BoofCV: Real\u2011time Java computer vision library\n\n### The Breakthrough\nBoofCV delivers a pure\u2011Java implementation of classic and modern vision algorithms\u2014including SFM, calibration, and QR\u2011code handling\u2014distributed via Maven Central for easy integration into desktop, Android, and Kotlin projects.\n\n### The Caveats\nNo performance benchmarks or comparative evaluations are provided to substantiate real\u2011time claims.\n\n## sbi: Python library for simulation\u2011based Bayesian inference\n\n### The Breakthrough\nsbi implements state\u2011of\u2011the\u2011art neural posterior estimation (NPE, SNPE) with amortized and sequential APIs, supporting GPU acceleration and integration with PyTorch, Pyro, and PyMC for robot system identification.\n\n### The Caveats\nThe library\u2019s claimed state\u2011of\u2011the\u2011art performance lacks formal evaluation or baseline comparisons.\n\n### Priority\nThe Geek+ UK warehouse rollout is the most immediate robotics development, showing large\u2011scale autonomous robot deployment in a commercial setting.\n\n### One action\nTrack the operational metrics of the Geek+ fleets as they mature to gauge real\u2011world impact on warehouse efficiency.\n\n### What to watch\nSeveral papers (SymmGrid, TurboVLA, DL\u2011VINS\u2011Factory) push on\u2011robot learning and perception toward faster, lighter, and more embedded solutions. SymmGrid focuses on symmetry\u2011based data augmentation for speed, TurboVLA compresses vision\u2011language\u2011action pipelines for high\u2011frequency inference, and DL\u2011VINS\u2011Factory integrates learned features for efficient VIO on edge hardware. Their complementary advances suggest a trend toward real\u2011time, data\u2011efficient embodied AI.",
+  "report": "## FasTac tactile sensor\n\n### The Breakthrough\nFasTac is a curved vision\u2011based tactile fingertip that captures a single multispectral image to recover fine 3D geometry and three\u2011axis forces; its depth reconstruction error drops to 0.0415\u202fmm (MAE) and force estimation error to ~2.7\u202f% while the FPGA pipeline runs in 1.09\u202fms latency.\n\n### The Caveats\nThe work does not compare FasTac against existing tactile sensors, leaving its performance advantage unverified.\n\n## PAC-MAN humanoid dodgeball\n\n### The Breakthrough\nPAC\u2011MAN fuses control\u2011barrier\u2011function safety with perception\u2011aware RL using segmentation\u2011masked depth, achieving 95\u202f% success on real\u2011world throws with a Unitree G1 robot deployed zero\u2011shot.\n\n### The Caveats\nThe result is shown only on a single robot, fixed camera placement, and one lighting condition.\n\n## FA\u2011RDP frequency\u2011adaptive manipulation\n\n### The Breakthrough\nFA\u2011RDP introduces a multi\u2011frequency visual\u2011force Transformer that switches from low\u2011frequency planning before contact to high\u2011frequency reactive control after contact, boosting success on three contact\u2011rich manipulation tasks.\n\n### The Caveats\nNo baseline comparisons are provided, so relative improvement is unclear.\n\n## X\u2011NavDP diffusion navigation\n\n### The Breakthrough\nX\u2011NavDP adds behavior\u2011perturbation exploration and Group Q\u2011score Reweighted Matching to a diffusion navigation policy, raising simulated success from 61.2\u202f% to 84.28\u202f% and real\u2011world hard\u2011case success from 10\u202f% to 65\u202f%.\n\n### The Caveats\nThe paper never benchmarks against existing navigation baselines.\n\n## Zoox robotaxi rides in Las Vegas\n\n### The Breakthrough\nZoox secured a temporary NHTSA exemption allowing its toaster\u2011shaped shuttles without steering wheels or brakes to charge passengers in Las Vegas, permitting up to 2,500 vehicles per year for two years.\n\n### The Caveats\nNo quantitative safety or performance data are provided.\n\n## Gemini Robotics 2.0\n\n### The Breakthrough\nGemini Robotics ER\u20112 is a vision\u2011language model that ingests live video streams, achieving ~60\u202f% frame\u2011completeness classification and claiming control of humanoid robots with complex hands via the Gemini Live API.\n\n### The Caveats\nThe claim rests on a single classification score with no real\u2011world robot trials or safety metrics.\n\n## Pomi voice agent for Rabbit R1\n\n### The Breakthrough\nPomi runs fully on\u2011device on the Rabbit R1, offering offline wake\u2011word detection, local transcription overlay, and Hermes\u2011based dialogue management, plus OTA updates via Tailscale.\n\n### The Caveats\nLatency measurements and comparisons to existing assistants are absent.\n\n## pixpick annotation toolkit\n\n### The Breakthrough\npixpick provides a lightweight GUI to draw boxes, polygons, or lines on images/video and instantly outputs coordinates in formats for YOLO, SAM, etc., with JSON export for reproducible pipelines.\n\n### The Caveats\nNo user study or robotics deployment evidence substantiates its claimed efficiency.\n\n## Snakie MicroPython IDE\n\n### The Breakthrough\nSnakie integrates a Monaco editor with live pin\u2011out parsing to render board schematics and streams telemetry to built\u2011in oscilloscopes, multimeters, and plots, plus an AI ghost\u2011text assistant for MicroPython development.\n\n### The Caveats\nPerformance and usability testing are missing, leaving productivity benefits unproven.\n\n### Priority\nFasTac delivers a compact, FPGA\u2011accelerated tactile fingertip with sub\u2011millimeter depth accuracy and sub\u20112\u202fms latency, offering immediate value for anyone building high\u2011speed, precise manipulation systems.\n\n### One action\nVisit the FasTac project page to download the hardware design files and FPGA code, and evaluate its latency for your own gripper.",
   "themes": [
-    "robotics",
+    "tactile",
     "manipulation",
-    "simulation",
-    "vision-language",
-    "automation"
+    "navigation",
+    "autonomous-vehicles",
+    "tools"
   ],
   "source_count": 9,
   "section_urls": [
-    "https://www.bbc.co.uk/news/articles/c0jl8v23qwgo",
-    "https://arxiv.org/abs/2607.26985",
-    "https://arxiv.org/abs/2607.27205",
-    "https://github.com/limshoonkit/DL-VINS-Factory-ROS2",
-    "https://arxiv.org/abs/2607.26914",
-    "https://arxiv.org/abs/2607.27180",
-    "https://www.eventual.ai/blog/what-if-data-alone-wont-solve-robotics",
-    "https://github.com/lessthanoptimal/BoofCV",
-    "https://github.com/sbi-dev/sbi"
+    "https://arxiv.org/abs/2607.28416",
+    "https://arxiv.org/abs/2607.28623",
+    "https://arxiv.org/abs/2607.28596",
+    "https://arxiv.org/abs/2607.28560",
+    "https://www.cnbc.com/2026/07/30/amazon-zoox-robotaxi-rides-las-vegas.html",
+    "https://arstechnica.com/ai/2026/07/google-reveals-gemini-robotics-2-0-promising-improved-dexterity-and-safety/",
+    "https://github.com/sidmohan0/pomi",
+    "https://github.com/K-saif/pixpick",
+    "https://github.com/kevinmcaleer/Snakie"
   ],
   "section_titles": [
-    "Geek+ autonomous mobile robots reshape UK warehouse logistics",
-    "SymmGrid: Super-Scaling On-Robot Learning with Parallelized Symmetries and Egocentric\u2011Exocentric Visual Perception",
-    "TurboVLA: Real-Time Vision-Language-Action Model at 32\u202fHz on RTX\u202f4090 with <1\u202fGB VRAM",
-    "DL-VINS-Factory ROS2: TensorRT\u2011accelerated learned visual\u2011inertial odometry for Jetson",
-    "BioVLN: Simulation Platform for Visual\u2011Language Navigation in Biomedical Labs",
-    "HumanCLAW: Evaluating Vision-Language Models via Decoupled Full-Body Action",
-    "Ken Goldberg: Data alone won\u2019t solve robotics \u2013 engineering still matters",
-    "BoofCV: Real-time Java computer vision library for SFM, calibration, and QR codes",
-    "sbi: Python library for simulation\u2011based Bayesian inference"
+    "FasTac: Curved multispectral vision tactile sensor for fast high\u2011precision 3D shape & force perception",
+    "PAC-MAN: Perception-Aware CBF-RL for Whole-Body Safety in Humanoid Dodgeball",
+    "FA-RDP: Frequency-Adaptive Reactive Diffusion Policy for Contact-Rich Manipulation",
+    "X-NavDP: diffusion navigation policy fine-tuned via Group Q-score Reweighted Matching",
+    "Zoox gets NHTSA exemption to charge for robotaxi rides in Las Vegas",
+    "Google unveils Gemini Robotics 2.0 with live\u2011vision VLM for humanoid control",
+    "Pomi: standalone voice agent for the Rabbit R1 Android mini\u2011PC",
+    "pixpick: interactive coordinate picker for computer\u2011vision frameworks",
+    "Snakie: Cross\u2011platform MicroPython IDE with board visualization and live instruments"
   ],
-  "generated_at": "2026-07-30T15:17:43.739148+00:00",
+  "generated_at": "2026-07-31T15:27:48.151987+00:00",
   "run_times": {
-    "orchestrator": "2026-07-30T15:17:43.739148+00:00",
-    "hn": "2026-07-30T15:11:24.876571+00:00",
-    "arxiv": "2026-07-30T15:12:03.213834+00:00",
-    "github": "2026-07-30T15:13:03.379027+00:00",
-    "research_desk": "2026-07-30T15:17:00.385743+00:00"
+    "orchestrator": "2026-07-31T15:27:48.151987+00:00",
+    "hn": "2026-07-31T15:20:46.757327+00:00",
+    "arxiv": "2026-07-31T15:21:23.485136+00:00",
+    "github": "2026-07-31T15:22:22.340505+00:00",
+    "research_desk": "2026-07-31T15:25:53.759232+00:00"
   }
 }
