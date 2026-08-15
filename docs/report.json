@@ -1,34 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Microrobotic Swarms Clean Microplastics\n\n### The Breakthrough\nScientists in the Czech Republic created microscopic MXene\u2011based robots coated with magnetic nickel that spin under rotating magnetic fields, binding and pulling out microplastics. The robots achieve ~94\u202f% removal of polystyrene in water and ~81\u202f% in soil within about an hour, outperforming passive adsorption. This demonstrates a hardware\u2011level, active decontamination approach for polluted ecosystems.\n\n### The Caveats\nPerformance is shown only in laboratory water and model\u2011soil tests, with no field trials, metal\u2011ion leaching assessment, or broader plastic spectrum evaluation.\n\n## nano-ros: Rust ROS2 client for MCUs\n\n### The Breakthrough\nNEWSLabNTU released nano-ros, a no_std Rust library that brings full ROS\u202f2 Humble compatibility to bare\u2011metal microcontrollers and RTOSes via interchangeable Zenoh, XRCE\u2011DDS, and Cyclone DDS backends. It includes QEMU\u2011based end\u2011to\u2011end testing for multiple MCU families and integrates formal verification and WCET measurement into CI. The stack lets developers prototype ROS\u202f2 nodes on constrained hardware without writing C/C++.\n\n### The Caveats\nThe claims rely solely on QEMU simulations; no real\u2011world hardware benchmarks or performance data have been published.\n\n## Opentrons API for Flex & OT\u20112 Robots\n\n### The Breakthrough\nThe Opentrons open\u2011source repository bundles a Python API, desktop app, and visual protocol designer that translate high\u2011level commands (e.g., aspirate, dispense) into motions for Flex and OT\u20112 liquid\u2011handling robots, lowering the programming barrier for wet\u2011lab users. The platform supports protocol versioning and community contributions, aiming to improve reproducibility of biology experiments.\n\n### The Caveats\nThe repo provides no hardware performance evaluation or benchmark data, so the actual impact on reproducibility or robot efficiency is unverified.\n\n## Agent-Worlds Multi\u2011Agent OS\n\n### The Breakthrough\nThe Agent\u2011Worlds system offers a pixel\u2011art 2D persistent world where each NPC runs its own LLM\u2011powered brain with modular memory, goal, and skill learning, coordinated through a Model Context Protocol that enables hot\u2011swappable models and a social nexus graph influencing decisions. This architecture lets developers experiment with long\u2011term autonomous agents beyond scripted behavior.\n\n### The Caveats\nThe project lacks empirical evaluation or baseline comparisons, leaving its claimed autonomy unverified.\n\n## Ultrafast GPT\u20115.6 Sol Mode\n\n### The Breakthrough\nCerebras and OpenAI unveiled an Ultrafast tier for GPT\u20115.6 Sol that leverages a wafer\u2011scale engine with 44\u202fGB on\u2011chip SRAM, keeping model weights on chip and pipelining tokens across wafers to reach up to 750 tokens\u202f/\u202fs. The service completed the 2,500\u2011question Humanity\u2019s Last Exam benchmark in 11\u202fh\u202f11\u202fm, roughly 7\u201311\u00d7 faster than competing models, with no reported loss in answer quality.\n\n### The Caveats\nSpeedup claims are based only on Cerebras\u2019 internal tests and have not been independently verified.\n\n### Priority\nThe microrobotic swarm paper delivers the most concrete hardware result\u2014a near\u2011complete removal of microplastics in realistic lab conditions\u2014making it the clearest signal of emerging embodied\u2011AI capability.\n\n### One action\nConsider following the Czech team\u2019s open\u2011source design (if available) to test magnetic swarm decontamination on local water samples, or monitor upcoming field\u2011trial announcements.",
+  "report": "## ContactGuard: Pre-Contact Execution Monitor\n\n### The Breakthrough\nContactGuard predicts the short\u2011horizon outcome of a planned visuomotor action chunk in latent visual space and aborts before contact if failure is likely. It trains a latent world model to forecast multi\u2011view embeddings under the robot's own actions and uses a lightweight failure probe trained on a few labelled pre\u2011contact clips, deploying on a live robot to provide abort signals without altering the original policy.\n\n### The Caveats\nEvaluation compares only against trivial ablations and omits comparison to existing safety\u2011monitoring baselines, leaving its true advantage unproven.\n\n## DreamX-Phi 1.0: Video World Model for Manipulation\n\n### The Breakthrough\nDreamX-Phi 1.0 predicts future camera observations from a current frame, language instruction, and a sequence of end\u2011effector poses using per\u2011arm SE(3) transforms via PRoPE\u2011style encoding, a depth branch, and SAM3 masks guided by a frozen V\u2011JEPA teacher; it topped one track and placed second on another in the WorldArena\u202f2.0 Challenge.\n\n### The Caveats\nThe paper reports state\u2011of\u2011the\u2011art scores on WorldArena\u202f2.0 but does not name baseline methods, so the claimed improvement cannot be verified.\n\n## Capstan\u2011Driven Continuum Surgical Robot\n\n### The Breakthrough\nA compliant element in the motor bracket deforms under cable tension, providing direct cable force measurements within the capstan space; combined with a short\u2011thick\u2011beam multibody model and a proximal multi\u2011axis force/torque sensor, it delivers real\u2011time pose and contact force/location sensing for single\u2011 and dual\u2011segment continuum robots.\n\n### The Caveats\nNo comparison to existing continuum\u2011robot sensing approaches, so performance cannot be judged against prior art.\n\n## HumanTracker Benchmark for Motion Tracking\n\n### The Breakthrough\nHumanTracker releases ~153\u202fhours of optical mocap data covering diverse contact\u2011rich humanoid motions with fine\u2011grained text labels, and introduces HumanScore, a learned metric trained on 12\u202fk motion pairs that aligns evaluation with human perceptual preferences, highlighting stability and contact errors missed by kinematic metrics.\n\n### The Caveats\nHumanScore\u2019s perceptual alignment is validated only on offline mocap data, with no hardware or live teleoperation experiments.\n\n## Swarm Foraging Q\u2011Learning Sandbox\n\n### The Breakthrough\nThe repository implements a fully distributed multi\u2011agent Q\u2011learning system where each agent maintains its own Q\u2011table, learning to harvest renewable resources in a dynamic gridworld with moving obstacles and a 5\u00d75 observation window; episodes run under 200\u202fms on a laptop and logs include Q\u2011table snapshots and reward curves.\n\n### The Caveats\nDemonstrates coordination only in a self\u2011made gridworld and provides no comparison to existing multi\u2011agent RL baselines, leaving performance unverified.\n\n## nano\u2011ros: No\u2011Std ROS2 for Rust MCUs\n\n### The Breakthrough\nnano\u2011ros delivers a complete no_std Rust ROS2 client supporting pub/sub, services, and actions, using zenoh\u2011pico for lightweight transport with pluggable backends (zenoh, XRCE\u2011DDS, Cyclone DDS), and integrates formal verification (Kani, CBMC) plus WCET analysis, plus QEMU images for several MCU targets.\n\n### The Caveats\nRelease provides no hardware performance, latency, or schedulability measurements, so real\u2011world ROS2 suitability remains unverified.\n\n## Qwen 3.8\u201127B\u2011FP8 Multimodal LLM\n\n### The Breakthrough\nQwen3.8\u201127B\u2011FP8 applies fine\u2011grained FP8 quantization (block size 128) that preserves performance while reducing memory, enabling a 27\u2011billion\u2011parameter multimodal LLM with a 262\u202fk token context window (extendable to 1\u202fM) to run on modest hardware and achieve SOTA coding and vision\u2011language scores matching full\u2011precision baselines.\n\n### The Caveats\nBenchmark scores lack named baselines, making it unclear whether the quantized model truly outperforms alternatives.\n\n## Walking & Talking Robots for Car Factories\n\n### The Breakthrough\nAnnouncement of robots equipped with bipedal locomotion and speech capabilities slated for deployment in automotive manufacturing, promising mobile and conversational interaction on the factory floor.\n\n### The Caveats\nNo hardware prototypes, performance data, or independent verification, so the claim remains unsubstantiated.\n\n### Priority\nContactGuard offers a concrete safety layer that can be added to existing manipulation pipelines today, directly reducing failure risk on real robots.\n\n### One action\nIntegrate a latent world model like ContactGuard into your robot's control stack to enable pre\u2011contact aborts for safer execution.\n\n### What to watch\nBoth ContactGuard and DreamX\u2011Phi rely on latent or video world models to anticipate future outcomes; ContactGuard focuses on short\u2011horizon safety aborts, while DreamX\u2011Phi emphasizes long\u2011horizon prediction for manipulation planning. Their complementary strengths suggest future systems could merge safety monitoring with predictive planning.",
   "themes": [
-    "microrobotics",
-    "embedded-ros",
-    "lab-automation",
-    "multi-agent",
-    "llm-acceleration"
+    "manipulation",
+    "safety",
+    "embodied-ai",
+    "benchmark",
+    "embedded"
   ],
-  "source_count": 5,
+  "source_count": 8,
   "section_urls": [
-    "https://phys.org/news/2026-08-swarms-tiny-robots-microplastics-soil.html",
+    "https://arxiv.org/abs/2608.13438",
+    "https://arxiv.org/abs/2608.13489",
+    "https://arxiv.org/abs/2608.13396",
+    "https://arxiv.org/abs/2608.13555",
+    "https://github.com/jaimasih05-commits/swarm-foraging-qlearn",
     "https://github.com/NEWSLabNTU/nano-ros",
-    "https://github.com/Opentrons/opentrons",
-    "https://github.com/israriqbal/agent-ecologies",
-    "https://www.cerebras.ai/blog/accelerating-gpt-5-6-sol-ultrafast-with-openai"
+    "https://huggingface.co/Qwen/Qwen3.8-27B-FP8",
+    "https://www.nytimes.com/2026/08/11/business/humanoid-robots-car-factories.html"
   ],
   "section_titles": [
-    "Microrobotic swarms clean microplastics from soil and water",
-    "nano-ros: no_std Rust ROS\u202f2 client for microcontrollers and RTOS",
-    "Opentrons: open-source API and app for automating biology protocols on Flex and OT\u20112 robots",
-    "Agent-Worlds: Multi\u2011Agent OS for Autonomous AI NPCs in a Persistent 2D World",
-    "Cerebras & OpenAI unveil Ultrafast mode for GPT-5.6 Sol, 750\u202ftokens\u202fper\u202fsecond"
+    "ContactGuard: Pre-Contact Execution Monitoring with Action-Conditioned Latent World Models",
+    "DreamX-Phi 1.0: Action\u2011Conditioned Video World Model for Robotic Manipulation",
+    "Capstan-driven Continuum Surgical Robot with Integrated Shape and Force Sensing",
+    "HumanTracker: Towards Comprehensive and Human-Aligned Motion Tracking Benchmark",
+    "Synaptic Harmony: Distributed Q\u2011Learning Swarm Foraging in Dynamic Grid Environments",
+    "nano-ros: no_std ROS\u202f2 client library for Rust on microcontrollers and RTOS",
+    "Qwen 3.8\u202f27B\u2011FP8: Open\u2011source multimodal LLM with vision, 262k context and FP8 quantization",
+    "Robots That Walk and Talk Are Coming to Car Factories"
   ],
-  "generated_at": "2026-08-14T14:20:30.345610+00:00",
+  "generated_at": "2026-08-15T13:40:49.140392+00:00",
   "run_times": {
-    "orchestrator": "2026-08-14T14:20:30.345610+00:00",
-    "hn": "2026-08-14T14:16:31.008854+00:00",
-    "arxiv": "2026-08-14T14:20:30.345610+00:00",
-    "github": "2026-08-14T14:17:25.025400+00:00",
-    "research_desk": "2026-08-14T14:19:29.617797+00:00"
+    "orchestrator": "2026-08-15T13:40:49.140392+00:00",
+    "hn": "2026-08-15T13:31:34.407679+00:00",
+    "arxiv": "2026-08-15T13:32:11.340990+00:00",
+    "github": "2026-08-15T13:33:08.773730+00:00",
+    "research_desk": "2026-08-15T13:36:49.670980+00:00"
   }
 }
