@@ -1,38 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## BATON: Long-Horizon Manipulation via Subtask Exploration\n\n### The Breakthrough\nThe authors introduce BATON, a framework that splits long\u2011horizon robot manipulation into explored subtasks stored in a transition\u2011aware memory. An LLM plans high\u2011level language actions while invoking frozen vision\u2011language\u2011action primitives only when needed, turning exploration cost from multiplicative to additive. On the RoboMemArena benchmark BATON raises task success by 11.6% and cumulative success by 14.9% over the previous state\u2011of\u2011the\u2011art.\n\n### The Caveats\nThe paper claims state\u2011of\u2011the\u2011art gains on RoboMemArena yet does not name or compare against any concrete baseline, making its 11.6% improvement unverifiable.\n\n## FlexWorm: Hybrid Contact\u2011Motion Planning for Suction Soft Robots\n\n### The Breakthrough\nFlexWorm combines block\u2011wise IK hybrid search (IKHS) with Primitive\u2011augmented Hybrid Search (PaHS), using a learned observation\u2011primitive embedding to retrieve short motion primitives and falling back to IKHS when needed. In simulation PaHS matches IKHS success rates with substantially lower planning time, and a pneumatic prototype successfully executes plans despite adhesion and actuation uncertainty.\n\n### The Caveats\nThe paper reports planning speedups without comparing against any existing soft\u2011robot planning baselines, so the claimed advantage is unverified.\n\n## \u03c4\u2080\u2011VLA: Hierarchical Foundation Model with Test\u2011Time Computation\n\n### The Breakthrough\n\u03c4\u2080\u2011VLA is a hierarchical robot foundation model that allocates extra test\u2011time computation for difficult sub\u2011task decisions using a world\u2011model guide. Trained on over 40,000\u202fhours of heterogeneous real\u2011world data, it improves next\u2011subtask prediction and overall task success on long\u2011horizon manipulation benchmarks.\n\n### The Caveats\nThe work reports performance gains but names no baseline methods for comparison, making it impossible to judge whether the claimed improvements are substantive.\n\n## HAF: Hierarchical Action Flow for Humanoid Whole\u2011Body Loco\u2011Manipulation\n\n### The Breakthrough\nHAF adapts pretrained vision\u2011language\u2011action models to humanoid whole\u2011body loco\u2011manipulation via a three\u2011stage hierarchical action\u2011flow generator with cross\u2011stage KV caches and a latent RL refinement (HAF\u2011Steer) that trains a regularized SAC policy in a compact noise subspace while keeping the VLA backbone frozen. It is evaluated on seven real\u2011world humanoid tasks and outperforms single\u2011stage VLA baselines.\n\n### The Caveats\nThe work claims to beat single\u2011stage VLA baselines yet presents no quantitative performance numbers, so the reported improvement cannot be independently verified.\n\n## Speko: Automatic Voice AI Stack Routing\n\n### The Breakthrough\nSpeko\u2019s router evaluates all public STT/LLM/TTS options in real time, filters by user\u2011specified criteria such as accuracy, latency, and cost, and returns the optimal stack with model identifiers and scores without a control\u2011plane round\u2011trip. An MIT\u2011licensed Go gateway runs as a side\u2011car supporting BYOK mode, enabling local routing for voice\u2011enabled systems including robots.\n\n### The Caveats\nThe platform\u2019s claim of optimal, production\u2011scale voice\u2011AI routing is unverified because it relies solely on internal benchmark leaderboards with no hardware or on\u2011robot latency tests and no comparison to established baselines.\n\n## Copilot Autofix Vulnerability in Snowflake CI/CD\n\n### The Breakthrough\nWiz\u2019s Red Agent automatically scanned Snowflake\u2019s public repositories, discovered a script\u2011injection flaw in a GitHub Actions workflow introduced by Copilot\u2019s Autofix, and crafted a payload that bypassed the workflow guard and harvested Jira credentials within seconds, demonstrating how AI\u2011generated PR changes can re\u2011introduce dangerous patterns missed by static analysis.\n\n### The Caveats\nThe finding rests on a single Snowflake workflow incident with no systematic testing across other repositories or CI/CD pipelines, so the broader prevalence of AI\u2011generated code vulnerabilities remains unproven.\n\n## Moxie: Social Robot Companion for Neurodivergent Kids\n\n### The Breakthrough\nManufacturers claim the Moxie social robot can deliver 24/7 personalized interaction that helps neurodivergent children practice eye contact, turn\u2011taking, and emotion regulation, with an on\u2011device curriculum that adapts to the child\u2019s responses to reinforce positive behaviors through playful dialogue.\n\n### The Caveats\nThe claims rest on a single anecdotal story with no systematic real\u2011world trial or baseline comparison, so the robot\u2019s purported therapeutic benefits remain unverified.\n\n### Priority\nBATON shows a quantified, 11.6% boost in long\u2011horizon manipulation success by marrying LLM planning with transition\u2011aware memory, offering a clear, actionable advance for building more reliable robot skill chains.\n\n### One action\nConsider integrating a transition\u2011aware memory module when combining LLM planners with VLA primitives to reduce exploration cost.",
+  "report": "## Effector\u2011Centric NMPC for Tiltable Quadrotors\n\n### The Breakthrough\nThe authors present a four\u2011rotor tiltable multirotor equipped with an onboard nonlinear model predictive controller running at 100\u202fHz. A dual disturbance\u2011rejection strategy enables offset\u2011free omnidirectional aerial manipulation, demonstrated with a 90\u00b0 cartwheel, whiteboard pushing, and continuous 360\u00b0 valve turning.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing controllers, making it unclear whether the claimed performance exceeds prior methods.\n\n## Jetson\u2011ORB\u2011SLAM3 Edge GPU Port\n\n### The Breakthrough\nORB\u2011SLAM3 is ported to the NVIDIA Jetson Orin Nano GPU, reproducing 94.7\u202f% of keypoints and 99.9\u202f% of descriptor bits while achieving sub\u2011centimeter trajectory error on standard benchmarks and sustaining 32\u202fFPS with a 180\u00d7 faster FP16 TensorRT loop\u2011closure engine.\n\n### The Caveats\nEvaluation is limited to static benchmark datasets; no real\u2011world robot or dynamic\u2011scene tests are presented.\n\n## Unitree \u2018Superman\u2019 Humanoid IPO\n\n### The Breakthrough\nUnitree unveiled a \u201cSuperman\u201d humanoid that can hop 2\u202fm high and run at 12.66\u202fm/s, showcasing advances in bipedal actuation, and announced a partnership with Nvidia to develop embodied AI models.\n\n### The Caveats\nPerformance figures are product specifications without independent benchmarking or deployment data.\n\n## 1872 Robotic Steel\u2011Fabrication Factory\n\n### The Breakthrough\nThe startup integrates AI\u2011driven software with industrial robots to automate most steps of steel skid fabrication, targeting roughly 80\u202f% autonomy and a prototype slated for 2027 to serve data\u2011center and modular nuclear markets.\n\n### The Caveats\nThe claim rests on a company announcement; no independent performance data or real\u2011world trials are provided.\n\n## Hydra\u20110 Action\u2011Flow World Model\n\n### The Breakthrough\nHydra\u20110 treats robot actions as pixel motion, cutting robot\u2011motion error by 90.4\u202f% and object\u2011motion error by 60.2\u202f% versus a baseline, achieving r\u202f=\u202f0.96 correlation on the RoboLab benchmark and learning an inverse mode that maps human\u2011demonstrated object flow to executable robot motions without task\u2011specific data.\n\n### The Caveats\nResults are confined to a simulated benchmark and have never been validated on physical robots.\n\n## Foxglove Agentic Workflows\n\n### The Breakthrough\nFoxglove adds an LLM\u2011driven sidebar agent and MCP server that automatically selects tools such as FoxQL and MCAP diagnosis, exposing an API to external agents like Claude and Claude, with an evaluation pipeline for prompt and tool changes.\n\n### The Caveats\nNo performance metrics, user study, or hardware validation are supplied.\n\n## PRISM Multimodal Manipulation Dataset\n\n### The Breakthrough\nPRISM offers over 5\u202f000 teleoperated trajectories across 25 precision, contact\u2011rich industrial tasks, capturing synchronized multi\u2011view RGB\u2011D, force/torque, tactile, and robot\u2011state data for a total of 45\u202fhours.\n\n### The Caveats\nThe release lacks benchmarks, baseline comparisons, or real\u2011robot evaluations, leaving its practical impact uncertain.\n\n## FCC Ban on Foreign\u2011Made Robots\n\n### The Breakthrough\nThe FCC adds \u201cadvanced robotic devices\u201d to its Covered List, requiring new sales in the U.S. to contain at least 65\u202f% domestic component value (rising to 75\u202f% by 2029) for devices such as humanoids, quadrupeds, vacuums, and lawn mowers.\n\n### The Caveats\nThe article provides no empirical analysis of cost or supply\u2011chain feasibility, so the rule\u2019s effects remain unsubstantiated.\n\n### Priority\nThe tiltable\u2011multirotor NMPC demo showcases a concrete, hardware\u2011level advance in aerial manipulation that directly impacts embodied AI research today.\n\n### One action\nMonitor the authors\u2019 code repository or upcoming video demos to see the controller in action and assess its applicability to your own aerial\u2011robot projects.\n\n### What to watch\nSeveral items explore new control and perception pipelines: the tiltable\u2011multirotor NMPC, the Jetson\u2011accelerated ORB\u2011SLAM3, and Hydra\u20110\u2019s pixel\u2011flow world model each push toward more capable real\u2011world robots, while PRISM provides data that could benchmark future algorithms.",
   "themes": [
-    "manipulation",
-    "foundation-models",
-    "planning",
-    "security",
-    "social-robots"
+    "aerial manipulation",
+    "edge computing",
+    "humanoid",
+    "policy",
+    "datasets"
   ],
-  "source_count": 7,
+  "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2608.16889",
-    "https://arxiv.org/abs/2608.16853",
-    "https://arxiv.org/abs/2608.16885",
-    "https://arxiv.org/abs/2608.16837",
-    "https://speko.ai/",
-    "https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug",
-    "https://www.technologyreview.com/2026/08/17/1141568/moxie-when-kids-robot-best-friend-dies/"
+    "https://arxiv.org/abs/2608.17819",
+    "https://arxiv.org/abs/2608.17874",
+    "https://www.cnn.com/2026/08/18/tech/china-unitree-ipo-intl-hnk",
+    "https://arstechnica.com/ai/2026/08/former-spacex-engineers-are-building-a-robotic-factory-for-making-steel-parts/",
+    "https://arxiv.org/abs/2608.18077",
+    "https://foxglove.dev/blog/foxglove-goes-agentic",
+    "https://arxiv.org/abs/2608.17962",
+    "https://restofworld.org/2026/china-robot-ban-silicon-valley/"
   ],
   "section_titles": [
-    "Don\u2019t Drop the BATON: Agentic Subtask Exploration for Long-Horizon Manipulation",
-    "FlexWorm: Hybrid Contact\u2011motion Planning for Suction\u2011based Multi\u2011segment Soft Robots",
-    "\u03c4\u2080\u2011VLA: Hierarchical Robot Foundation Model with World\u2011Model\u2011Guided Test\u2011Time Computation",
-    "HAF: Hierarchical Action Flow and Latent RL for Humanoid Whole-Body Loco-Manipulation",
-    "Speko: OpenRouter for Voice AI that auto\u2011selects STT, LLM, and TTS stacks",
-    "AI\u2011Generated GitHub Copilot \u2018Autofix\u2019 Enables Snowflake Jira Compromise via GitHub Actions Injection",
-    "When a kid\u2019s companion robot dies: hopes and limits of social robots for neurodivergent kids"
+    "Effector-Centric NMPC Enables Offset-Free Omnidirectional Aerial Manipulation with Tiltable Quadrotors",
+    "Jetson-ORB-SLAM3: Accuracy-Preserving GPU Implementation for Edge Devices",
+    "Unitree Robotics IPO: 600% debut surge and new \u201cSuperman\u201d humanoid",
+    "Former SpaceX engineers launch 1872: AI\u2011driven robotic steel\u2011fabrication factory",
+    "Hydra-0: Action Flow for Generalist World Modeling and Control",
+    "Foxglove adds agentic workflows for robotics data in the desktop app",
+    "PRISM: Precision and Contact-Rich Real-World Industrial Skill Dataset with Multimodal Sensing",
+    "US FCC bans foreign-made robots, forcing 65% US content for startups"
   ],
-  "generated_at": "2026-08-18T13:48:25.185240+00:00",
+  "generated_at": "2026-08-19T13:49:44.506929+00:00",
   "run_times": {
-    "orchestrator": "2026-08-18T13:48:25.185240+00:00",
-    "hn": "2026-08-18T13:43:24.389696+00:00",
-    "arxiv": "2026-08-18T13:44:14.649402+00:00",
-    "github": "2026-08-18T13:48:25.185240+00:00",
-    "research_desk": "2026-08-18T13:47:44.492212+00:00"
+    "orchestrator": "2026-08-19T13:49:44.506929+00:00",
+    "hn": "2026-08-19T13:45:06.970413+00:00",
+    "arxiv": "2026-08-19T13:45:41.527169+00:00",
+    "github": "2026-08-19T13:49:44.506929+00:00",
+    "research_desk": "2026-08-19T13:49:14.345228+00:00"
   }
 }
