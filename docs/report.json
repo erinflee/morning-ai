@@ -1,40 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Effector\u2011Centric NMPC for Tiltable Quadrotors\n\n### The Breakthrough\nThe authors present a four\u2011rotor tiltable multirotor equipped with an onboard nonlinear model predictive controller running at 100\u202fHz. A dual disturbance\u2011rejection strategy enables offset\u2011free omnidirectional aerial manipulation, demonstrated with a 90\u00b0 cartwheel, whiteboard pushing, and continuous 360\u00b0 valve turning.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing controllers, making it unclear whether the claimed performance exceeds prior methods.\n\n## Jetson\u2011ORB\u2011SLAM3 Edge GPU Port\n\n### The Breakthrough\nORB\u2011SLAM3 is ported to the NVIDIA Jetson Orin Nano GPU, reproducing 94.7\u202f% of keypoints and 99.9\u202f% of descriptor bits while achieving sub\u2011centimeter trajectory error on standard benchmarks and sustaining 32\u202fFPS with a 180\u00d7 faster FP16 TensorRT loop\u2011closure engine.\n\n### The Caveats\nEvaluation is limited to static benchmark datasets; no real\u2011world robot or dynamic\u2011scene tests are presented.\n\n## Unitree \u2018Superman\u2019 Humanoid IPO\n\n### The Breakthrough\nUnitree unveiled a \u201cSuperman\u201d humanoid that can hop 2\u202fm high and run at 12.66\u202fm/s, showcasing advances in bipedal actuation, and announced a partnership with Nvidia to develop embodied AI models.\n\n### The Caveats\nPerformance figures are product specifications without independent benchmarking or deployment data.\n\n## 1872 Robotic Steel\u2011Fabrication Factory\n\n### The Breakthrough\nThe startup integrates AI\u2011driven software with industrial robots to automate most steps of steel skid fabrication, targeting roughly 80\u202f% autonomy and a prototype slated for 2027 to serve data\u2011center and modular nuclear markets.\n\n### The Caveats\nThe claim rests on a company announcement; no independent performance data or real\u2011world trials are provided.\n\n## Hydra\u20110 Action\u2011Flow World Model\n\n### The Breakthrough\nHydra\u20110 treats robot actions as pixel motion, cutting robot\u2011motion error by 90.4\u202f% and object\u2011motion error by 60.2\u202f% versus a baseline, achieving r\u202f=\u202f0.96 correlation on the RoboLab benchmark and learning an inverse mode that maps human\u2011demonstrated object flow to executable robot motions without task\u2011specific data.\n\n### The Caveats\nResults are confined to a simulated benchmark and have never been validated on physical robots.\n\n## Foxglove Agentic Workflows\n\n### The Breakthrough\nFoxglove adds an LLM\u2011driven sidebar agent and MCP server that automatically selects tools such as FoxQL and MCAP diagnosis, exposing an API to external agents like Claude and Claude, with an evaluation pipeline for prompt and tool changes.\n\n### The Caveats\nNo performance metrics, user study, or hardware validation are supplied.\n\n## PRISM Multimodal Manipulation Dataset\n\n### The Breakthrough\nPRISM offers over 5\u202f000 teleoperated trajectories across 25 precision, contact\u2011rich industrial tasks, capturing synchronized multi\u2011view RGB\u2011D, force/torque, tactile, and robot\u2011state data for a total of 45\u202fhours.\n\n### The Caveats\nThe release lacks benchmarks, baseline comparisons, or real\u2011robot evaluations, leaving its practical impact uncertain.\n\n## FCC Ban on Foreign\u2011Made Robots\n\n### The Breakthrough\nThe FCC adds \u201cadvanced robotic devices\u201d to its Covered List, requiring new sales in the U.S. to contain at least 65\u202f% domestic component value (rising to 75\u202f% by 2029) for devices such as humanoids, quadrupeds, vacuums, and lawn mowers.\n\n### The Caveats\nThe article provides no empirical analysis of cost or supply\u2011chain feasibility, so the rule\u2019s effects remain unsubstantiated.\n\n### Priority\nThe tiltable\u2011multirotor NMPC demo showcases a concrete, hardware\u2011level advance in aerial manipulation that directly impacts embodied AI research today.\n\n### One action\nMonitor the authors\u2019 code repository or upcoming video demos to see the controller in action and assess its applicability to your own aerial\u2011robot projects.\n\n### What to watch\nSeveral items explore new control and perception pipelines: the tiltable\u2011multirotor NMPC, the Jetson\u2011accelerated ORB\u2011SLAM3, and Hydra\u20110\u2019s pixel\u2011flow world model each push toward more capable real\u2011world robots, while PRISM provides data that could benchmark future algorithms.",
+  "report": "## Unitree Humanoid Leap\n\n### The Breakthrough\nUnitree unveiled a new bipedal prototype that can perform a 2\u202fm vertical jump and sprint at 12.66\u202fm/s, driven by 0.85\u202fm legs with high\u2011power actuation and AI\u2011based whole\u2011body control, all engineered in roughly three months.\n\n### The Caveats\nThe feats are shown only in a single video with no quantitative baseline or benchmark, leaving the record\u2011breaking claim unverified.\n\n## ADEPT Dexterous Transfer\n\n### The Breakthrough\nADEPT introduces a two\u2011stage RL pipeline that pre\u2011trains a generic re\u2011posing policy and then post\u2011trains task\u2011specific skills via behavior\u2011cloning distillation, a critic warm\u2011up, and conservative on\u2011policy updates, achieving zero\u2011shot transfer of long\u2011horizon manipulation to a 23\u2011DoF Kuka Allegro and a 29\u2011DoF Flexiv Sharp\u2011a hand at human\u2011level speed.\n\n### The Caveats\nThe paper reports zero\u2011shot transfer on two robot hands but offers no comparison to existing RL or imitation\u2011learning baselines.\n\n## PartialBiGrasp Bimanual Grasp\n\n### The Breakthrough\nPartialBiGrasp uses convolutional occupancy networks to infer hidden local geometry from partial point clouds and generates collision\u2011free dual\u2011arm grasps refined by a sampling\u2011based optimizer, demonstrated on a real robot handling noisy, incomplete data.\n\n### The Caveats\nNo comparison to prior or full\u2011point\u2011cloud baselines is provided, so improvement is unsubstantiated.\n\n## AgriNav Autonomous Tractor\n\n### The Breakthrough\nAgriNav fuses LiDAR and camera streams through a four\u2011mechanism bridge and a 1.68\u202fM\u2011parameter CNN\u2011FPN weed detector with asymmetric weighting and confidence veto, cutting inference area by 30\u201150\u202f% and using an EKF navigation stack that bridges 20\u2011second GNSS outages.\n\n### The Caveats\nResults are reported only in simulation without baseline comparisons, making real\u2011world superiority unclear.\n\n## GEN-1.5 One-Shot Model\n\n### The Breakthrough\nGEN-1.5 is presented as a foundational robotics model that can acquire new tasks from a single demonstration, suggesting a move toward sample\u2011efficient embodied AI.\n\n### The Caveats\nThe one\u2011shot claim lacks evaluation, benchmarks, or comparison to existing methods.\n\n## LT-Mem Lifelong Memory\n\n### The Breakthrough\nLT-Mem builds a Tri\u2011Memory (Live, Delta, Meta) structure with a volatility\u2011aware policy that decides overwrite, hold, or branching actions, achieving consistent gains on the new LT\u2011VQA benchmark while using roughly ten times fewer tokens.\n\n### The Caveats\nImprovements are shown only on the authors' benchmark with no named baselines.\n\n## OpenIVS Vision Stack\n\n### The Breakthrough\nOpenIVS is a C# framework that wraps Hikvision SDKs, provides a modular cascade\u2011inference pipeline, and integrates Modbus PLC control, enabling rapid assembly of vision\u2011guided robot workflows on Windows.\n\n### The Caveats\nThe repository lacks performance benchmarks, real\u2011world robot or PLC deployments, and comparative evaluation.\n\n## dora Rust Middleware\n\n### The Breakthrough\ndora offers a Rust\u2011first dataflow framework using Zenoh shared\u2011memory and Apache Arrow, delivering 10\u201117\u00d7 lower latency than ROS2 Python across 4\u202fKB\u20114\u202fMB payloads, with multi\u2011language node support and hot\u2011reload pipelines.\n\n### The Caveats\nLatency gains are demonstrated only with synthetic payloads against ROS2 Python, without real\u2011robot experiments.\n\n## nano-ros Embedded ROS2\n\n### The Breakthrough\nnano-ros provides a no_std Rust ROS2 client for microcontrollers and RTOSes, featuring zero\u2011copy publish/subscribe via zenoh\u2011pico, formal verification tooling, and interchangeable transport backends.\n\n### The Caveats\nClaims of full ROS2 functionality are unsubstantiated, lacking hardware performance or latency benchmarks.\n\n### Priority\nUnitree\u2019s record\u2011breaking jump and sprint showcase a concrete, hardware\u2011level breakthrough in dynamic locomotion that sets the day\u2019s tone for tangible robot capabilities.\n\n### One action\nWatch the Unitree demo video, note the leg actuation specs, and consider how similar whole\u2011body control could be applied to your own locomotion projects.\n\n### What to watch\nThe manipulation landscape is heating up: ADEPT pushes zero\u2011shot sim\u2011to\u2011real dexterity, PartialBiGrasp tackles bimanual grasping from incomplete views, and LT\u2011Mem adds lifelong scene memory. Comparing their real\u2011robot validations and evaluation rigor will indicate which approaches are ready for deployment versus still experimental.",
   "themes": [
-    "aerial manipulation",
-    "edge computing",
-    "humanoid",
-    "policy",
-    "datasets"
+    "dynamic locomotion",
+    "dexterous manipulation",
+    "perception"
   ],
-  "source_count": 8,
+  "source_count": 9,
   "section_urls": [
-    "https://arxiv.org/abs/2608.17819",
-    "https://arxiv.org/abs/2608.17874",
-    "https://www.cnn.com/2026/08/18/tech/china-unitree-ipo-intl-hnk",
-    "https://arstechnica.com/ai/2026/08/former-spacex-engineers-are-building-a-robotic-factory-for-making-steel-parts/",
-    "https://arxiv.org/abs/2608.18077",
-    "https://foxglove.dev/blog/foxglove-goes-agentic",
-    "https://arxiv.org/abs/2608.17962",
-    "https://restofworld.org/2026/china-robot-ban-silicon-valley/"
+    "https://www.globaltimes.cn/page/202608/1368390.shtml",
+    "https://arxiv.org/abs/2608.19182",
+    "https://arxiv.org/abs/2608.19188",
+    "https://arxiv.org/abs/2608.19004",
+    "https://www.youtube.com/watch?v=1cllCVK-9lo",
+    "https://arxiv.org/abs/2608.19059",
+    "https://github.com/dl-cv/OpenIVS",
+    "https://github.com/dora-rs/dora",
+    "https://github.com/NEWSLabNTU/nano-ros"
   ],
   "section_titles": [
-    "Effector-Centric NMPC Enables Offset-Free Omnidirectional Aerial Manipulation with Tiltable Quadrotors",
-    "Jetson-ORB-SLAM3: Accuracy-Preserving GPU Implementation for Edge Devices",
-    "Unitree Robotics IPO: 600% debut surge and new \u201cSuperman\u201d humanoid",
-    "Former SpaceX engineers launch 1872: AI\u2011driven robotic steel\u2011fabrication factory",
-    "Hydra-0: Action Flow for Generalist World Modeling and Control",
-    "Foxglove adds agentic workflows for robotics data in the desktop app",
-    "PRISM: Precision and Contact-Rich Real-World Industrial Skill Dataset with Multimodal Sensing",
-    "US FCC bans foreign-made robots, forcing 65% US content for startups"
+    "Unitree humanoid robot jumps 2\u202fm and runs 12.66\u202fm/s, beating human records",
+    "ADEPT: Pre\u2011training and post\u2011training RL for dexterous sim\u2011to\u2011real transfer",
+    "PartialBiGrasp: Inferring Hidden Local Geometry for Bimanual Grasping from Partial Views",
+    "AgriNav: Integrated Weed Detection and LiDAR Navigation for Autonomous Paddy Farming Tractors",
+    "GEN-1.5: a one-shot learner robotics foundational model (video)",
+    "LT-Mem: Volatility-Aware Spatio-Temporal Memory for Lifelong Scene Understanding",
+    "OpenIVS: .NET Open\u2011Source Industrial Vision System with PLC & AI integration",
+    "dora: Rust dataflow\u2011oriented middleware for low\u2011latency robotics",
+    "nano-ros: no_std Rust ROS\u202f2 client for microcontrollers and RTOS"
   ],
-  "generated_at": "2026-08-19T13:49:44.506929+00:00",
+  "generated_at": "2026-08-20T13:58:43.702236+00:00",
   "run_times": {
-    "orchestrator": "2026-08-19T13:49:44.506929+00:00",
-    "hn": "2026-08-19T13:45:06.970413+00:00",
-    "arxiv": "2026-08-19T13:45:41.527169+00:00",
-    "github": "2026-08-19T13:49:44.506929+00:00",
-    "research_desk": "2026-08-19T13:49:14.345228+00:00"
+    "orchestrator": "2026-08-20T13:58:43.702236+00:00",
+    "hn": "2026-08-20T13:49:21.418614+00:00",
+    "arxiv": "2026-08-20T13:49:58.337014+00:00",
+    "github": "2026-08-20T13:50:58.139982+00:00",
+    "research_desk": "2026-08-20T13:55:25.979186+00:00"
   }
 }
