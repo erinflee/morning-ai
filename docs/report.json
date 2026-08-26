@@ -1,42 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Humanoid Sprint Record\n\n### The Breakthrough\nChinese humanoid robots Tiangong Ultra and Lightning ran 100\u202fm in 9.39\u202fs and 9.47\u202fs, respectively, setting a new speed benchmark for bipedal locomotion. The demonstration used powerful actuators and aggressive balance strategies to generate ultra\u2011fast gaits, and the robots also completed a 400\u202fm run in 38.16\u202fs, beating the human record.\n\n### The Caveats\nThe dash was a one\u2011off showcase that never measured stopping, repeatability, or durability, so the claim is not substantively validated.\n\n## ROS2SmolVLA for Lightweight Robots\n\n### The Breakthrough\nThe authors released ROS2SmolVLA, a ROS\u202f2 node that streams camera data to a compact Vision\u2011Language\u2011Action model and translates its outputs into motion commands for a UR10e arm, enabling on\u2011premise, low\u2011latency inference without cloud dependence.\n\n### The Caveats\nThe paper provides no comparison to existing VLA or robotics baselines, leaving the suitability claim unsubstantiated.\n\n## Act with Intent VLA Boost\n\n### The Breakthrough\nIntention Distillation (INDI) injects behavior\u2011level intent from a frozen teacher VLM into VLA decoders, raising success rates from 64.3\u202f% to 84.7\u202f% on SimplerEnv\u2011Bridge and from 62.0\u202f% to 68.7\u202f% on real\u2011world tasks.\n\n### The Caveats\nResults are reported only against the single GR00T\u2011N1.7 baseline, so performance relative to stronger VLA approaches is unclear.\n\n## China\u2019s $20\u202fbn Industrial Robot Push\n\n### The Breakthrough\nChina now manufactures over half of the world\u2019s industrial robots and claims a single arm can be programmed for more than 90\u202f% of repetitive tasks, backed by a $20\u202fbillion government plan to flood factories with robots.\n\n### The Caveats\nThe article offers no empirical performance data or real\u2011world impact analysis to substantiate these claims.\n\n## OptiSight Zero\u2011Shot Navigation\n\n### The Breakthrough\nOptiSight couples a finite\u2011state Chain\u2011of\u2011Thought VLM with deterministic visual servoing and Grounded\u2011SAM for open\u2011vocabulary target localization, achieving reliable zero\u2011shot indoor navigation in AI Habitat using only 8\u202fGB VRAM.\n\n### The Caveats\nThe study lacks baseline comparisons, making it unclear whether it truly outperforms existing methods.\n\n## Reward\u2011Free Continual Adaptation for Space Robots\n\n### The Breakthrough\nThe framework pre\u2011trains a latent\u2011state world model, freezes observation and reward components, and adapts only the transition dynamics online, allowing policies to be trained on imagined rollouts for planetary traversal, orbital navigation, and precision assembly under severe hardware failures.\n\n### The Caveats\nImprovements are reported without comparison to existing adaptation baselines, so superiority is uncertain.\n\n## HFlow Data Pipeline SDK\n\n### The Breakthrough\nHFlow defines MCAP as a universal format and auto\u2011generates Airflow\u202f3 DAGs with DuckDB\u2011backed Parquet catalogs, enabling reproducible multimodal robotics data pipelines without rewriting code.\n\n### The Caveats\nNo performance benchmarks or real\u2011world large\u2011scale deployments are provided to support the scalability claim.\n\n## BAGEL Browser\u2011Based ROS Bag Viewer\n\n### The Breakthrough\nBAGEL is a client\u2011side web app that parses .mcap, .bag, .pcd, .ply, .splat files via WebAssembly and renders them with Three.js, supporting drag\u2011and\u2011drop and live streaming over rosbridge.\n\n### The Caveats\nThe repo lacks benchmarks or comparisons to existing visualizers, leaving speed and usability unverified.\n\n## oopsie-data-tools for Manipulation Rollouts\n\n### The Breakthrough\nThe toolkit offers an HDF5\u2011based EpisodeRecorder, web annotation workflows, and upload utilities to collect and share real\u2011world robot manipulation attempts, including failures, to the Oopsie Data dataset.\n\n### The Caveats\nPlatform\u2011agnostic applicability is unverified due to absent empirical evaluation on robot hardware.\n\n### Priority\nThe humanoid sprint record showcases unprecedented high\u2011speed gait generation on real hardware, setting a new performance frontier that directly impacts future locomotion research.\n\n### One action\nWatch upcoming releases from the Tiangong team for more robust balance controllers and consider integrating fast\u2011gait modules into your bipedal projects.\n\n### What to watch\nBoth ROS2SmolVLA and Act with Intent push vision\u2011language\u2011action models toward on\u2011robot use: ROS2SmolVLA demonstrates a lightweight inference pipeline for pick\u2011and\u2011place, while Act with Intent shows how intent distillation can markedly boost success rates. Together they signal a shift from cloud\u2011reliant VLMs to on\u2011premise, intent\u2011aware agents.",
+  "report": "## Stretch 4 Autodocking\n\n### The Breakthrough\nThe Open\u2011source team released an autodocking system for the Stretch\u202f4 robot that uses three retro\u2011reflective markers detected in LiDAR intensity returns to recover the dock\u2019s 6\u2011DoF pose via an O(n\u00b2) triangle\u2011leg algorithm. A CUDA\u2011accelerated MPPI controller builds a 2\u202fm local obstacle map 6\u00d7 faster than Nav2 and samples thousands of holonomic trajectories per second, achieving docking latencies of 40\u202fms (CPU) or 65\u202fms (CPU+GPU). This enables reliable self\u2011charging in real homes without external infrastructure.\n\n### The Caveats\nThe demo is limited to videos; no quantitative success rates or baseline comparisons are provided, so reliability versus existing methods is unproven.\n\n## One-Shot LfD for Contact-Rich Manipulation\n\n### The Breakthrough\nThe authors present a one\u2011shot learning\u2011from\u2011demonstration method that extracts physical interaction events from a single demo and uses them as transition triggers for a hybrid position\u2011force controller. By detecting contact\u2011based conditions, the controller autonomously switches between position and force modes, handling tasks such as door opening, lock manipulation, bolt picking, and surface contouring on a real robot.\n\n### The Caveats\nOnly raw success on a handful of tasks is reported, with no baseline comparisons, leaving robustness and the one\u2011shot advantage unverified.\n\n## Gripper-aware Vision Language Action Models\n\n### The Breakthrough\nMiGA, a new dataset of 103\u202fk demonstrations across five robot grippers, fuels GVLA, a vision\u2011language action model that encodes gripper type via a multi\u2011gripper tokenizer and adapter\u2011based policy routing. Experiments in simulation and on real robots show GVLA surpasses existing baselines and improves zero\u2011shot and few\u2011shot generalization to new objects and tasks.\n\n### The Caveats\nThe paper does not name or compare against any existing baselines, so the claimed performance gains lack external validation.\n\n## Fiber Optic Sensing Glove\n\n### The Breakthrough\nThe glove employs multi\u2011core shape\u2011sensing fibers whose full 3\u2011D shape is reconstructed and registered to a common hand frame; an inverse\u2011kinematics solver then yields full hand pose at 60\u202fHz. On a 2\u2011hour dexterous manipulation dataset it achieves 7.2\u202fmm mean fingertip error, dropping to 4.9\u202fmm after a one\u2011time factory calibration.\n\n### The Caveats\nAccuracy claims are unsubstantiated because the paper provides no comparison to existing sensor or vision\u2011based hand\u2011tracking baselines.\n\n## Fiber Bragg Grating Whiskers\n\n### The Breakthrough\nCompact FBG whiskers produce a monotonic flow signal from 0.1 to 0.6\u202f\u00b5m/s and exhibit far lower self\u2011induced vibrations than cylindrical baselines; in pitching\u2011foil tests they detect vortex shedding seconds after passage. Mounted on a miniature robot, a single whisker enabled correct navigation\u2011branch selection in 17/20 trials (85%).\n\n### The Caveats\nPerformance is demonstrated only in controlled lab towing and a single robot test; no open\u2011water or multi\u2011platform field trials are presented.\n\n## Humanoid Robots Record Claims\n\n### What happened\nA Hacker News post claims humanoid robots have outperformed human world\u2011record times in the 100\u202fm dash, half\u2011marathon, and high jump, citing advanced actuation, real\u2011time balance control, and energy\u2011efficient gait planning as enablers.\n\n### The Caveats\nThe claim lacks hardware specifications, measurement methodology, and independent verification, so its validity is unsupported.\n\n## nano-ros\n\n### The Breakthrough\nnano-ros implements a full ROS\u202f2 stack (pub/sub, services, actions, parameters) in a no_std Rust crate, using zenoh\u2011pico for lightweight transport and zero\u2011copy CDR serialization. The build includes formal verification (Kani, CBMC), WCET measurement, and a code\u2011generation tool that creates Rust bindings from ROS\u202f2 .msg/.srv/.action files, targeting bare\u2011metal MCUs and RTOSes.\n\n### The Caveats\nThe library is only demonstrated in QEMU with no real\u2011hardware performance or latency measurements, leaving its suitability for safety\u2011critical deployments unproven.\n\n## Geti\u2122\n\n### The Breakthrough\nGeti bundles OpenVINO Training Extensions with a UI\u2011driven app that automates data ingestion, model selection, training, quantization, and deployment, supporting CPU, Intel\u00ae XPU, and NVIDIA\u00ae CUDA inference. It offers a Python API and out\u2011of\u2011the\u2011box support for classification, detection, and segmentation tasks on edge hardware.\n\n### The Caveats\nNo benchmark or baseline comparisons are provided, so the claimed edge\u2011hardware acceleration remains unverified.\n\n### Priority\nStretch\u202f4 autodocking is the most actionable breakthrough today because it delivers a ready\u2011to\u2011run, hardware\u2011level solution for autonomous charging that can be tested on existing home robots.\n\n### One action\nClone the Stretch\u202f4 autodocking repo and run the provided Docker demo to evaluate docking latency on your own robot or simulation.\n\n### What to watch\nMultiple papers target high\u2011fidelity manipulation: the Fiber Optic Glove offers precise hand\u2011pose capture for data collection, the One\u2011Shot LfD method focuses on rapid skill transfer from a single demo, and GVLA introduces gripper\u2011aware language models to generalize across hardware. Together they signal a shift toward more embodied, sensor\u2011rich pipelines that combine accurate perception with adaptable control.",
   "themes": [
-    "bipedal locomotion",
-    "vision-language",
-    "industrial automation",
-    "data pipelines",
-    "space robotics"
+    "manipulation",
+    "perception",
+    "embedded",
+    "hardware",
+    "datasets"
   ],
-  "source_count": 9,
+  "source_count": 8,
   "section_urls": [
-    "https://www.theverge.com/tech/983688/world-humanoid-robot-games-sprint-record-2026",
-    "https://arxiv.org/abs/2608.23320",
-    "https://arxiv.org/abs/2608.23478",
-    "https://www.bbc.com/news/articles/c62m4zn1q6mo",
-    "https://arxiv.org/abs/2608.23354",
-    "https://arxiv.org/abs/2608.23452",
-    "https://github.com/Hebbian-Robotics/hflow",
-    "https://github.com/Hussain004/BAGEL",
-    "https://github.com/oopsie-data/oopsie-data-tools"
+    "https://binitshah.github.io/blog/stretch-4-autodocking/",
+    "https://arxiv.org/abs/2608.24741",
+    "https://arxiv.org/abs/2608.24603",
+    "https://arxiv.org/abs/2608.24572",
+    "https://arxiv.org/abs/2608.24724",
+    "https://www.reuters.com/sports/chinese-humanoid-robot-lightning-beats-human-100m-world-record-state-media-says-2026-08-22/",
+    "https://github.com/NEWSLabNTU/nano-ros",
+    "https://github.com/open-edge-platform/geti"
   ],
   "section_titles": [
-    "Humanoid robots break Usain Bolt's 100m record at World Humanoid Robot Games",
-    "ROS2SmolVLA: Small Vision\u2011Language\u2011Action Models for Lightweight Industrial Robots",
-    "Act with Intent: Distilling behavior intent boosts Vision\u2011Language\u2011Action models",
-    "China's $20bn push to flood factories with industrial robots",
-    "OptiSight: Hybrid Vision\u2011Language Reasoning and Geometric Control for Zero\u2011Shot Indoor Navigation",
-    "Reward-Free Continual Adaptation for Resilient Space Robots",
-    "HFlow: open\u2011source SDK for scalable multimodal robotics data pipelines",
-    "BAGEL: Zero\u2011install ROS bag and 3D data visualizer in the browser",
-    "oopsie-data-tools: Toolkit for recording and annotating real robot manipulation rollouts"
+    "Stretch 4 Autodocking: Open\u2011source 3\u2011marker LiDAR docking with MPPI controller",
+    "One-Shot LfD for Contact-Rich Manipulation via Physical Interaction Identification",
+    "Gripper-aware Vision Language Action Models",
+    "Fiber Optic Sensing Glove for High Performance Dexterous Manipulation Capture",
+    "Fiber Bragg Grating Whiskers for Bioinspired Hydrodynamic Perception on Underwater Robots",
+    "Humanoid robots break human records in 100m, half\u2011marathon, and high jump",
+    "nano-ros: no_std Rust ROS\u202f2 client for microcontrollers and RTOS",
+    "Geti\u2122: End-to-End Vision AI Framework for Local Training and Deployment"
   ],
-  "generated_at": "2026-08-25T13:58:50.257351+00:00",
+  "generated_at": "2026-08-26T14:01:47.199581+00:00",
   "run_times": {
-    "orchestrator": "2026-08-25T13:58:50.257351+00:00",
-    "hn": "2026-08-25T13:51:40.443943+00:00",
-    "arxiv": "2026-08-25T13:52:20.318391+00:00",
-    "github": "2026-08-25T13:53:21.732030+00:00",
-    "research_desk": "2026-08-25T13:57:08.897714+00:00"
+    "orchestrator": "2026-08-26T14:01:47.199581+00:00",
+    "hn": "2026-08-26T13:56:04.460268+00:00",
+    "arxiv": "2026-08-26T13:56:48.424949+00:00",
+    "github": "2026-08-26T13:57:42.428602+00:00",
+    "research_desk": "2026-08-26T14:00:52.962370+00:00"
   }
 }
