@@ -1,45 +1,42 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## FlashVLA\n\n### The Breakthrough\nFlashVLA introduces a chunk\u2011wise streaming action decoding framework that lets Vision\u2011Language\u2011Action models emit executable action chunks at each inference step, achieving >30\u202fHz closed\u2011loop control on a real robot using a single GPU.\n\n### The Caveats\nThe paper provides no named baselines or quantitative task\u2011success comparisons, so the latency gain and performance parity are not independently verified.\n\n## Meta Data\u2011Center Robots\n\n### The Breakthrough\nMeta is piloting off\u2011the\u2011shelf Kinova Gen3 arms, dual\u2011armed Watney manipulators and custom finger\u2011actuators to plug cables, power\u2011cycle servers and inventory equipment, claiming the system could handle up to 80\u202f% of routine technician tasks.\n\n### The Caveats\nNo quantitative metrics or head\u2011to\u2011head human comparisons are offered to support the 80\u202f% reduction claim.\n\n## STEP\n\n### The Breakthrough\nSTEP augments a multi\u2011modal LLM with a dual\u2011prompt that first predicts the current state and then the post\u2011action state, yielding a 32.8\u202f% gain in action executability and a 14.8\u202f% drop in final\u2011state error in a simulated robot assembly benchmark.\n\n### The Caveats\nThe improvement is reported against an unspecified \u201cstate\u2011of\u2011the\u2011art\u201d baseline, making the gain unverifiable.\n\n## Samsung LPDDR5X\u2011PIM\n\n### The Breakthrough\nSamsung\u2019s LPDDR5X\u2011PIM embeds MAC arrays in each of the 16 DRAM banks, delivering up to 2.4\u202fTOPS per chip and 614\u202fGB/s internal bandwidth while using standard row commands for compute.\n\n### The Caveats\nPerformance numbers are internal estimates without a hardware prototype, benchmark, or real\u2011world workload validation.\n\n## Embodied Scene Rearrangement Benchmark\n\n### The Breakthrough\nThe authors release ESRP\u2011Bench, a simulation suite of 5,400 scene pairs on OmniGibson for the new Embodied Scene Rearrangement Planning task, and show that current planners perform poorly under egocentric observation constraints.\n\n### The Caveats\nAll experiments stay in simulation; no real\u2011world robot or sim\u2011to\u2011real transfer is demonstrated.\n\n## CLAP\n\n### The Breakthrough\nCLAP learns action\u2011conditioned video prediction across heterogeneous agents by unifying action representations (end\u2011effector pose, language, latent) and achieves zero\u2011shot performance on new robots that matches or exceeds single\u2011embodiment video models on benchmarks like DROID.\n\n### The Caveats\nResults are limited to simulation with no real\u2011robot validation.\n\n## Lemmalog\n\n### The Breakthrough\nLemmalog treats LLM\u2011generated facts as entries in a Datalog database, enabling incremental addition and retraction of facts with provenance tracking and on\u2011demand explanations of derived security predicates.\n\n### The Caveats\nThe prototype is demonstrated only anecdotally, lacking quantitative benchmarks or comparisons to existing LLM\u2011memory systems.\n\n## ICE Spot Procurement\n\n### The Breakthrough\nU.S. Immigration and Customs Enforcement plans to spend at least $1\u202fM on Boston Dynamics\u2019 Spot quadruped robots to improve officer safety during field operations.\n\n### The Caveats\nThe safety benefit is unsubstantiated, with no field\u2011trial results or cost\u2011benefit analysis provided.\n\n## Synaptic Harmony Swarm Foraging\n\n### The Breakthrough\nSynaptic Harmony offers a pure\u2011NumPy, decentralized Q\u2011learning sandbox where each agent maintains its own table and learns to forage resources in a dynamic grid world, with live visualisation and configurable YAML settings.\n\n### The Caveats\nNo formal evaluation or baseline comparisons are presented, so emergent cooperation remains unvalidated beyond visual demos.\n\n## OGMA Runtime Monitors\n\n### The Breakthrough\nOGMA extends the Copilot verification framework to automatically generate hard\u2011real\u2011time C99 runtime monitors for NASA Core Flight System, ROS/ROS2 and F\u2032 applications from high\u2011level specifications.\n\n### The Caveats\nNo performance benchmarks or hardware trials are shown, leaving timing and resource impact on actual platforms uncertain.\n\n## ros2_control\n\n### The Breakthrough\nros2_control provides a modular, plugin\u2011based control framework for ROS\u202f2 with a hardware\u2011abstraction layer, realtime\u2011safe controller plugins and CI pipelines that test across all active ROS\u202f2 distributions.\n\n### The Caveats\nThe claim of generic, reusable control lacks performance benchmarks or real\u2011world robot deployment evidence.\n\n### Priority\nFlashVLA\u2019s >30\u202fHz real\u2011world control shows that streaming VLA inference can finally keep pace with fast robotic loops, making it the most immediately actionable advance today.\n\n### One action\nClone the open\u2011source FlashVLA implementation and benchmark its control latency on your own robot against your existing planner.\n\n### What to watch\nThe surge of LLM\u2011driven robotics\u2014embodied in STEP\u2019s state\u2011aware planning, CLAP\u2019s cross\u2011embodiment video world models, and FlashVLA\u2019s streaming VLA inference\u2014suggests a near\u2011term focus on grounding large\u2011scale language or vision models in concrete robot actions and physics. Watching how these approaches move from simulation to real\u2011world deployments will be key.",
+  "report": "## PanelShield\n\n### The Breakthrough\nPanelShield introduces a framework that generates safe action sequences for robots handling industrial control panels by combining large\u2011model planners with formal verification using Linear Temporal Logic and a Safety Finite\u2011State Machine. It detects and repairs violations, cutting the violation rate to 2.7% with an end\u2011to\u2011end latency of 4.1\u202fseconds, outperforming foundation\u2011model\u2011only baselines.\n\n### The Caveats\nThe claimed generalizability is unproven, since the evaluation is limited to three panel types on a single robot platform.\n\n## Aero Hand Open\n\n### The Breakthrough\nAero Hand Open releases a tendon\u2011driven anthropomorphic hand together with a physics\u2011accurate simulation model, a bidirectional actuation map, and an RL training stack that enables zero\u2011shot sim\u2011to\u2011real transfer of manipulation policies without fine\u2011tuning or explicit state estimation.\n\n### The Caveats\nThe work provides no comparison against existing hand\u2011control baselines, so the claimed performance improvement is unclear.\n\n## ChainSplat\n\n### The Breakthrough\nChainSplat learns the 3D geometry, appearance, kinematics, and dynamics of deformable linear objects directly from multi\u2011view RGB videos by modeling the object as a screw\u2011theoretic open chain of rigid links and integrating Gaussian splatting, achieving state\u2011of\u2011the\u2011art results in dynamics prediction and real\u2011time force estimation for robotic manipulation.\n\n### The Caveats\nNo quantitative comparison to existing DLO modeling baselines is provided, leaving the claimed improvements unverifiable.\n\n## Algorithmic Altruism\n\n### The Breakthrough\nThe paper defines a Social Nash Equilibrium that reshapes each heterogeneous robot\u2019s utility with altruistic relatedness weights, allowing lower\u2011valued robots to assume more risk; the resulting projected\u2011gradient planner improves exploration spacing and risk allocation while preserving coverage in wheeled robot experiments.\n\n### The Caveats\nNo comparison to existing risk\u2011aware planners is offered, so the reported gains are unsubstantiated.\n\n## Microduck\n\n### The Breakthrough\nPollen Robotics launches a 25\u202fcm, 800\u202fg biped robot equipped with 15 motors, camera, depth sensor, and pre\u2011trained behaviors; it ships for $399 with an open\u2011source stack covering simulation, reinforcement\u2011learning training, and sim\u2011to\u2011real deployment, enabling low\u2011cost legged locomotion research.\n\n### The Caveats\nThe robot\u2019s capabilities are advertised without quantitative benchmarks or real\u2011world testing, so performance claims remain unverified.\n\n## glass\u2011LIO\n\n### The Breakthrough\nglass\u2011LIO provides a readable C++17 ROS2 implementation of LiDAR\u2011inertial odometry for Livox sensors that deskews 100\u202fms sweeps, uses voxel\u2011hash mapping and a custom Gauss\u2011Newton optimizer, runs at ~10\u202fHz, and achieves an RMSE of 0.13\u202fm on a test bag.\n\n### The Caveats\nOnly a single\u2011bag RMSE is reported with no comparison to existing LIO baselines, leaving accuracy claims unverified.\n\n## HFlow\n\n### The Breakthrough\nHFlow is an open\u2011source SDK that converts multimodal robot recordings into standardized, quality\u2011checked episodes using MCAP files, Python transforms, and Airflow DAGs, storing metadata in Parquet for DuckDB queries and enabling reproducible dataset manifests.\n\n### The Caveats\nThe system\u2019s reproducibility and performance are unverified, lacking benchmarks or large\u2011scale real\u2011world testing.\n\n## NeMo Gym\n\n### The Breakthrough\nNeMo Gym is an open\u2011source library that offers modular, scalable sandbox environments for evaluating AI agents, supporting thousands of concurrent tasks, integrating with popular RL frameworks, and adding 21 new environments plus reward recomputation from stored rollouts.\n\n### The Caveats\nScalability claims are unsubstantiated, with no empirical benchmarks or quantitative validation provided.\n\n## Hugging Face Microduck Sales\n\n### The Breakthrough\nHugging Face reports that its $399 Microduck robot generated over $2.6\u202fM in orders within 24\u202fhours; the robot can walk, sit, stand, kick a ball, pick up objects, and developers can program new behaviors via sim\u2011to\u2011real workflows exporting ONNX models.\n\n### The Caveats\nThe announcement offers only sales figures and demo videos, providing no systematic performance, durability, or long\u2011term usage tests; capabilities remain unverified.\n\n### Priority\nPanelShield stands out as the most actionable story because it demonstrates a concrete method to embed provable safety into industrial robot planning, a critical need for real\u2011world deployments.\n\n### One action\nRead the PanelShield paper and evaluate its verification pipeline for your own industrial robot tasks.\n\n### What to watch\nThree recent releases\u2014Microduck, Aero Hand Open, and ChainSplat\u2014focus on bridging simulation and reality for different manipulation domains (legged locomotion, dexterous hand control, and deformable object handling). Comparing their open\u2011source stacks and real\u2011world validation strategies will reveal emerging standards for low\u2011cost, zero\u2011shot sim\u2011to\u2011real learning.",
   "themes": [
-    "robotics",
-    "llm",
-    "simulation",
-    "hardware"
+    "simulation-to-real",
+    "industrial safety",
+    "multi-robot exploration",
+    "deformable manipulation",
+    "data pipelines"
   ],
-  "source_count": 11,
+  "source_count": 9,
   "section_urls": [
-    "https://arxiv.org/abs/2608.27384",
-    "https://www.wired.com/story/inside-metas-experiments-with-data-center-robots/",
-    "https://arxiv.org/abs/2608.27225",
-    "https://chipsandcheese.com/p/hot-chips-2026-samsungs-processing",
-    "https://arxiv.org/abs/2608.27371",
-    "https://arxiv.org/abs/2608.27406",
-    "https://pwning.systems/posts/llm-memory-program-analysis/",
-    "https://www.404media.co/ice-plans-to-spends-millions-on-boston-dynamics-dog-robots/",
-    "https://github.com/jaimasih05-commits/swarm-foraging-qlearn",
-    "https://github.com/nasa/ogma",
-    "https://github.com/ros-controls/ros2_control"
+    "https://arxiv.org/abs/2608.28305",
+    "https://arxiv.org/abs/2608.28578",
+    "https://arxiv.org/abs/2608.28570",
+    "https://arxiv.org/abs/2608.28409",
+    "https://pollen-robotics.com/microduck/blog/introducing-microduck/",
+    "https://github.com/Tim-HW/glass-lio",
+    "https://github.com/Hebbian-Robotics/hflow",
+    "https://github.com/NVIDIA-NeMo/Gym",
+    "https://www.businessinsider.com/hugging-faces-duck-robot-hits-sales-roller-skate-2026-8"
   ],
   "section_titles": [
-    "FlashVLA: Streaming Action Decoding for Fast and Asynchronous VLA Inference",
-    "Meta trials robots for cable plugging, server resets and inventory in its data centers",
-    "STEP: State\u2011Aware Task Estimation and Planning with Multi\u2011Modal LLMs for Human\u2011Robot Collaboration",
-    "Samsung unveils LPDDR5X-PIM: MAC units embedded in standard LPDDR5X memory",
-    "Embodied Scene Rearrangement Planning (ESRP) introduces a new task and benchmark",
-    "CLAP: Cross\u2011embodiment video world models enable zero\u2011shot physical simulation",
-    "Lemmalog: a Datalog engine to give LLM agents incremental, provable memory for vulnerability research",
-    "ICE to Spend $1M+ on Boston Dynamics Spot Robots for Officer Safety",
-    "Synaptic Harmony: Distributed Q\u2011Learning Swarm Foraging Simulation",
-    "OGMA: NASA tool for generating runtime monitors for flight and robotics software",
-    "ros2_control: generic and simple controls framework for ROS\u202f2"
+    "PanelShield: Verifiable Closed-Loop Safe Planning for Robotic Industrial Panel Operation",
+    "Aero Hand Open: Simulation-Ready Tendon-Driven Hand for Dexterous Manipulation Learning",
+    "ChainSplat: Screw-Theoretic Model for Learning Deformable Linear Object Dynamics from RGB Videos",
+    "Algorithmic Altruism Enables Cooperative Risk\u2011Aware Exploration for Heterogeneous Robot Teams",
+    "Microduck: 25\u202fcm biped robot for learning legged locomotion, $399 pre\u2011order",
+    "glass-LIO: Transparent LiDAR\u2011inertial odometry for Livox MID\u2011360",
+    "Hebbian Robotics launches HFlow: SDK for scalable robotics data pipelines",
+    "NeMo Gym: NVIDIA\u2019s scalable library for evaluating and training AI agents in sandboxed environments",
+    "Hugging Face reports $2.6M in Microduck sales within first 24 hours"
   ],
-  "generated_at": "2026-08-29T17:18:15.370782+00:00",
+  "generated_at": "2026-08-31T19:33:33.355049+00:00",
   "run_times": {
-    "orchestrator": "2026-08-29T17:18:15.370782+00:00",
-    "hn": "2026-08-29T17:01:49.838101+00:00",
-    "arxiv": "2026-08-29T17:02:26.082792+00:00",
-    "github": "2026-08-29T17:03:25.348506+00:00",
-    "research_desk": "2026-08-29T17:08:16.279477+00:00"
+    "orchestrator": "2026-08-31T19:33:33.355049+00:00",
+    "hn": "2026-08-31T19:26:02.971444+00:00",
+    "arxiv": "2026-08-31T19:26:40.372188+00:00",
+    "github": "2026-08-31T19:27:38.394741+00:00",
+    "research_desk": "2026-08-31T19:31:07.602122+00:00"
   }
 }
