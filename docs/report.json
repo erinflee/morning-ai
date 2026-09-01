@@ -1,42 +1,41 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## PanelShield\n\n### The Breakthrough\nPanelShield introduces a framework that generates safe action sequences for robots handling industrial control panels by combining large\u2011model planners with formal verification using Linear Temporal Logic and a Safety Finite\u2011State Machine. It detects and repairs violations, cutting the violation rate to 2.7% with an end\u2011to\u2011end latency of 4.1\u202fseconds, outperforming foundation\u2011model\u2011only baselines.\n\n### The Caveats\nThe claimed generalizability is unproven, since the evaluation is limited to three panel types on a single robot platform.\n\n## Aero Hand Open\n\n### The Breakthrough\nAero Hand Open releases a tendon\u2011driven anthropomorphic hand together with a physics\u2011accurate simulation model, a bidirectional actuation map, and an RL training stack that enables zero\u2011shot sim\u2011to\u2011real transfer of manipulation policies without fine\u2011tuning or explicit state estimation.\n\n### The Caveats\nThe work provides no comparison against existing hand\u2011control baselines, so the claimed performance improvement is unclear.\n\n## ChainSplat\n\n### The Breakthrough\nChainSplat learns the 3D geometry, appearance, kinematics, and dynamics of deformable linear objects directly from multi\u2011view RGB videos by modeling the object as a screw\u2011theoretic open chain of rigid links and integrating Gaussian splatting, achieving state\u2011of\u2011the\u2011art results in dynamics prediction and real\u2011time force estimation for robotic manipulation.\n\n### The Caveats\nNo quantitative comparison to existing DLO modeling baselines is provided, leaving the claimed improvements unverifiable.\n\n## Algorithmic Altruism\n\n### The Breakthrough\nThe paper defines a Social Nash Equilibrium that reshapes each heterogeneous robot\u2019s utility with altruistic relatedness weights, allowing lower\u2011valued robots to assume more risk; the resulting projected\u2011gradient planner improves exploration spacing and risk allocation while preserving coverage in wheeled robot experiments.\n\n### The Caveats\nNo comparison to existing risk\u2011aware planners is offered, so the reported gains are unsubstantiated.\n\n## Microduck\n\n### The Breakthrough\nPollen Robotics launches a 25\u202fcm, 800\u202fg biped robot equipped with 15 motors, camera, depth sensor, and pre\u2011trained behaviors; it ships for $399 with an open\u2011source stack covering simulation, reinforcement\u2011learning training, and sim\u2011to\u2011real deployment, enabling low\u2011cost legged locomotion research.\n\n### The Caveats\nThe robot\u2019s capabilities are advertised without quantitative benchmarks or real\u2011world testing, so performance claims remain unverified.\n\n## glass\u2011LIO\n\n### The Breakthrough\nglass\u2011LIO provides a readable C++17 ROS2 implementation of LiDAR\u2011inertial odometry for Livox sensors that deskews 100\u202fms sweeps, uses voxel\u2011hash mapping and a custom Gauss\u2011Newton optimizer, runs at ~10\u202fHz, and achieves an RMSE of 0.13\u202fm on a test bag.\n\n### The Caveats\nOnly a single\u2011bag RMSE is reported with no comparison to existing LIO baselines, leaving accuracy claims unverified.\n\n## HFlow\n\n### The Breakthrough\nHFlow is an open\u2011source SDK that converts multimodal robot recordings into standardized, quality\u2011checked episodes using MCAP files, Python transforms, and Airflow DAGs, storing metadata in Parquet for DuckDB queries and enabling reproducible dataset manifests.\n\n### The Caveats\nThe system\u2019s reproducibility and performance are unverified, lacking benchmarks or large\u2011scale real\u2011world testing.\n\n## NeMo Gym\n\n### The Breakthrough\nNeMo Gym is an open\u2011source library that offers modular, scalable sandbox environments for evaluating AI agents, supporting thousands of concurrent tasks, integrating with popular RL frameworks, and adding 21 new environments plus reward recomputation from stored rollouts.\n\n### The Caveats\nScalability claims are unsubstantiated, with no empirical benchmarks or quantitative validation provided.\n\n## Hugging Face Microduck Sales\n\n### The Breakthrough\nHugging Face reports that its $399 Microduck robot generated over $2.6\u202fM in orders within 24\u202fhours; the robot can walk, sit, stand, kick a ball, pick up objects, and developers can program new behaviors via sim\u2011to\u2011real workflows exporting ONNX models.\n\n### The Caveats\nThe announcement offers only sales figures and demo videos, providing no systematic performance, durability, or long\u2011term usage tests; capabilities remain unverified.\n\n### Priority\nPanelShield stands out as the most actionable story because it demonstrates a concrete method to embed provable safety into industrial robot planning, a critical need for real\u2011world deployments.\n\n### One action\nRead the PanelShield paper and evaluate its verification pipeline for your own industrial robot tasks.\n\n### What to watch\nThree recent releases\u2014Microduck, Aero Hand Open, and ChainSplat\u2014focus on bridging simulation and reality for different manipulation domains (legged locomotion, dexterous hand control, and deformable object handling). Comparing their open\u2011source stacks and real\u2011world validation strategies will reveal emerging standards for low\u2011cost, zero\u2011shot sim\u2011to\u2011real learning.",
+  "report": "## SUN: Persistent Programs for Language\u2011Grounded Control\n\n### The Breakthrough\nSUN Programs encode geometric and contact relations into executable programs that feed model\u2011predictive control costs, reinforcement\u2011learning rewards, and diagnostics; Kuafu automatically generates them from language, screens feasibility with MPC, and trains stage\u2011conditioned policies, achieving 82.03% macro\u2011success across nine long\u2011horizon tasks and real\u2011robot performance on Franka and Kinova arms.\n\n### The Caveats\nThe work provides no ablation of its language\u2011grounding versus MPC\u2011screening components, leaving it unclear which part drives the reported gains.\n\n## Zeva: In\u2011Context Causal Learning for Generalizable Manipulation\n\n### The Breakthrough\nZeva adds a Causal Interaction Extractor that turns actions and observed state changes into causal signals stored in a dual\u2011timescale memory and injected as context into a frozen policy model, enabling self\u2011evolution without gradient updates; experiments show higher success rates and cross\u2011task transfer in both simulated and real\u2011world manipulation tasks.\n\n### The Caveats\nGeneralizability claims rest on experiments with a single robot platform and limited task set, lacking broader validation.\n\n## ICE deploys Boston Dynamics Spot for deportation tasks\n\n### The Breakthrough\nICE has ordered $2\u202fM of Spot quadruped robots equipped with perception, gas\u2011detection, and payload sensors, using autonomous navigation and tele\u2011operation to keep officers out of hazardous environments, extending Spot\u2019s use in government and first\u2011responder contexts.\n\n### The Caveats\nThe announcement provides no independent performance data or real\u2011world testing, so effectiveness and ethical implications remain unverified.\n\n## Language\u2011Driven Quality\u2011Diversity for Autonomous Skill Acquisition\n\n### The Breakthrough\nThe method leverages large language models to sample functional descriptors without hand\u2011crafted metrics, integrates them into a MAP\u2011Elites Success archive via a multi\u2011behavior\u2011descriptor QD algorithm, and in the Genesis simulator outperforms classic QD on four manipulation tasks.\n\n### The Caveats\nValidation is limited to simulation on four tasks; no real\u2011robot experiments, so zero\u2011shot adaptability is unproven.\n\n## DARP: Calibrated Dual\u2011Arm RGB\u2011D\u2011IR Dataset\n\n### The Breakthrough\nDARP provides synchronized dual\u2011arm RGB, depth, and infrared streams with joint states, automatic cross\u2011arm localization, and a deterministic multi\u2011view fusion pipeline yielding a median point\u2011to\u2011mesh error of 2.13\u202fmm and 96.56% of points within 10\u202fmm, supporting research on multi\u2011view reconstruction and collaborative perception.\n\n### The Caveats\nNo comparison to existing multi\u2011view or multimodal datasets, making its advantage unclear.\n\n## Crocoddyl: Differential Dynamic Programming Library\n\n### The Breakthrough\nCrocoddyl delivers fast DDP\u2011style solvers (FDDP, OdynSQP) with analytical derivatives via Pinocchio, Python bindings, code generation, and multi\u2011threading, supporting optimal control, MPC, and legged\u2011robot motion planning.\n\n### The Caveats\nThe repository lacks benchmark results or real\u2011robot experiments to verify claimed speed and generality.\n\n## RoboticsAcademy ROS Learning Platform\n\n### The Breakthrough\nRoboticsAcademy bundles a full ROS simulation stack (Gazebo, RViz) with curated exercises, an auto\u2011install script, and instructional videos, letting students launch a complete environment with a single command.\n\n### The Caveats\nNo formal evaluation or benchmark assesses learning effectiveness beyond anecdotal demos.\n\n## Perceptron AI releases Isaac 0.5 (36\u202fB)\n\n### The Breakthrough\nIsaac 0.5 is a 36\u2011billion\u2011parameter embodied foundation model released with full weight checkpoints, offering the largest open\u2011weight model aimed at robotics research.\n\n### The Caveats\nNo evaluation, benchmarks, or hardware results are provided, leaving its general\u2011purpose claim unverified.\n\n## Open Agent Forum for AI agents\n\n### The Breakthrough\nThe platform provides a REST/SSE service issuing cryptographically signed envelopes for each message, with an HTTP API and npm SDK that lets agents read a firehose of traffic, demonstrated via a bounty affiliate proof\u2011of\u2011concept.\n\n### The Caveats\nNever tested with real\u2011world agent deployments, so reliability and security remain unproven.\n\n### Priority\nSUN showcases a complete pipeline\u2014from language to real\u2011robot execution\u2014with strong quantitative results, making it the most actionable breakthrough for today\u2019s robotics audience.\n\n### One action\nClone the SUN/Kuafu repository, run the provided examples, and try generating a simple program for your own manipulation setup.",
   "themes": [
-    "simulation-to-real",
-    "industrial safety",
-    "multi-robot exploration",
-    "deformable manipulation",
-    "data pipelines"
+    "manipulation",
+    "foundation models",
+    "datasets",
+    "control"
   ],
   "source_count": 9,
   "section_urls": [
-    "https://arxiv.org/abs/2608.28305",
-    "https://arxiv.org/abs/2608.28578",
-    "https://arxiv.org/abs/2608.28570",
-    "https://arxiv.org/abs/2608.28409",
-    "https://pollen-robotics.com/microduck/blog/introducing-microduck/",
-    "https://github.com/Tim-HW/glass-lio",
-    "https://github.com/Hebbian-Robotics/hflow",
-    "https://github.com/NVIDIA-NeMo/Gym",
-    "https://www.businessinsider.com/hugging-faces-duck-robot-hits-sales-roller-skate-2026-8"
+    "https://arxiv.org/abs/2608.31167",
+    "https://arxiv.org/abs/2608.30880",
+    "https://www.wcvb.com/article/ice-boston-dynamics-robot-dogs/73559827",
+    "https://arxiv.org/abs/2608.30983",
+    "https://arxiv.org/abs/2608.31002",
+    "https://github.com/loco-3d/crocoddyl",
+    "https://github.com/JdeRobot/RoboticsAcademy",
+    "https://twitter.com/perceptroninc/status/2092678357775442103",
+    "https://openagentforum.com/"
   ],
   "section_titles": [
-    "PanelShield: Verifiable Closed-Loop Safe Planning for Robotic Industrial Panel Operation",
-    "Aero Hand Open: Simulation-Ready Tendon-Driven Hand for Dexterous Manipulation Learning",
-    "ChainSplat: Screw-Theoretic Model for Learning Deformable Linear Object Dynamics from RGB Videos",
-    "Algorithmic Altruism Enables Cooperative Risk\u2011Aware Exploration for Heterogeneous Robot Teams",
-    "Microduck: 25\u202fcm biped robot for learning legged locomotion, $399 pre\u2011order",
-    "glass-LIO: Transparent LiDAR\u2011inertial odometry for Livox MID\u2011360",
-    "Hebbian Robotics launches HFlow: SDK for scalable robotics data pipelines",
-    "NeMo Gym: NVIDIA\u2019s scalable library for evaluating and training AI agents in sandboxed environments",
-    "Hugging Face reports $2.6M in Microduck sales within first 24 hours"
+    "SUN: Persistent Programs for Language-Grounded Control-to-Learning-to-Real Policies",
+    "Zeva: In-Context Causal Learning for Generalizable Embodied Manipulation",
+    "ICE to deploy Boston Dynamics Spot robot dogs for deportation operations",
+    "Language-Driven Quality-Diversity for Autonomous Robot Manipulation Skill Acquisition",
+    "DARP: Calibrated Dual\u2011Arm RGB\u2011D\u2011IR Dataset for Multi\u2011View Robotic Perception",
+    "Crocoddyl: differential dynamic programming library for optimal robot control",
+    "RoboticsAcademy: Open-source ROS\u2011based platform for learning robotics",
+    "Perceptron AI releases Isaac 0.5: 36B open-weight embodied foundation model",
+    "Open Agent Forum: signed public message square for AI agents"
   ],
-  "generated_at": "2026-08-31T19:33:33.355049+00:00",
+  "generated_at": "2026-09-01T17:18:55.167024+00:00",
   "run_times": {
-    "orchestrator": "2026-08-31T19:33:33.355049+00:00",
-    "hn": "2026-08-31T19:26:02.971444+00:00",
-    "arxiv": "2026-08-31T19:26:40.372188+00:00",
-    "github": "2026-08-31T19:27:38.394741+00:00",
-    "research_desk": "2026-08-31T19:31:07.602122+00:00"
+    "orchestrator": "2026-09-01T17:18:55.167024+00:00",
+    "hn": "2026-09-01T17:12:40.305711+00:00",
+    "arxiv": "2026-09-01T17:13:18.091936+00:00",
+    "github": "2026-09-01T17:14:17.004124+00:00",
+    "research_desk": "2026-09-01T17:17:05.874689+00:00"
   }
 }
