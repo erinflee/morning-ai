@@ -1,42 +1,42 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## GPT-6 Astra Robot Arm\n\n### The Breakthrough\nThe OpenAI GPT-6 Astra model was pitted against Anthropic Claude Fable 5/5.1 on YAM robotic arms for bowl\u2011placement. Astra achieved a 95% success rate (19/20) in 2.5\u202fminutes per trial at a cost of $0.94, far outpacing Claude\u2019s 8/20, 6.8\u202fminutes and $2.12 per run. This demonstrates that a large language model can act as a high\u2011level controller for real\u2011world manipulation with strong efficiency gains.\n\n### The Caveats\nThe comparison is confounded because Astra and Claude were tested on different hardware rigs, so superiority may reflect setup differences rather than model performance.\n\n## MulDP Quadruped Parkour\n\n### The Breakthrough\nMulDP introduces a diffusion\u2011based policy that fuses vision, proprioception, and goal inputs to generate temporally coherent velocity commands for quadruped parkour. The authors also released the first Quadruped Parkour Navigation Dataset (QPND) to train the model end\u2011to\u2011end. Experiments in simulation and on real hardware show robust long\u2011horizon navigation across complex terrains.\n\n### The Caveats\nMulDP is never benchmarked against existing quadruped navigation baselines, so its claimed robustness and performance gains remain unsupported.\n\n## AdaRoboVLG Adaptive Grasping\n\n### The Breakthrough\nAdaRoboVLG separates grasp synthesis from task understanding by learning a hand\u2011agnostic base policy that maps candidate grasps to kinematics and evaluates force\u2011closure stability. Composable foundation\u2011model priors inject spatial, cognitive, and temporal context, letting the system match or exceed current vision\u2011language grasping methods without extra policy training.\n\n### The Caveats\nThe paper\u2019s performance claim rests on comparisons to unnamed \u201cstate\u2011of\u2011the\u2011art\u201d methods, leaving the magnitude of improvement unclear.\n\n## GIFT Structured Feature Training\n\n### The Breakthrough\nGIFT adds geometry alignment, affordance prediction, and goal\u2011region reconstruction as supervision signals for intermediate visual features. Integrated with several policy architectures, it raises zero\u2011shot LIBERO\u2011Plus accuracy to up to 87.8% (a 4.6\u201112.6 point gain) and yields similar improvements on RoboCasa.\n\n### The Caveats\nThe gains are demonstrated only in simulation, with no real\u2011world robot experiments to confirm transfer to hardware.\n\n## Formation Matrix Multi\u2011Agent Control\n\n### The Breakthrough\nThe authors derive a formation matrix from graph\u2011theoretic principles to capture inter\u2011agent energy exchange, enabling control\u2011by\u2011interconnection within the IDA\u2011PBC framework. This yields provably stable leader\u2011following and position\u2011based formation tasks in planar robot simulations.\n\n### The Caveats\nThe work demonstrates stable formation and collision avoidance only in simulation and offers no comparison to existing formation\u2011control baselines.\n\n## LLM Robot Arena\n\n### The Breakthrough\nA browser\u2011based arena lets LLMs write JavaScript/TypeScript controllers for identical robots that then battle in real time with an ~2\u202fms per\u2011step budget. The deterministic sandbox includes a tournament framework (quick rounds, round\u2011robin) with reproducible seeds, energy\u2011management rules, and exportable JSON replays for systematic agent comparison.\n\n### The Caveats\nThe demo only compares LLM\u2011generated bots against a single hand\u2011crafted baseline and offers no evaluation against established code\u2011generation or robotics benchmarks.\n\n## Wayfinder Evaluation Framework\n\n### The Breakthrough\nWayfinder is an open\u2011source reference that stitches together rule\u2011based checks, human evaluation, LLM\u2011as\u2011a\u2011judge, offline and online metrics into a single progressive workflow, showing how to combine deterministic and stochastic assessments for AI systems.\n\n### The Caveats\nWayfinder is only a demo repository with no empirical benchmarking on real AI tasks or robotics hardware, so its practical impact remains unproven.\n\n## AgileRL RLOps Library\n\n### The Breakthrough\nAgileRL integrates evolutionary hyper\u2011parameter optimization directly into the RL training loop, reporting up to 10\u00d7 faster HPO than Optuna and superior performance on LLM fine\u2011tuning (GEM Sudoku Hard) and multi\u2011agent benchmarks (MADDPG, MATD3).\n\n### The Caveats\nThe reported speed\u2011up lacks an ablation study, so it is unclear whether the evolutionary HPO itself or other implementation tricks drive the gains.\n\n## CarWatch Offline Car Assistant\n\n### The Breakthrough\nCarWatch runs a 35B\u2011parameter Qwen3.6 model (14.3\u202fGB) on a Raspberry\u202fPi\u202f5 using dynamic quantisation, achieving ~3.5\u202ftokens/s generation while staying under 65\u202f\u00b0C. It combines lexical RAG from a 489\u2011page car manual with live OBD data and a zero\u2011dependency voice listener built on whisper.cpp.\n\n### The Caveats\nThe repository reports only raw runtime numbers on a single Pi and provides no comparative baselines, leaving its relative performance unclear.\n\n### Priority\nGPT\u20116 Astra is the only story showing a large language model directly controlling a physical robot arm with measurable cost and speed advantages, making it the most immediately actionable development.\n\n### One action\nIf you have access to a robot arm, try reproducing Astra\u2019s setup using the Inspect\u202fRobots agent policy to evaluate LLM\u2011driven manipulation on your own hardware.\n\n### What to watch\nThree recent manipulation efforts\u2014GPT\u20116 Astra\u2019s LLM controller, AdaRoboVLG\u2019s foundation\u2011model\u2011guided grasp synthesis, and GIFT\u2019s structured feature training\u2014illustrate complementary paths: raw LLM prompting for simple tasks, modular priors for hand\u2011agnostic grasping, and supervised visual representations for zero\u2011shot transfer. Watching how each scales from simulation to real hardware will reveal the most viable route for LLM\u2011enabled manipulation.",
+  "report": "## TacPAC: Real-Time Tactile Action Correction\n\n### The Breakthrough\nTacPAC predicts tactile contact images, caches them, and uses a tactile expert to compare live observations and issue a single\u2011pass correction that is 20.7\u00d7 cheaper than replanning, raising manipulation success from 22% to 64% across five real\u2011robot tasks.\n\n### The Caveats\nTacPAC is only benchmarked against an unnamed vision\u2011only baseline and never compared to existing tactile\u2011based correction methods.\n\n## FIRE-LIVWO: Robust Multimodal Odometry for Underground\n\n### The Breakthrough\nThe system fuses 4D mmWave radar, LiDAR, visual features, and wheel odometry in an iterated error\u2011state Kalman filter with Doppler constraints, achieving an average localization error of 5.677\u202fcm in underground coal\u2011mine tests, outperforming unspecified baselines.\n\n### The Caveats\nThe claimed error improvement is against unspecified baselines, leaving its robustness unverified.\n\n## Conditional Visual Grounding in Imitation Policies\n\n### The Breakthrough\nBy adding distractor augmentation, phase\u2011dependent attention regularization, and appearance\u2011based visual prompting to the ACT transformer policy, the authors improve target selection robustness on simulated tasks and a real UR3e robot.\n\n### The Caveats\nEvaluation is only against the unaugmented ACT policy with no comparison to established visuomotor baselines.\n\n## Humanoid Robot Prototype for Multimodal HRI\n\n### The Breakthrough\nA 12\u2011DOF dual\u2011arm humanoid with a Jetson runs MediaPipe Pose+LSTM gesture classification, YOLO\u2011based 3D object detection, and speech\u2011to\u2011text plus LLM parsing, achieving 96% gesture, 92% speech accuracy and sub\u20112\u202fcm manipulation error with >90% task success.\n\n### The Caveats\nReported accuracies are not benchmarked against existing humanoid platforms.\n\n## visloc-rs: Fast Pure\u2011Rust Visual SLAM\n\n### The Breakthrough\nThe Rust library implements feature extraction, matching, and a memory\u2011bounded mapper, delivering a 3.46\u00d7 speedup over COLMAP on a 1,200\u2011image dataset and up to 66.7% lower RMSE, while using \u22643.32\u202fGiB RAM and registering 99.88% of cameras.\n\n### The Caveats\nSpeedup and error reductions are demonstrated only against COLMAP, with no other SLAM comparisons.\n\n## quackd: LLM\u2011Powered Brain Daemon for Small Robots\n\n### The Breakthrough\nquackd translates natural\u2011language goals into robot\u2011specific skill sequences via LLMs, enforces a .duck safety contract, supports eight robot bodies, runs on a bundled simulator, and can offload reasoning to cloud or local LLM servers without API keys.\n\n### The Caveats\nThe hardware\u2011ready claim is unverified; the repo provides only a simulated demo with no real\u2011robot experiments.\n\n## TAMU\u2011Robomasters Taproot Aimbots Rewrite\n\n### The Breakthrough\nThe repository rewrites the 2021 Aimbots platform using modern C++20 and FreeRTOS within the Taproot framework, offering a modular embedded stack and build documentation for competition robots.\n\n### The Caveats\nNo performance evaluation or baseline comparison is provided, so improvement is unclear.\n\n## HexBOTs: Cellular Automaton of Robotic Lawn\u2011Mowers\n\n### The Breakthrough\nHexBOTs is a browser\u2011based deterministic cellular automaton where each cell is a robot with a genome\u2011based rule set, enabling an astronomically large space of robot types without runtime randomness and instant user experimentation.\n\n### The Caveats\nThe demo lacks quantitative or comparative evaluation of its emergent patterns.\n\n## China Readies Humanoid Robots for Combat\n\n### The Breakthrough\nA report claims China is developing humanoid robots intended for combat tasks, suggesting advances in mobility, autonomy, and potential weapon integration.\n\n### The Caveats\nThe claim lacks concrete evidence, trials, or independent verification.\n\n### Priority\nTacPAC offers a concrete, real\u2011world tactile correction that dramatically boosts manipulation success and provides open\u2011source code and data for immediate use.\n\n### One action\nClone the TacPAC repository, examine the released dataset, and prototype tactile\u2011feedback correction in your own manipulation pipeline.",
   "themes": [
     "manipulation",
-    "quadruped",
-    "vision-language",
-    "evaluation",
-    "reinforcement-learning"
+    "slam",
+    "tactile",
+    "multimodal",
+    "llm"
   ],
   "source_count": 9,
   "section_urls": [
-    "https://openai.robocurve.org/gpt-6-astra/",
-    "https://arxiv.org/abs/2609.03984",
-    "https://arxiv.org/abs/2609.04096",
-    "https://arxiv.org/abs/2609.04193",
-    "https://arxiv.org/abs/2609.04158",
-    "https://github.com/nigrosimone/llms-robot-arena",
-    "https://github.com/DivakarUngatla/wayfinder",
-    "https://github.com/AgileRL/AgileRL",
-    "https://github.com/ThinkOffApp/CarWatch"
+    "https://arxiv.org/abs/2609.05266",
+    "https://arxiv.org/abs/2609.05325",
+    "https://arxiv.org/abs/2609.05376",
+    "https://arxiv.org/abs/2609.05361",
+    "https://github.com/rsasaki0109/visloc-rs",
+    "https://github.com/rokbenko/quackd",
+    "https://github.com/TAMU-Robomasters/aimbots-dev",
+    "https://hexbot-genesis.netlify.app/",
+    "https://www.reuters.com/world/china/dance-floor-war-china-readies-humanoid-robots-combat-2026-09-07/"
   ],
   "section_titles": [
-    "GPT-6 Astra outperforms Claude Fable 5.1 on bowl pick\u2011and\u2011place task",
-    "MulDP: Multimodal Diffusion Policy for Autonomous Quadruped Parkour Navigation",
-    "AdaRoboVLG: Adaptive Vision\u2011Language Grasping with Foundation Model Priors",
-    "GIFT: Guided Intermediate Feature Training for Robotic Manipulation",
-    "Formation Matrix and Energy-based Control of Multi-Agent Systems",
-    "Show HN: arena where LLM\u2011generated robot controllers battle each other",
-    "Wayfinder: reference implementation for evaluating AI applications",
-    "AgileRL: RLOps library with 10\u00d7 faster RL training via evolutionary hyperparameter optimization",
-    "CarWatch: Offline LLM-powered car chat agent on Raspberry Pi 5"
+    "TacPAC: Real-Time Tactile Action Correction Boosts Contact-Rich Manipulation Success",
+    "FIRE-LIVWO: Robust LiDAR\u2011Inertial\u2011Visual\u2011Wheel Odometry with Failure\u2011Immune mmWave Radar",
+    "What Matters, When? Diagnosing and Improving Conditional Visual Grounding in Visuomotor Imitation Policies",
+    "Humanoid Robot Prototype for Multimodal Human\u2011Robot Interaction",
+    "visloc-rs: pure\u2011Rust visual SLAM & SfM with 3.5\u00d7 COLMAP\u2011level speed",
+    "quackd: LLM\u2011powered brain daemon for small robots and simulators",
+    "TAMU-Robomasters: Taproot\u2011based rewrite of Aimbots embedded development platform",
+    "HexBOTs: deterministic cellular automaton of robotic lawnmower agents",
+    "China readies humanoid robots for combat"
   ],
-  "generated_at": "2026-09-06T16:08:33.962376+00:00",
+  "generated_at": "2026-09-07T18:14:30.091450+00:00",
   "run_times": {
-    "orchestrator": "2026-09-06T16:08:33.962376+00:00",
-    "hn": "2026-09-06T16:01:24.785192+00:00",
-    "arxiv": "2026-09-06T16:02:03.039715+00:00",
-    "github": "2026-09-06T16:03:00.699511+00:00",
-    "research_desk": "2026-09-06T16:06:28.321246+00:00"
+    "orchestrator": "2026-09-07T18:14:30.091450+00:00",
+    "hn": "2026-09-07T18:08:41.014305+00:00",
+    "arxiv": "2026-09-07T18:09:14.807599+00:00",
+    "github": "2026-09-07T18:10:17.320816+00:00",
+    "research_desk": "2026-09-07T18:13:46.179061+00:00"
   }
 }
