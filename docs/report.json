@@ -1,35 +1,44 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Maven Robotics' $100M wheeled robot launch\n\n### The Breakthrough\nMaven Robotics emerged from stealth with a $100\u202fmillion Series\u202fA and is now shipping wheeled robots that autonomously palletize mixed goods in warehouses. The third\u2011generation platform moves at up to 10\u202fmph, lifts 30\u202fkg with two arms, and its fast telemetry pipeline enables rapid model retraining. Field trials report over 99\u202f% uptime across two years while running 16\u202fhours per day.\n\n### The Caveats\nThe performance claims lack independent verification or baseline comparisons to other systems.\n\n## AV safety study shows 92% crash reduction\n\n### The Breakthrough\nIIHS and Waymo analyses reveal self\u2011driving cars dramatically lower crash rates: Waymo robotaxis logged 220\u202fmillion miles with a 92\u202f% drop in fatal/serious\u2011injury crashes, and automatic emergency braking cut pedestrian crashes by 27\u202f% and rear\u2011end crashes by 50\u202f%.\n\n### The Caveats\nSafety gains are based on uncontrolled, city\u2011specific observational data rather than a controlled comparison.\n\n## DUET\u2011DINO cross\u2011view latent world model for manipulation\n\n### The Breakthrough\nDUET\u2011DINO jointly trains side\u2011view and wrist\u2011view predictors with cross\u2011view conditioning, using DINOv3 for wrist predictions, enabling latent planning over the full 7\u2011DoF space. In simulation it reaches 92\u202f% success on reach, 72.5\u202f% on angled\u2011reach, and 60\u202f% on lift, outperforming single\u2011view baselines.\n\n### The Caveats\nResults are demonstrated only in simulation; real\u2011world transfer is untested.\n\n## FreqFM frequency\u2011conditioned flow matching\n\n### The Breakthrough\nFreqFM reformulates Flow Matching in DCT frequency space, balances loss across frequency bands and adds per\u2011frequency guidance, delivering up to a 9.3\u2011point boost on the LIBERO\u2011Plus benchmark without changing the VLA backbone.\n\n### The Caveats\nEvaluation compares only to a vanilla Flow Matching baseline, lacking tests against stronger state\u2011of\u2011the\u2011art methods.\n\n## Multi\u2011agent RL UAVs for wildfire monitoring\n\n### The Breakthrough\nA multi\u2011agent reinforcement\u2011learning system trains UAVs to track fire boundaries using reward shaping; simulation training shows stable navigation patterns, converging loss curves, and improved reward signals, suggesting viable autonomous aerial monitoring.\n\n### The Caveats\nNo baseline or existing planning method is compared, leaving performance relative to established techniques unclear.\n\n## Show\u2011Harness lets VLMs control robots\n\n### The Breakthrough\nShow\u2011Harness maps high\u2011level language intent to discrete semantic actions that deterministic interpreters translate into concrete robot motions, enabling zero\u2011shot control with proprietary VLMs and quick fine\u2011tuning of open\u2011source VLMs; its GUMI GUI gathers demonstrations without teleoperation hardware.\n\n### The Caveats\nThe paper provides no real\u2011hardware experiments or benchmark comparisons, so robustness and generalization remain unverified.\n\n### Priority\nMaven Robotics\u2019 deployment offers the most concrete, real\u2011world evidence of autonomous robots delivering logistics value today.\n\n### One action\nVisit Maven Robotics\u2019 website to explore their SDK and assess whether their high\u2011uptime palletizing robots fit your warehouse automation plans.\n\n### What to watch\nFreqFM and Show\u2011Harness illustrate two complementary routes to language\u2011driven robot control: FreqFM improves low\u2011level trajectory generation via frequency\u2011conditioned flow matching, while Show\u2011Harness leverages high\u2011level semantic action mapping. Both signal a push toward integrating foundation models with manipulation, yet each still needs broader real\u2011world validation.",
+  "report": "## Tactile Datasets Boost Dexterous Manipulation\n\n### The Breakthrough\nResearchers released several large tactile datasets and fast expert models that dramatically improve real\u2011world dexterous tasks. Berkeley\u2019s two\u2011expert architecture couples a high\u2011level motion planner with a tactile expert four times faster, achieving 65\u202f% success on 12 tasks\u2014about double the best vision\u2011language baseline. Tsinghua aggregated over 3,000\u202fh of data from 21 sensors into a hardware\u2011agnostic model, while NeoteAI and USC added visual\u2011tactile demos and vision\u2011only pressure inference, raising success rates up to 62.8\u202f%.\n\n### The Caveats\nThe gains are benchmarked only against a single vision\u2011language\u2011action baseline and a generic hardware\u2011agnostic model, with no comparison to other state\u2011of\u2011the\u2011art tactile methods.\n\n## Rapid In-Hand Pen Writing via Jacobian Estimation\n\n### The Breakthrough\nA lightweight CPU\u2011only controller continuously estimates the combined hand\u2011object Jacobian online, letting an anthropomorphic hand learn to write with a pen after roughly 18\u202fseconds of initialization. The method requires no analytical model, simulation pre\u2011training, or demonstrations and attains sub\u2011millimeter (\u22640.6\u202fmm mean) precision on letters and shapes across three different hand platforms.\n\n### The Caveats\nThe reported accuracy is unconvincing because the work does not compare its Jacobian\u2011estimation controller to existing RL or imitation\u2011learning baselines on the same task.\n\n## Contact\u2011Aware MPC for Aerial Manipulation\n\n### The Breakthrough\nThe authors fuse nonlinear model predictive control with incremental nonlinear dynamic inversion to control an underactuated quadrotor equipped with a single\u2011link arm, achieving simultaneous five\u2011DoF pose and normal\u2011force tracking on vertical and inclined surfaces without dedicated force sensors, validated on real hardware.\n\n### The Caveats\nThe paper provides no comparison against existing NMPC or INDI baselines, so robustness and performance gains cannot be verified.\n\n## EVPeriscope: Event\u2011Camera Quadrotor Localization\n\n### The Breakthrough\nAn upward\u2011facing event camera on a ground robot captures the high\u2011frequency propeller signatures of a nearby quadrotor, enabling 200\u202fHz closed\u2011loop relative localization without fiducial markers and remaining robust to motion blur, lighting changes, and foliage in day, night, and wind up to 15\u202fmph.\n\n### The Caveats\nThe paper provides no quantitative comparison against standard frame\u2011based or fiducial\u2011marker methods, leaving reliability claims unsubstantiated.\n\n## Monocular SLAM for Hidden Tomato Detection\n\n### The Breakthrough\nBy combining GLOMAP\u2019s structure\u2011from\u2011motion mapper with a coarse\u2011to\u2011fine hierarchical localization strategy, a single inexpensive monocular camera builds a 3D model of greenhouse crops and accurately detects occluded tomatoes, achieving geometric accuracy comparable to manual ground\u2011truth measurements.\n\n### The Caveats\nThe paper reports accurate fruit estimates but provides no comparison to existing SLAM or fruit\u2011detection baselines, so its advantage remains unverified.\n\n## Forester Behavior Trees for Virtual Commissioning\n\n### The Breakthrough\nForester adds a typed language, high\u2011performance Rust runtime, shared\u2011state blackboard, and built\u2011in tracer/simulator, letting engineers script repeatable PLC/robot test scenarios, invariant checks, and fault recovery that run alongside actual PLC logic via HTTP/OPC\u2011UA.\n\n### The Caveats\nThe framework is demonstrated only via a descriptive example with no hardware or real\u2011world testing, so its claimed benefits remain unproven.\n\n## Swarm: Open Arena for AI Drone Navigation\n\n### The Breakthrough\nSwarm bundles a unified simulation loop (depth\u2011camera perception \u2192 model \u2192 flight commands) running at 50\u202fHz across 1,100 procedurally generated worlds per epoch, with a token\u2011based leaderboard and automatic Bittensor rewards for top agents.\n\n### The Caveats\nThe platform provides no baseline or prior\u2011art comparisons, so leaderboard scores offer no evidence of improvement over existing drone\u2011control methods.\n\n## ABot-Recon: Streaming 3\u2011D Reconstruction\n\n### The Breakthrough\nABot\u2011Recon reconstructs long video streams into dense 3\u2011D models using a fixed 12\u2011frame sliding window, caching KV features and composing adjacent poses to keep compute and memory constant, with pretrained checkpoints and benchmark results included.\n\n### The Caveats\nThe paper provides no comparison to existing SLAM or reconstruction baselines, so claimed accuracy and throughput gains cannot be judged.\n\n## XPENG Completes Humanoid Robot Production Line\n\n### The Breakthrough\nXPENG announced a fully built production line for mass\u2011producing its humanoid robots, signalling a move from prototype to manufacturing scale.\n\n### The Caveats\nThe claim rests solely on XPENG\u2019s own announcement with no independent verification, timeline, or technical details.\n\n## RTK Token\u2011Savings Benchmarks Show Mixed Costs\n\n### The Breakthrough\nRTK rewrites shell commands to emit terse summaries, resulting in a 5\u202f% cost reduction for Claude\u2011based Fable\u202f5.0 but a 5\u202f% increase for DeepSeek\u202fV4\u202fPro across 1,740 attempts, exposing that token\u2011saving metrics can be misleading for monetary cost.\n\n### The Caveats\nEvaluation is limited to Terminal\u2011Bench\u202f2.1 and two Claude\u2011based models, leaving performance on newer benchmarks, other LLM families, and real developer workflows untested.\n\n### Priority\nThe tactile dataset breakthroughs deliver concrete performance gains across multiple labs and directly enable more reliable dexterous manipulation, making them the most actionable start for today\u2019s robotics scan.\n\n### One action\nExplore the new tactile datasets and consider integrating Berkeley\u2019s two\u2011expert architecture into your manipulation pipeline.",
   "themes": [
-    "manipulation",
-    "autonomous-vehicles",
-    "vision-language",
-    "warehouse-automation"
+    "dexterous-manipulation",
+    "tactile-sensing",
+    "aerial-manipulation",
+    "vision-slam",
+    "robotics-tools"
   ],
-  "source_count": 6,
+  "source_count": 10,
   "section_urls": [
-    "https://techcrunch.com/2026/09/10/maven-robotics-wants-to-steal-your-robot-deployment-deal/",
-    "https://spectrum.ieee.org/are-self-driving-cars-safe",
-    "https://arxiv.org/abs/2609.10506",
-    "https://arxiv.org/abs/2609.10405",
-    "https://arxiv.org/abs/2609.10433",
-    "https://arxiv.org/abs/2609.10522"
+    "https://spectrum.ieee.org/tactile-data-robots",
+    "https://arxiv.org/abs/2609.11775",
+    "https://arxiv.org/abs/2609.11661",
+    "https://arxiv.org/abs/2609.11920",
+    "https://arxiv.org/abs/2609.11766",
+    "https://besok.github.io/posts/forester-virtual-commissioning-of-robotic-cells/",
+    "https://github.com/swarm-subnet/swarm",
+    "https://github.com/amap-cvlab/ABot-Recon",
+    "https://www.youtube.com/watch?v=ZgBm8PdtpGo",
+    "https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/"
   ],
   "section_titles": [
-    "Maven Robotics raises $100M to deploy wheeled mixed\u2011palletizing robots",
-    "Study finds autonomous vehicles cut crashes up to 92% versus human drivers",
-    "DUET-DINO: Cross\u2011view latent world model for 7\u2011DoF robot manipulation planning",
-    "FreqFM: Frequency-Conditioned Flow Matching for Vision-Language-Action Models",
-    "Multi-Agent RL for Autonomous UAV Exploration in Wildfire Response",
-    "Show-Harness: Just a VLM Agent Can Play Robots"
+    "Robots are learning to feel: new tactile datasets and fast expert models boost dexterous manipulation",
+    "Rapid Learning of Dexterous In-Hand Pen Writing via Real-Time Jacobian Estimation",
+    "Contact-Aware Incremental Model Predictive Control for an Underactuated Aerial Manipulator",
+    "EVPeriscope: Event\u2011camera tracking of quadrotor propellers for aerial\u2011ground robot localization",
+    "Monocular Visual\u2011SLAM for Hidden Tomato Detection in Greenhouses via Hierarchical Localization and GLOMAP",
+    "Forester Behavior Trees for Virtual Commissioning of Industrial Robotic Cells",
+    "Swarm: Open arena for AI-driven autonomous drone navigation",
+    "ABot-Recon: streaming 3\u2011D reconstruction from video using a fixed 12\u2011frame local context",
+    "XPENG completes production line for its humanoid robots",
+    "RTK token\u2011savings claims clash with benchmark cost results"
   ],
-  "generated_at": "2026-09-10T16:59:37.161833+00:00",
+  "generated_at": "2026-09-11T17:09:51.419175+00:00",
   "run_times": {
-    "orchestrator": "2026-09-10T16:59:37.161833+00:00",
-    "hn": "2026-09-10T16:55:18.185169+00:00",
-    "arxiv": "2026-09-10T16:55:59.228474+00:00",
-    "github": "2026-09-10T16:59:37.161833+00:00",
-    "research_desk": "2026-09-10T16:59:00.763421+00:00"
+    "orchestrator": "2026-09-11T17:09:51.419175+00:00",
+    "hn": "2026-09-11T16:56:43.679454+00:00",
+    "arxiv": "2026-09-11T16:57:18.098590+00:00",
+    "github": "2026-09-11T16:58:12.566246+00:00",
+    "research_desk": "2026-09-11T17:02:44.552352+00:00"
   }
 }
