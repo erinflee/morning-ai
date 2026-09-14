@@ -1,31 +1,34 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Naval Drone Duel\n\n### The Breakthrough\nThe Ukrainian Sargan\u20113000 uncrewed surface vessel equipped with a 12.7\u202fmm Kongsberg Protector remote weapon station engaged and sank the Russian Orcan USV, marking the first documented USV\u2011vs\u2011USV kill. This demonstrates that small, expendable surface drones can deliver lethal force against peer unmanned platforms.\n\n### The Caveats\nThe claim rests on a single news report with no independent verification or quantitative data.\n\n## mjbatch\n\n### The Breakthrough\nmjbatch introduces a GIL\u2011free C++ thread pool that can step up to 4\u202f096 MuJoCo simulations in parallel, exposing live NumPy\u2011style views of simulation state. The library showed a Go1 quadruped learning to walk in under a minute on a five\u2011year\u2011old laptop, enabling fast reinforcement\u2011learning and co\u2011design without GPUs.\n\n### The Caveats\nNo quantitative comparison to existing parallel MuJoCo frameworks is provided, leaving the speed advantage unverified.\n\n## shodh-memory\n\n### The Breakthrough\nshodh-memory delivers deterministic, offline memory for AI agents and ROS2 robots using Rust\u2011based Hebbian strengthening, power\u2011law decay, and local MiniLM embeddings via ONNX, with reported storage latency of ~55\u202fms\u2014orders of magnitude faster than cloud\u2011based alternatives.\n\n### The Caveats\nLatency figures are presented without any evaluation of retrieval accuracy or memory quality, so the effectiveness of the offline memory remains unproven.\n\n## AutonomousKart\n\n### The Breakthrough\nThe AutonomousKart repository offers a ROS2 package with colcon builds, launch files that switch between simulation and real\u2011world kart, and GitHub Actions CI, targeting a Raspberry\u202fPi for on\u2011board execution\u2014providing an open\u2011source stack for rapid autonomous\u2011vehicle prototyping.\n\n### The Caveats\nThe repo supplies launch scripts but no real\u2011world performance metrics or baseline comparisons, so its effectiveness on actual hardware is unverified.\n\n### Priority\nThe naval duel provides the clearest evidence that autonomous surface robots can now achieve lethal, peer\u2011to\u2011peer combat outcomes, making it the most concrete hardware milestone for today\u2019s robotics scan.\n\n### One action\nTrack independent verification of the Sargan\u20113000 engagement and consider its remote\u2011weapon\u2011station integration when evaluating USV concepts.\n\n### What to watch\nBoth mjbatch and shodh-memory are software tools that expand robot research capabilities: mjbatch scales simulation for learning and design, while shodh-memory aims to give agents fast, offline knowledge retrieval. Watching their adoption could signal broader trends toward CPU\u2011centric, low\u2011latency robotics pipelines.",
+  "report": "## HFlow: open-source SDK for scalable multimodal robotics data pipelines\n\n### The Breakthrough\nThe core idea treats each recording episode as an MCAP container and orchestrates processing steps as Airflow DAGs, automatically generating provenance metadata and a Parquet catalog; quality checks and enrichments are plain Python functions that plug in without rewriting code, enabling efficient reads for training.\n\n### The Caveats\nScalability is untested beyond a single local demo, with no benchmark or baseline comparison.\n\n## NVIDIA Agent Skills: portable toolkits for coding agents\n\n### The Breakthrough\nThe repo defines standardized, portable instruction sets (\u201cskills\u201d) that encode best\u2011practice usage of NVIDIA products and expose them to AI agents via the skills CLI; the catalog syncs daily from product repos, supports multiple agents, and currently has 3,288 stars, enabling agents to run GPU\u2011accelerated simulation and data\u2011frame tasks end\u2011to\u2011end.\n\n### The Caveats\nNo performance or usability evaluation of the skills on actual agents is provided.\n\n## Synaptic Harmony: multi-agent Q-learning swarm foraging simulator\n\n### The Breakthrough\nThe environment implements pure\u2011NumPy distributed Q\u2011learning where each forager maintains its own Q\u2011table, learns via epsilon\u2011greedy exploration with decaying rates, and operates in a dynamic grid world with resource regeneration and moving obstacles; episodes run under 200\u202fms on a laptop and an animated dashboard logs rewards and Q\u2011table snapshots.\n\n### The Caveats\nIt provides no comparison to existing multi\u2011agent RL baselines, leaving performance advantages unverified.\n\n## Pion: platform for autonomous business agents\n\n### The Breakthrough\nPion offers persistent agents with integrated access to email, phone, banking, and browsing tools, enabling end\u2011to\u2011end operation of a company without human intervention; deployments on vending\u2011machine and small retail pilots show Claude Opus\u202f4 can turn a profit in simple scenarios.\n\n### The Caveats\nThe claim to run any company autonomously is unsubstantiated beyond a single vending machine and small pilots, with no evidence on complex enterprises.\n\n## Siri Model Delegation: swapping Siri AI for Claude or ChatGPT\n\n### The Breakthrough\nThe \u201cModel Delegation\u201d mechanism lets an external LLM such as Claude appear as a Siri extension, and Model Manager Services can replace Apple\u2019s server\u2011side Siri model with a GPT\u201115.6 model, feeding the native planner prompt and tool definitions so it can invoke system tools and return results through Siri\u2019s voice UI.\n\n### The Caveats\nThe demonstration is short and lacks quantitative metrics or comparisons to existing Siri implementations.\n\n### Priority\nHFlow is the best starting point because it provides a concrete, open\u2011source pipeline that immediately lets robotics teams turn raw MCAP logs into clean, indexed datasets for training, addressing a common bottleneck in robot learning.\n\n### One action\nClone the HFlow repo and run its example to convert a recent MCAP recording into a Parquet catalog for your own experiments.",
   "themes": [
-    "naval robotics",
+    "robotics-data",
+    "agentic-tools",
     "simulation",
-    "offline memory",
-    "autonomous vehicles"
+    "autonomous-agents",
+    "voice-assistants"
   ],
-  "source_count": 4,
+  "source_count": 5,
   "section_urls": [
-    "https://www.navalnews.com/naval-news/2026/09/worlds-first-naval-drone-duel-results-in-ukrainian-success/",
-    "https://github.com/kevinzakka/mjbatch",
-    "https://github.com/varun29ankuS/shodh-memory",
-    "https://github.com/EVC-Purdue/AutonomousKart"
+    "https://github.com/Hebbian-Robotics/hflow",
+    "https://github.com/NVIDIA/skills",
+    "https://github.com/jaimasih05-commits/swarm-foraging-qlearn",
+    "https://andonlabs.com/blog/why-we-built-pion",
+    "https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/"
   ],
   "section_titles": [
-    "Ukrainian Sargan-3000 USV Sinks Russian Orcan Drone in First Naval Drone Duel",
-    "mjbatch: Python library for massive parallel MuJoCo simulation on CPU",
-    "shodh-memory: offline LLM\u2011free persistent memory for AI agents and ROS2 robots",
-    "AutonomousKart: ROS2 codebase for Purdue autonomous go\u2011kart team"
+    "HFlow: open\u2011source SDK for scalable multimodal robotics data pipelines",
+    "NVIDIA Agent Skills: portable toolkits for coding agents to run robotics, simulation, and CUDA workflows",
+    "Synaptic Harmony: Multi\u2011Agent Q\u2011Learning Swarm Foraging Simulator",
+    "Andon Labs launches Pion: platform for autonomous business agents",
+    "Apple's Siri AI Can Be Swapped Out for Claude or ChatGPT, Code Shows"
   ],
-  "generated_at": "2026-09-13T16:57:09.922901+00:00",
+  "generated_at": "2026-09-14T18:28:19.577783+00:00",
   "run_times": {
-    "orchestrator": "2026-09-13T16:57:09.922901+00:00",
-    "hn": "2026-09-13T16:53:32.709448+00:00",
-    "arxiv": "2026-09-13T16:57:09.922901+00:00",
-    "github": "2026-09-13T16:54:52.290475+00:00",
-    "research_desk": "2026-09-13T16:56:46.914989+00:00"
+    "orchestrator": "2026-09-14T18:28:19.577783+00:00",
+    "hn": "2026-09-14T18:24:26.895370+00:00",
+    "arxiv": "2026-09-14T18:28:19.577783+00:00",
+    "github": "2026-09-14T18:25:26.220775+00:00",
+    "research_desk": "2026-09-14T18:27:50.562067+00:00"
   }
 }
