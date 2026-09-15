@@ -1,34 +1,33 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## HFlow: open-source SDK for scalable multimodal robotics data pipelines\n\n### The Breakthrough\nThe core idea treats each recording episode as an MCAP container and orchestrates processing steps as Airflow DAGs, automatically generating provenance metadata and a Parquet catalog; quality checks and enrichments are plain Python functions that plug in without rewriting code, enabling efficient reads for training.\n\n### The Caveats\nScalability is untested beyond a single local demo, with no benchmark or baseline comparison.\n\n## NVIDIA Agent Skills: portable toolkits for coding agents\n\n### The Breakthrough\nThe repo defines standardized, portable instruction sets (\u201cskills\u201d) that encode best\u2011practice usage of NVIDIA products and expose them to AI agents via the skills CLI; the catalog syncs daily from product repos, supports multiple agents, and currently has 3,288 stars, enabling agents to run GPU\u2011accelerated simulation and data\u2011frame tasks end\u2011to\u2011end.\n\n### The Caveats\nNo performance or usability evaluation of the skills on actual agents is provided.\n\n## Synaptic Harmony: multi-agent Q-learning swarm foraging simulator\n\n### The Breakthrough\nThe environment implements pure\u2011NumPy distributed Q\u2011learning where each forager maintains its own Q\u2011table, learns via epsilon\u2011greedy exploration with decaying rates, and operates in a dynamic grid world with resource regeneration and moving obstacles; episodes run under 200\u202fms on a laptop and an animated dashboard logs rewards and Q\u2011table snapshots.\n\n### The Caveats\nIt provides no comparison to existing multi\u2011agent RL baselines, leaving performance advantages unverified.\n\n## Pion: platform for autonomous business agents\n\n### The Breakthrough\nPion offers persistent agents with integrated access to email, phone, banking, and browsing tools, enabling end\u2011to\u2011end operation of a company without human intervention; deployments on vending\u2011machine and small retail pilots show Claude Opus\u202f4 can turn a profit in simple scenarios.\n\n### The Caveats\nThe claim to run any company autonomously is unsubstantiated beyond a single vending machine and small pilots, with no evidence on complex enterprises.\n\n## Siri Model Delegation: swapping Siri AI for Claude or ChatGPT\n\n### The Breakthrough\nThe \u201cModel Delegation\u201d mechanism lets an external LLM such as Claude appear as a Siri extension, and Model Manager Services can replace Apple\u2019s server\u2011side Siri model with a GPT\u201115.6 model, feeding the native planner prompt and tool definitions so it can invoke system tools and return results through Siri\u2019s voice UI.\n\n### The Caveats\nThe demonstration is short and lacks quantitative metrics or comparisons to existing Siri implementations.\n\n### Priority\nHFlow is the best starting point because it provides a concrete, open\u2011source pipeline that immediately lets robotics teams turn raw MCAP logs into clean, indexed datasets for training, addressing a common bottleneck in robot learning.\n\n### One action\nClone the HFlow repo and run its example to convert a recent MCAP recording into a Parquet catalog for your own experiments.",
+  "report": "## LLM\u2011Controlled Robot Arm Paint Showdown\n\n### The Breakthrough\nThe demo hooked Claude\u202fFable\u202f5.1 and GPT\u20116\u202fAstra into a robot arm\u2019s control loop, letting each LLM generate motion primitives that drove brush strokes on a canvas. Both models operated on the same hardware, producing paintings in real time, demonstrating an end\u2011to\u2011end LLM\u2011to\u2011actuation pipeline for manipulation.\n\n### The Caveats\nThe comparison rests on a single anecdotal demo with no repeat trials, quantitative metrics, or baseline comparisons.\n\n## Unitree G1+ Humanoid Upgrade\n\n### The Breakthrough\nUnitree released the G1+ humanoid, adding two neck DoFs, boosting peak shoulder\u2011and\u2011waist torque by 110% and arm torque by 43%, plus a binocular wide\u2011angle vision system, head\u2011touch sensors, a six\u2011mic array and external power support. These upgrades aim to improve agility, perception and human\u2011robot interaction on the same price\u2011point platform.\n\n### The Caveats\nThe performance gains are unverified, as the announcement provides no quantitative data or direct comparison to the original G1.\n\n## 2026 Inference Hardware Revolution\n\n### The Breakthrough\nThe article highlights three 2026 inference hardware advances: Cerebras\u2019s wafer\u2011scale engine that colocates memory and compute to eliminate KV\u2011cache bandwidth bottlenecks; Nvidia\u2019s Groq\u202f3 LPU that orders on\u2011chip SRAM and compute blocks to cut data movement; and Amazon\u2019s split\u2011inference pipeline that offloads KV\u2011cache handling to Cerebras while running model layers on Trainium. Together they shift industry focus from training\u2011centric to inference\u2011centric AI compute.\n\n### The Caveats\nThe piece offers no benchmarks or real\u2011world measurements, relying solely on vendor statements.\n\n## Foxglove SDK for Multimodal Logging\n\n### The Breakthrough\nFoxglove SDK provides a unified Rust API for writing sensor data to MCAP files and streaming it live over WebSocket, with pre\u2011built binaries and wheels that let Python and C++ users avoid compiling Rust. Built\u2011in ROS/ROS2 integration and schema support enable seamless multimodal logging for robotic experiments.\n\n### The Caveats\nThe SDK ships without empirical evaluation or comparison to existing logging tools, so its claimed advantages are unverified.\n\n## Franken Surveillance System Design\n\n### The Breakthrough\nThe Franken surveillance system design introduces four operational planes and an immutable EvidenceDeltaBatch stream, using semantic MVCC and ATP object graphs to guarantee provenance\u2011rich world models, plus a Rust\u2011only cognitive OS that consumes SituationCapsules and a digital\u2011twin calibration workflow using piloted drones.\n\n### The Caveats\nThe repository only contains design specifications; there is no working implementation of video capture, model inference, or alerting, so the claimed capabilities have not been demonstrated.\n\n### Priority\nSeeing two state\u2011of\u2011the\u2011art LLMs directly control a robot arm provides a concrete glimpse of how large language models are moving from text to physical manipulation, making it the most immediate and eye\u2011catching development for robotics readers today.\n\n### One action\nIf you have access to a low\u2011cost 6\u2011DoF arm, try hooking an open\u2011source LLM via a simple motion\u2011primitive API (e.g., using the Foxglove SDK for data logging) to experiment with end\u2011to\u2011end control.\n\n### What to watch\nBoth the LLM\u2011driven painting demo and Unitree\u2019s G1+ upgrade showcase hardware\u2011level progress, but they target different trajectories\u2014software\u2011centric manipulation versus platform\u2011centric actuation and sensing. Tracking follow\u2011up demos that quantify performance for the LLM pipeline and real\u2011world benchmarks for the G1+ will reveal which approach drives faster advances in embodied AI.",
   "themes": [
-    "robotics-data",
-    "agentic-tools",
-    "simulation",
-    "autonomous-agents",
-    "voice-assistants"
+    "manipulation",
+    "humanoids",
+    "inference",
+    "tooling"
   ],
   "source_count": 5,
   "section_urls": [
-    "https://github.com/Hebbian-Robotics/hflow",
-    "https://github.com/NVIDIA/skills",
-    "https://github.com/jaimasih05-commits/swarm-foraging-qlearn",
-    "https://andonlabs.com/blog/why-we-built-pion",
-    "https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/"
+    "https://www.reddit.com/r/ClaudeAI/s/rfi4npFNSr",
+    "https://technode.com/2026/09/15/unitree-g1-plus-humanoid-robot/",
+    "https://spectrum.ieee.org/inference-hardware-revolution",
+    "https://github.com/foxglove/foxglove-sdk",
+    "https://github.com/Dicklesworthstone/franken_surveillance_system"
   ],
   "section_titles": [
-    "HFlow: open\u2011source SDK for scalable multimodal robotics data pipelines",
-    "NVIDIA Agent Skills: portable toolkits for coding agents to run robotics, simulation, and CUDA workflows",
-    "Synaptic Harmony: Multi\u2011Agent Q\u2011Learning Swarm Foraging Simulator",
-    "Andon Labs launches Pion: platform for autonomous business agents",
-    "Apple's Siri AI Can Be Swapped Out for Claude or ChatGPT, Code Shows"
+    "Claude Fable 5.1 vs GPT\u20116 Astra: robot arm painting showdown",
+    "Unitree launches G1+ humanoid robot with six major upgrades",
+    "The Inference Hardware Revolution of 2026",
+    "Foxglove SDK: Rust\u2011based multimodal data logging and visualization for robotics",
+    "franken surveillance system: pure\u2011Rust, evidence\u2011native sensor fabric for cameras and drones"
   ],
-  "generated_at": "2026-09-14T18:28:19.577783+00:00",
+  "generated_at": "2026-09-15T17:34:26.417592+00:00",
   "run_times": {
-    "orchestrator": "2026-09-14T18:28:19.577783+00:00",
-    "hn": "2026-09-14T18:24:26.895370+00:00",
-    "arxiv": "2026-09-14T18:28:19.577783+00:00",
-    "github": "2026-09-14T18:25:26.220775+00:00",
-    "research_desk": "2026-09-14T18:27:50.562067+00:00"
+    "orchestrator": "2026-09-15T17:34:26.417592+00:00",
+    "hn": "2026-09-15T17:31:28.002748+00:00",
+    "arxiv": "2026-09-15T17:34:26.417592+00:00",
+    "github": "2026-09-15T17:32:18.030578+00:00",
+    "research_desk": "2026-09-15T17:34:00.103775+00:00"
   }
 }
