@@ -1,33 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## LLM\u2011Controlled Robot Arm Paint Showdown\n\n### The Breakthrough\nThe demo hooked Claude\u202fFable\u202f5.1 and GPT\u20116\u202fAstra into a robot arm\u2019s control loop, letting each LLM generate motion primitives that drove brush strokes on a canvas. Both models operated on the same hardware, producing paintings in real time, demonstrating an end\u2011to\u2011end LLM\u2011to\u2011actuation pipeline for manipulation.\n\n### The Caveats\nThe comparison rests on a single anecdotal demo with no repeat trials, quantitative metrics, or baseline comparisons.\n\n## Unitree G1+ Humanoid Upgrade\n\n### The Breakthrough\nUnitree released the G1+ humanoid, adding two neck DoFs, boosting peak shoulder\u2011and\u2011waist torque by 110% and arm torque by 43%, plus a binocular wide\u2011angle vision system, head\u2011touch sensors, a six\u2011mic array and external power support. These upgrades aim to improve agility, perception and human\u2011robot interaction on the same price\u2011point platform.\n\n### The Caveats\nThe performance gains are unverified, as the announcement provides no quantitative data or direct comparison to the original G1.\n\n## 2026 Inference Hardware Revolution\n\n### The Breakthrough\nThe article highlights three 2026 inference hardware advances: Cerebras\u2019s wafer\u2011scale engine that colocates memory and compute to eliminate KV\u2011cache bandwidth bottlenecks; Nvidia\u2019s Groq\u202f3 LPU that orders on\u2011chip SRAM and compute blocks to cut data movement; and Amazon\u2019s split\u2011inference pipeline that offloads KV\u2011cache handling to Cerebras while running model layers on Trainium. Together they shift industry focus from training\u2011centric to inference\u2011centric AI compute.\n\n### The Caveats\nThe piece offers no benchmarks or real\u2011world measurements, relying solely on vendor statements.\n\n## Foxglove SDK for Multimodal Logging\n\n### The Breakthrough\nFoxglove SDK provides a unified Rust API for writing sensor data to MCAP files and streaming it live over WebSocket, with pre\u2011built binaries and wheels that let Python and C++ users avoid compiling Rust. Built\u2011in ROS/ROS2 integration and schema support enable seamless multimodal logging for robotic experiments.\n\n### The Caveats\nThe SDK ships without empirical evaluation or comparison to existing logging tools, so its claimed advantages are unverified.\n\n## Franken Surveillance System Design\n\n### The Breakthrough\nThe Franken surveillance system design introduces four operational planes and an immutable EvidenceDeltaBatch stream, using semantic MVCC and ATP object graphs to guarantee provenance\u2011rich world models, plus a Rust\u2011only cognitive OS that consumes SituationCapsules and a digital\u2011twin calibration workflow using piloted drones.\n\n### The Caveats\nThe repository only contains design specifications; there is no working implementation of video capture, model inference, or alerting, so the claimed capabilities have not been demonstrated.\n\n### Priority\nSeeing two state\u2011of\u2011the\u2011art LLMs directly control a robot arm provides a concrete glimpse of how large language models are moving from text to physical manipulation, making it the most immediate and eye\u2011catching development for robotics readers today.\n\n### One action\nIf you have access to a low\u2011cost 6\u2011DoF arm, try hooking an open\u2011source LLM via a simple motion\u2011primitive API (e.g., using the Foxglove SDK for data logging) to experiment with end\u2011to\u2011end control.\n\n### What to watch\nBoth the LLM\u2011driven painting demo and Unitree\u2019s G1+ upgrade showcase hardware\u2011level progress, but they target different trajectories\u2014software\u2011centric manipulation versus platform\u2011centric actuation and sensing. Tracking follow\u2011up demos that quantify performance for the LLM pipeline and real\u2011world benchmarks for the G1+ will reveal which approach drives faster advances in embodied AI.",
+  "report": "## Optimized Wrench Polytope for Real-Time Legged Stability\n\n### The Breakthrough\nThe authors present a fast algorithm that computes the full actuatable wrench polytope for arbitrary contact configurations at 49\u202fHz, enabling per\u2011joint torque computation within the main control loop. This speed allows on\u2011the\u2011fly torque calculation and yields stable locomotion on a physical legged robot in complex multi\u2011contact scenarios previously unattainable.\n\n### The Caveats\nThe paper shows stable locomotion but offers no quantitative comparison to existing controllers, leaving the claimed real\u2011time advantage unsubstantiated.\n\n## Agility Robotics Digit\u202f5 Safety Motion\n\n### The Breakthrough\nAgility Robotics unveiled Digit\u202f5, equipped with a complex safe motion system that classifies human proximity and instantly halts, sidesteps, or assumes a squatted posture, extending safety beyond simple stop\u2011and\u2011wait behaviors. Early access is slated for the first half of 2027.\n\n### The Caveats\nNo empirical safety performance data or real\u2011world trials are provided, so the claim of safe collaborative operation remains unsubstantiated.\n\n## UBTECH 10k\u2011Unit Humanoid Smart Factory\n\n### The Breakthrough\nUBTECH opened a 14,000\u202fm\u00b2 smart factory that can assemble an industrial humanoid robot every 10\u202fminutes, using a Siemens\u2011co\u2011developed manufacturing operations platform, simulation\u2011driven scheduling, and automated stereoscopic warehousing that stores 112 robots in 65\u202fm\u00b2.\n\n### The Caveats\nThe claimed 10\u2011minute\u2011per\u2011unit throughput and 10\u202fk\u2011unit annual capacity are unverified, with no independent performance data.\n\n## Waymo Tokyo Robotaxi Service 2027\n\n### The Breakthrough\nWaymo plans to launch a fully driverless robotaxi fleet in Tokyo by 2027, integrating its proven self\u2011driving stack with local taxi partners to operate up to 100 vehicles without safety drivers.\n\n### The Caveats\nThe announcement lacks independent verification, regulatory approvals, or performance data.\n\n## Tesla Cybercab FMVSS Compliance Order\n\n### The Breakthrough\nTesla introduced a steering\u2011wheel\u2011free Cybercab that it self\u2011certified as meeting all applicable FMVSS, marking the first commercial robotaxi without traditional driver controls; NHTSA now demands proof of compliance under oath.\n\n### The Caveats\nTesla\u2019s compliance claim is unsubstantiated, with no independent safety validation.\n\n## Online Geometric Change Detection via Scene Decomposition (CDSD)\n\n### The Breakthrough\nThe CDSD framework breaks dense SLAM maps into local submaps, allowing online geometric change detection using LiDAR or RGB\u2011D sensors with reduced computational load while maintaining accuracy, demonstrated on custom ARL facility data and public multi\u2011session datasets.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing change\u2011detection baselines.\n\n## Motion\u2011Prior Regularization for Data\u2011Scarce Insertion\n\n### The Breakthrough\nBy adding minimum\u2011jerk and speed\u2011curvature priors to diffusion\u2011policy training on just 15 demonstrations, the method achieved up to 87.5% success on a peg\u2011in\u2011hole insertion task across 80 real\u2011robot trials, showing simple priors can mitigate data scarcity.\n\n### The Caveats\nResults are confined to a single insertion task on one robot, so generalization remains unclear.\n\n## Modality\u2011Autoregressive World\u2011Action Models (ModAR)\n\n### The Breakthrough\nModAR autoregressively denoises multiple future visual modalities before predicting actions, reaching 75% success on three real\u2011world bimanual manipulation tasks while using ~20\u00d7 fewer FLOPs and no pretraining compared to prior models.\n\n### The Caveats\nThe paper never ablates the contribution of each generated modality, leaving the source of success gains uncertain.\n\n### Priority\nThe legged\u2011robot stability breakthrough offers a real\u2011time, hardware\u2011validated controller that immediately expands the capabilities of versatile legged platforms.\n\n### One action\nExplore integrating the open\u2011source wrench\u2011polytope code into your legged robot stack or benchmark against its 49\u202fHz performance.\n\n### What to watch\nBoth the motion\u2011prior regularization work and ModAR aim to improve data\u2011efficient manipulation. The former leverages simple kinematic priors on a diffusion policy for a single insertion task, while the latter builds a multimodal world\u2011action model that predicts richer visual cues before actions across multiple bimanual tasks. Future research may combine these approaches, using priors to guide multimodal autoregressive predictions for broader, low\u2011data manipulation challenges.",
   "themes": [
-    "manipulation",
-    "humanoids",
-    "inference",
-    "tooling"
+    "legged",
+    "humanoid",
+    "autonomous",
+    "manufacturing",
+    "manipulation"
   ],
-  "source_count": 5,
+  "source_count": 8,
   "section_urls": [
-    "https://www.reddit.com/r/ClaudeAI/s/rfi4npFNSr",
-    "https://technode.com/2026/09/15/unitree-g1-plus-humanoid-robot/",
-    "https://spectrum.ieee.org/inference-hardware-revolution",
-    "https://github.com/foxglove/foxglove-sdk",
-    "https://github.com/Dicklesworthstone/franken_surveillance_system"
+    "https://arxiv.org/abs/2609.17405",
+    "https://arstechnica.com/ai/2026/09/agilitys-new-humanoid-robot-will-stop-squat-to-avoid-harming-human-coworkers/",
+    "https://www.globaltimes.cn/page/202609/1370528.shtml",
+    "https://www.japantimes.co.jp/business/2026/09/15/companies/waymo-tokyo-robotaxi-launch/",
+    "https://electrek.co/2026/09/15/nhtsa-tesla-cybercab-special-order-fmvss-certification/",
+    "https://arxiv.org/abs/2609.17302",
+    "https://arxiv.org/abs/2609.17484",
+    "https://arxiv.org/abs/2609.17524"
   ],
   "section_titles": [
-    "Claude Fable 5.1 vs GPT\u20116 Astra: robot arm painting showdown",
-    "Unitree launches G1+ humanoid robot with six major upgrades",
-    "The Inference Hardware Revolution of 2026",
-    "Foxglove SDK: Rust\u2011based multimodal data logging and visualization for robotics",
-    "franken surveillance system: pure\u2011Rust, evidence\u2011native sensor fabric for cameras and drones"
+    "Optimized Wrench Polytope Analysis for Real-Time Stability Control of Legged Robots",
+    "Agility Robotics unveils Digit 5 humanoid with safety\u2011stop and squatting to protect nearby workers",
+    "UBTECH launches 10,000\u2011unit smart factory for mass\u2011producing humanoid robots",
+    "Waymo to launch fully autonomous robotaxi service in Tokyo by 2027",
+    "NHTSA orders Tesla to prove Cybercab compliance under oath",
+    "Online Geometric Change Detection via Scene Decomposition (CDSD)",
+    "Motion-Prior Regularization Boosts Data-Scarce Robotic Insertion",
+    "Modality-Autoregressive World-Action Models (ModAR) improve multi-modal prediction and action planning"
   ],
-  "generated_at": "2026-09-15T17:34:26.417592+00:00",
+  "generated_at": "2026-09-16T17:36:11.308174+00:00",
   "run_times": {
-    "orchestrator": "2026-09-15T17:34:26.417592+00:00",
-    "hn": "2026-09-15T17:31:28.002748+00:00",
-    "arxiv": "2026-09-15T17:34:26.417592+00:00",
-    "github": "2026-09-15T17:32:18.030578+00:00",
-    "research_desk": "2026-09-15T17:34:00.103775+00:00"
+    "orchestrator": "2026-09-16T17:36:11.308174+00:00",
+    "hn": "2026-09-16T17:31:32.957594+00:00",
+    "arxiv": "2026-09-16T17:32:12.214101+00:00",
+    "github": "2026-09-16T17:36:11.308174+00:00",
+    "research_desk": "2026-09-16T17:35:33.267201+00:00"
   }
 }
