@@ -1,40 +1,44 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Optimized Wrench Polytope for Real-Time Legged Stability\n\n### The Breakthrough\nThe authors present a fast algorithm that computes the full actuatable wrench polytope for arbitrary contact configurations at 49\u202fHz, enabling per\u2011joint torque computation within the main control loop. This speed allows on\u2011the\u2011fly torque calculation and yields stable locomotion on a physical legged robot in complex multi\u2011contact scenarios previously unattainable.\n\n### The Caveats\nThe paper shows stable locomotion but offers no quantitative comparison to existing controllers, leaving the claimed real\u2011time advantage unsubstantiated.\n\n## Agility Robotics Digit\u202f5 Safety Motion\n\n### The Breakthrough\nAgility Robotics unveiled Digit\u202f5, equipped with a complex safe motion system that classifies human proximity and instantly halts, sidesteps, or assumes a squatted posture, extending safety beyond simple stop\u2011and\u2011wait behaviors. Early access is slated for the first half of 2027.\n\n### The Caveats\nNo empirical safety performance data or real\u2011world trials are provided, so the claim of safe collaborative operation remains unsubstantiated.\n\n## UBTECH 10k\u2011Unit Humanoid Smart Factory\n\n### The Breakthrough\nUBTECH opened a 14,000\u202fm\u00b2 smart factory that can assemble an industrial humanoid robot every 10\u202fminutes, using a Siemens\u2011co\u2011developed manufacturing operations platform, simulation\u2011driven scheduling, and automated stereoscopic warehousing that stores 112 robots in 65\u202fm\u00b2.\n\n### The Caveats\nThe claimed 10\u2011minute\u2011per\u2011unit throughput and 10\u202fk\u2011unit annual capacity are unverified, with no independent performance data.\n\n## Waymo Tokyo Robotaxi Service 2027\n\n### The Breakthrough\nWaymo plans to launch a fully driverless robotaxi fleet in Tokyo by 2027, integrating its proven self\u2011driving stack with local taxi partners to operate up to 100 vehicles without safety drivers.\n\n### The Caveats\nThe announcement lacks independent verification, regulatory approvals, or performance data.\n\n## Tesla Cybercab FMVSS Compliance Order\n\n### The Breakthrough\nTesla introduced a steering\u2011wheel\u2011free Cybercab that it self\u2011certified as meeting all applicable FMVSS, marking the first commercial robotaxi without traditional driver controls; NHTSA now demands proof of compliance under oath.\n\n### The Caveats\nTesla\u2019s compliance claim is unsubstantiated, with no independent safety validation.\n\n## Online Geometric Change Detection via Scene Decomposition (CDSD)\n\n### The Breakthrough\nThe CDSD framework breaks dense SLAM maps into local submaps, allowing online geometric change detection using LiDAR or RGB\u2011D sensors with reduced computational load while maintaining accuracy, demonstrated on custom ARL facility data and public multi\u2011session datasets.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing change\u2011detection baselines.\n\n## Motion\u2011Prior Regularization for Data\u2011Scarce Insertion\n\n### The Breakthrough\nBy adding minimum\u2011jerk and speed\u2011curvature priors to diffusion\u2011policy training on just 15 demonstrations, the method achieved up to 87.5% success on a peg\u2011in\u2011hole insertion task across 80 real\u2011robot trials, showing simple priors can mitigate data scarcity.\n\n### The Caveats\nResults are confined to a single insertion task on one robot, so generalization remains unclear.\n\n## Modality\u2011Autoregressive World\u2011Action Models (ModAR)\n\n### The Breakthrough\nModAR autoregressively denoises multiple future visual modalities before predicting actions, reaching 75% success on three real\u2011world bimanual manipulation tasks while using ~20\u00d7 fewer FLOPs and no pretraining compared to prior models.\n\n### The Caveats\nThe paper never ablates the contribution of each generated modality, leaving the source of success gains uncertain.\n\n### Priority\nThe legged\u2011robot stability breakthrough offers a real\u2011time, hardware\u2011validated controller that immediately expands the capabilities of versatile legged platforms.\n\n### One action\nExplore integrating the open\u2011source wrench\u2011polytope code into your legged robot stack or benchmark against its 49\u202fHz performance.\n\n### What to watch\nBoth the motion\u2011prior regularization work and ModAR aim to improve data\u2011efficient manipulation. The former leverages simple kinematic priors on a diffusion policy for a single insertion task, while the latter builds a multimodal world\u2011action model that predicts richer visual cues before actions across multiple bimanual tasks. Future research may combine these approaches, using priors to guide multimodal autoregressive predictions for broader, low\u2011data manipulation challenges.",
+  "report": "## GPT-Policy: In-Context Robot Learning with VLMs\n\n### The Breakthrough\nGPT-Policy lets robots acquire new skills from video demos and language prompts without any gradient updates. It compiles visual transitions, queries a vision\u2011language model (e.g., GPT\u201116\u202fAstra) for tool actions, and validates each step with a constrained controller, delivering higher success rates on real\u2011robot trials.\n\n### The Caveats\nThe paper provides no comparison against established non\u2011VLM or standard policy baselines, so the improvement is unsubstantiated.\n\n## Holistic Whole-Body Loco-Manipulation for Bipedal Robots\n\n### The Breakthrough\nA reinforcement\u2011learning controller maps 6\u2011DoF end\u2011effector goals directly to coordinated arm and leg commands, using a reward\u2011gating strategy and a temporal\u2011context estimator (Transformer\u202f+\u202fGRU) to balance tracking, locomotion, and balance. Real\u2011robot experiments show it works with VR teleoperation, diffusion policies, and scripted trajectories, offering a unified interface for diverse tasks.\n\n### The Caveats\nNo baseline comparisons are presented, leaving the actual performance gain unclear.\n\n## CaSCo: Cascade-Aware Soft-Collision Planning\n\n### The Breakthrough\nCaSCo fuses a vision\u2011language model that assigns semantic risk to objects with a physics engine that predicts cascaded collisions, then searches trajectories with a cascade\u2011relaxed admissible heuristic and caching to keep computation tractable. Evaluations on cluttered manipulation scenes report reduced semantic risk while maintaining feasible planning times.\n\n### The Caveats\nThe paper does not compare its risk reduction to existing motion\u2011planning baselines.\n\n## ElastiQP: Always-Feasible QP Solver\n\n### The Breakthrough\nElastiQP integrates per\u2011constraint L1 penalties into a dual active\u2011set QP solver, analytically folding slacks so the linear system size stays constant. It delivers microsecond\u2011scale solve times and up to 40\u00d7 speed\u2011up on infeasible problems while preserving hard equality constraints.\n\n### The Caveats\nNo concrete baseline solvers are named, so the claimed speed advantage lacks verification.\n\n## Habitat-GS: Gaussian\u2011Splatting Navigation Simulator\n\n### The Breakthrough\nA non\u2011intrusive plug\u2011in swaps Habitat\u2011Sim\u2019s rasterizer for a 3D Gaussian\u2011Splatting renderer, yielding photo\u2011realistic RGB and depth outputs and supporting dynamic Gaussian avatars. An interactive NavMesh tool converts raw 3DGS scenes to navigable environments.\n\n### The Caveats\nThe repository provides no quantitative benchmarks against existing simulators.\n\n## 3DGRUT: Ray\u2011Traced Gaussian Particle Rendering\n\n### The Breakthrough\n3DGRUT implements 3D Gaussian Ray Tracing and Unscented Transform, enabling secondary\u2011ray effects such as reflections and supporting distorted cameras, while a hybrid rasterization path preserves performance for primary rays.\n\n### The Caveats\nNo performance or fidelity comparisons to prior Gaussian\u2011splatting methods are offered.\n\n## NeMo Gym: Scalable Agent Evaluation Library\n\n### The Breakthrough\nNeMo Gym unifies agent harnesses, verifiers, and environments, allowing thousands of concurrent instances and GPU\u2011scaled rollouts; v0.6 adds multi\u2011agent routing, health checks, and a Switchyard component for side\u2011by\u2011side model comparison.\n\n### The Caveats\nThe repo lacks benchmark results or baseline comparisons to substantiate its scalability claims.\n\n## Compute:Arena: Community AI Benchmark Harness\n\n### The Breakthrough\nCompute:Arena provides a plug\u2011and\u2011play suite that automatically measures model latency, throughput, and memory across CPUs and GPUs, crowdsourcing results to a live leaderboard and lowering the barrier for reproducible hardware benchmarking.\n\n### The Caveats\nIndependent validation of its cross\u2011chip comparability is missing.\n\n## GLM Custom Inference Infrastructure\n\n### The Breakthrough\nGLM built an in\u2011house inference stack using proprietary components to meet latency and scalability requirements for edge and robot deployments, avoiding reliance on third\u2011party services.\n\n### The Caveats\nNo quantitative benchmarks or hardware comparisons are provided.\n\n## Ubtech Humanoid Production Plant\n\n### The Breakthrough\nUbtech\u2019s 14,000\u202fm\u00b2 smart factory in Liuzhou can produce over 10,000 industrial humanoid robots per year\u2014about one every ten minutes\u2014using robots for logistics, collaborative manipulators for assembly, and a fully automated 3\u2011D warehouse that stores 112 robots in 65\u202fm\u00b2, with a four\u2011hour full\u2011unit test and automotive\u2011grade inspection tunnel.\n\n### The Caveats\nThe announcement lacks independent performance, cost, or reliability data, leaving the ten\u2011minute rate unverified.\n\n### Priority\nGPT-Policy showcases a concrete, hardware\u2011tested route to on\u2011the\u2011fly skill acquisition using vision\u2011language models, making it the most immediately actionable breakthrough for embodied AI today.\n\n### One action\nExperiment with a VLM\u2011based context compiler to generate robot actions from video demos without retraining your policy.",
   "themes": [
-    "legged",
-    "humanoid",
-    "autonomous",
-    "manufacturing",
-    "manipulation"
+    "in-context-learning",
+    "manipulation",
+    "simulation",
+    "benchmarking",
+    "inference"
   ],
-  "source_count": 8,
+  "source_count": 10,
   "section_urls": [
-    "https://arxiv.org/abs/2609.17405",
-    "https://arstechnica.com/ai/2026/09/agilitys-new-humanoid-robot-will-stop-squat-to-avoid-harming-human-coworkers/",
-    "https://www.globaltimes.cn/page/202609/1370528.shtml",
-    "https://www.japantimes.co.jp/business/2026/09/15/companies/waymo-tokyo-robotaxi-launch/",
-    "https://electrek.co/2026/09/15/nhtsa-tesla-cybercab-special-order-fmvss-certification/",
-    "https://arxiv.org/abs/2609.17302",
-    "https://arxiv.org/abs/2609.17484",
-    "https://arxiv.org/abs/2609.17524"
+    "https://arxiv.org/abs/2609.19138",
+    "https://arxiv.org/abs/2609.18930",
+    "https://arxiv.org/abs/2609.18910",
+    "https://arxiv.org/abs/2609.19080",
+    "https://github.com/zju3dv/habitat-gs",
+    "https://github.com/nv-tlabs/3dgrut",
+    "https://github.com/NVIDIA-NeMo/Gym",
+    "https://computearena.ai",
+    "https://z.ai/blog/glm-built-its-inference-infrastructure",
+    "https://en.sedaily.com/international/2026/09/16/chinas-ubtech-opens-plant-making-a-humanoid-robot-every-10"
   ],
   "section_titles": [
-    "Optimized Wrench Polytope Analysis for Real-Time Stability Control of Legged Robots",
-    "Agility Robotics unveils Digit 5 humanoid with safety\u2011stop and squatting to protect nearby workers",
-    "UBTECH launches 10,000\u2011unit smart factory for mass\u2011producing humanoid robots",
-    "Waymo to launch fully autonomous robotaxi service in Tokyo by 2027",
-    "NHTSA orders Tesla to prove Cybercab compliance under oath",
-    "Online Geometric Change Detection via Scene Decomposition (CDSD)",
-    "Motion-Prior Regularization Boosts Data-Scarce Robotic Insertion",
-    "Modality-Autoregressive World-Action Models (ModAR) improve multi-modal prediction and action planning"
+    "In-Context Robot Learning with VLM Agents",
+    "Learning Holistic Whole-Body Loco-Manipulation with a Bipedal Mobile Manipulator",
+    "CaSCo: Cascade-Aware Soft-Collision Motion Planning",
+    "ElastiQP: An Always-Feasible QP Solver for Constrained Robot Control",
+    "Habitat-GS: High-Fidelity Navigation Simulator with Dynamic Gaussian Splatting",
+    "3DGRUT: Ray tracing & hybrid rasterization for Gaussian particle rendering",
+    "NeMo Gym: NVIDIA\u2019s scalable library for evaluating and training AI agents in stateful environments",
+    "Show HN: Compute:Arena \u2013 community\u2011submitted local AI benchmarks",
+    "How GLM built its own inference infrastructure",
+    "Ubtech launches world\u2019s first humanoid\u2011robot\u2011building plant, one robot every 10 minutes"
   ],
-  "generated_at": "2026-09-16T17:36:11.308174+00:00",
+  "generated_at": "2026-09-17T17:46:23.379629+00:00",
   "run_times": {
-    "orchestrator": "2026-09-16T17:36:11.308174+00:00",
-    "hn": "2026-09-16T17:31:32.957594+00:00",
-    "arxiv": "2026-09-16T17:32:12.214101+00:00",
-    "github": "2026-09-16T17:36:11.308174+00:00",
-    "research_desk": "2026-09-16T17:35:33.267201+00:00"
+    "orchestrator": "2026-09-17T17:46:23.379629+00:00",
+    "hn": "2026-09-17T17:31:20.057195+00:00",
+    "arxiv": "2026-09-17T17:32:00.010213+00:00",
+    "github": "2026-09-17T17:32:59.492585+00:00",
+    "research_desk": "2026-09-17T17:37:20.180263+00:00"
   }
 }
