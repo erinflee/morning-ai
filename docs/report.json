@@ -1,44 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## GPT-Policy: In-Context Robot Learning with VLMs\n\n### The Breakthrough\nGPT-Policy lets robots acquire new skills from video demos and language prompts without any gradient updates. It compiles visual transitions, queries a vision\u2011language model (e.g., GPT\u201116\u202fAstra) for tool actions, and validates each step with a constrained controller, delivering higher success rates on real\u2011robot trials.\n\n### The Caveats\nThe paper provides no comparison against established non\u2011VLM or standard policy baselines, so the improvement is unsubstantiated.\n\n## Holistic Whole-Body Loco-Manipulation for Bipedal Robots\n\n### The Breakthrough\nA reinforcement\u2011learning controller maps 6\u2011DoF end\u2011effector goals directly to coordinated arm and leg commands, using a reward\u2011gating strategy and a temporal\u2011context estimator (Transformer\u202f+\u202fGRU) to balance tracking, locomotion, and balance. Real\u2011robot experiments show it works with VR teleoperation, diffusion policies, and scripted trajectories, offering a unified interface for diverse tasks.\n\n### The Caveats\nNo baseline comparisons are presented, leaving the actual performance gain unclear.\n\n## CaSCo: Cascade-Aware Soft-Collision Planning\n\n### The Breakthrough\nCaSCo fuses a vision\u2011language model that assigns semantic risk to objects with a physics engine that predicts cascaded collisions, then searches trajectories with a cascade\u2011relaxed admissible heuristic and caching to keep computation tractable. Evaluations on cluttered manipulation scenes report reduced semantic risk while maintaining feasible planning times.\n\n### The Caveats\nThe paper does not compare its risk reduction to existing motion\u2011planning baselines.\n\n## ElastiQP: Always-Feasible QP Solver\n\n### The Breakthrough\nElastiQP integrates per\u2011constraint L1 penalties into a dual active\u2011set QP solver, analytically folding slacks so the linear system size stays constant. It delivers microsecond\u2011scale solve times and up to 40\u00d7 speed\u2011up on infeasible problems while preserving hard equality constraints.\n\n### The Caveats\nNo concrete baseline solvers are named, so the claimed speed advantage lacks verification.\n\n## Habitat-GS: Gaussian\u2011Splatting Navigation Simulator\n\n### The Breakthrough\nA non\u2011intrusive plug\u2011in swaps Habitat\u2011Sim\u2019s rasterizer for a 3D Gaussian\u2011Splatting renderer, yielding photo\u2011realistic RGB and depth outputs and supporting dynamic Gaussian avatars. An interactive NavMesh tool converts raw 3DGS scenes to navigable environments.\n\n### The Caveats\nThe repository provides no quantitative benchmarks against existing simulators.\n\n## 3DGRUT: Ray\u2011Traced Gaussian Particle Rendering\n\n### The Breakthrough\n3DGRUT implements 3D Gaussian Ray Tracing and Unscented Transform, enabling secondary\u2011ray effects such as reflections and supporting distorted cameras, while a hybrid rasterization path preserves performance for primary rays.\n\n### The Caveats\nNo performance or fidelity comparisons to prior Gaussian\u2011splatting methods are offered.\n\n## NeMo Gym: Scalable Agent Evaluation Library\n\n### The Breakthrough\nNeMo Gym unifies agent harnesses, verifiers, and environments, allowing thousands of concurrent instances and GPU\u2011scaled rollouts; v0.6 adds multi\u2011agent routing, health checks, and a Switchyard component for side\u2011by\u2011side model comparison.\n\n### The Caveats\nThe repo lacks benchmark results or baseline comparisons to substantiate its scalability claims.\n\n## Compute:Arena: Community AI Benchmark Harness\n\n### The Breakthrough\nCompute:Arena provides a plug\u2011and\u2011play suite that automatically measures model latency, throughput, and memory across CPUs and GPUs, crowdsourcing results to a live leaderboard and lowering the barrier for reproducible hardware benchmarking.\n\n### The Caveats\nIndependent validation of its cross\u2011chip comparability is missing.\n\n## GLM Custom Inference Infrastructure\n\n### The Breakthrough\nGLM built an in\u2011house inference stack using proprietary components to meet latency and scalability requirements for edge and robot deployments, avoiding reliance on third\u2011party services.\n\n### The Caveats\nNo quantitative benchmarks or hardware comparisons are provided.\n\n## Ubtech Humanoid Production Plant\n\n### The Breakthrough\nUbtech\u2019s 14,000\u202fm\u00b2 smart factory in Liuzhou can produce over 10,000 industrial humanoid robots per year\u2014about one every ten minutes\u2014using robots for logistics, collaborative manipulators for assembly, and a fully automated 3\u2011D warehouse that stores 112 robots in 65\u202fm\u00b2, with a four\u2011hour full\u2011unit test and automotive\u2011grade inspection tunnel.\n\n### The Caveats\nThe announcement lacks independent performance, cost, or reliability data, leaving the ten\u2011minute rate unverified.\n\n### Priority\nGPT-Policy showcases a concrete, hardware\u2011tested route to on\u2011the\u2011fly skill acquisition using vision\u2011language models, making it the most immediately actionable breakthrough for embodied AI today.\n\n### One action\nExperiment with a VLM\u2011based context compiler to generate robot actions from video demos without retraining your policy.",
+  "report": "## Helix 2.5 Zero-Shot Home Generalization\n\n### The Breakthrough\nThe team released Helix 2.5, a humanoid robot that tackles three long\u2011horizon household tasks across 30 unseen Bay Area homes without any environment\u2011specific data. By pretraining a single policy on the massive Index human\u2011behavior dataset, the robot attains 56\u202f% success in blind tests, a six\u2011fold jump over a randomly initialized baseline. This demonstrates the first large\u2011scale zero\u2011shot whole\u2011body autonomy for a single platform.\n\n### The Caveats\nThe claim is limited to one robot morphology and only three tasks, with no evaluation on other platforms or task families.\n\n## Agile-WAM Tactile-Vision Control\n\n### The Breakthrough\nAgile\u2011WAM introduces a tactile\u2011vision World Action Model that fuses camera frames and tactile signals into a shared latent space and predicts multimodal action chunks. The model achieves a 29.4\u202f% relative boost in real\u2011world success rates while running inference in just 11.9\u202fms, enabling low\u2011latency control for contact\u2011rich manipulation.\n\n### The Caveats\nThe paper lacks comparisons to established baselines, leaving the magnitude of improvement uncertain.\n\n## Workspace Models Memory Token\n\n### The Breakthrough\nThe authors distill vision\u2011language model supervision into a compact \u2018workspace token\u2019 that encodes task\u2011relevant history, allowing policies to query this token instead of invoking heavy VLMs at runtime. Experiments on simulated and real robots show the token improves both computational efficiency and manipulation performance.\n\n### The Caveats\nNo benchmark against existing robotic memory or VLM baselines is provided, so the significance of the gains cannot be quantified.\n\n## Wonder Robotic Meal Assembly\n\n### The Breakthrough\nWonder unveiled an end\u2011to\u2011end robotic line that automatically assembles complete meals, integrating manipulation with ingredient handling to create a fully automated food\u2011service pipeline.\n\n### The Caveats\nThe announcement lacks any performance numbers, hardware specifications, or comparative analysis, making the claim of being the first such system unverified.\n\n## UBTECH 10k-Unit Smart Factory\n\n### The Breakthrough\nUBTECH\u2019s new 14,000\u202fm\u00b2 smart factory uses a digital \u2018smart brain\u2019 and a Siemens\u2011co\u2011developed operations system to schedule work orders, material flow, and traceability with one\u2011item\u2011one\u2011code IDs, enabling a reported production rate of one humanoid every ten minutes and a 50\u202f% gain in storage density via a 65\u202fm\u00b2 stereoscopic warehouse.\n\n### The Caveats\nIndependent verification of the ten\u2011minute per robot rate or overall throughput is absent, leaving the scalability claim unsubstantiated.\n\n## FAMOS Articulation Modeling\n\n### The Breakthrough\nFAMOS presents a Feed\u2011Forward 3D Articulation Transformer that fuses sparse, unordered point clouds from multiple views to predict movable\u2011part segmentation and joint parameters, even from a single monocular observation, thanks to a novel articulation span supervision and a procedural data generator.\n\n### The Caveats\nAll experiments are confined to simulated datasets; real\u2011world robot perception performance remains untested.\n\n## SafeHarness Coding Agent Safety\n\n### The Breakthrough\nSafeHarness equips a language\u2011model\u2011based coding agent with obstacle\u2011aware route planning and contact execution modules, modeling objects as bounding boxes to generate and verify safe waypoints before execution. This yields 71.9\u202f% task success and 87.5\u202f% collision avoidance, a 6.5\u202f% and 27\u202f% improvement over the prior state\u2011of\u2011the\u2011art agent.\n\n### The Caveats\nResults are demonstrated only in simulation with static obstacles, with no physical robot validation.\n\n## OpenHarness Coding Agent Platform\n\n### The Breakthrough\nOpenHarness is an open\u2011source framework that runs multiple coding agents in persistent tmux sessions and connects them to a desk\u2011side hardware device via encrypted WebRTC, allowing domain\u2011specific harnesses to add toolchains and live viewers without modifying core code.\n\n### The Caveats\nThe platform is announced without benchmarks or formal evaluation, so its performance and generality are unverified.\n\n### Priority\nHelix 2.5 provides the first real\u2011world demonstration of zero\u2011shot whole\u2011body autonomy across dozens of homes, showing a tangible leap in general\u2011purpose robot capability.\n\n### One action\nWatch for follow\u2011up videos or datasets from Figure AI to explore applying large\u2011scale pretraining to other robot platforms.\n\n### What to watch\nSeveral items push manipulation forward: Agile\u2011WAM shows tactile\u2011vision latent modeling for faster control; Workspace Models offers lightweight memory tokens to reduce VLM overhead; SafeHarness focuses on safety in coding\u2011agent generated motions. Together they illustrate a trend toward integrating perception, memory, and safety primitives into embodied agents.",
   "themes": [
-    "in-context-learning",
+    "zero-shot",
     "manipulation",
-    "simulation",
-    "benchmarking",
-    "inference"
+    "manufacturing",
+    "food-automation",
+    "memory"
   ],
-  "source_count": 10,
+  "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2609.19138",
-    "https://arxiv.org/abs/2609.18930",
-    "https://arxiv.org/abs/2609.18910",
-    "https://arxiv.org/abs/2609.19080",
-    "https://github.com/zju3dv/habitat-gs",
-    "https://github.com/nv-tlabs/3dgrut",
-    "https://github.com/NVIDIA-NeMo/Gym",
-    "https://computearena.ai",
-    "https://z.ai/blog/glm-built-its-inference-infrastructure",
-    "https://en.sedaily.com/international/2026/09/16/chinas-ubtech-opens-plant-making-a-humanoid-robot-every-10"
+    "https://www.figure.ai/news/helix-2-5-zero-shot-30-home-generalization",
+    "https://arxiv.org/abs/2609.20761",
+    "https://arxiv.org/abs/2609.20820",
+    "https://www.fastcompany.com/91606368/marc-lore-startup-wonder-infinite-makeline-robotic-food-prep",
+    "https://www.globaltimes.cn/page/202609/1370528.shtml",
+    "https://arxiv.org/abs/2609.20817",
+    "https://arxiv.org/abs/2609.20822",
+    "https://github.com/autonomous-ai/openharness"
   ],
   "section_titles": [
-    "In-Context Robot Learning with VLM Agents",
-    "Learning Holistic Whole-Body Loco-Manipulation with a Bipedal Mobile Manipulator",
-    "CaSCo: Cascade-Aware Soft-Collision Motion Planning",
-    "ElastiQP: An Always-Feasible QP Solver for Constrained Robot Control",
-    "Habitat-GS: High-Fidelity Navigation Simulator with Dynamic Gaussian Splatting",
-    "3DGRUT: Ray tracing & hybrid rasterization for Gaussian particle rendering",
-    "NeMo Gym: NVIDIA\u2019s scalable library for evaluating and training AI agents in stateful environments",
-    "Show HN: Compute:Arena \u2013 community\u2011submitted local AI benchmarks",
-    "How GLM built its own inference infrastructure",
-    "Ubtech launches world\u2019s first humanoid\u2011robot\u2011building plant, one robot every 10 minutes"
+    "Figure AI Helix 2.5: Zero-Shot Whole-Body Generalization in 30 Real Homes",
+    "Agile-WAM: Efficient tactile\u2011vision world action model for contact\u2011rich robot control",
+    "Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision",
+    "Wonder launches first robotic meal assembly system after acquiring Sweetgreen tech",
+    "UBTECH launches world\u2019s first 10,000\u2011unit smart factory for humanoid robots",
+    "FAMOS: Feed-Forward 3D Articulation Modeling from Sparse Observations",
+    "Coding agents with obstacle-aware harness for safe robot manipulation",
+    "OpenHarness: unified platform for coding agents, domain\u2011specific harnesses, and desk\u2011side hardware"
   ],
-  "generated_at": "2026-09-17T17:46:23.379629+00:00",
+  "generated_at": "2026-09-18T17:07:13.887042+00:00",
   "run_times": {
-    "orchestrator": "2026-09-17T17:46:23.379629+00:00",
-    "hn": "2026-09-17T17:31:20.057195+00:00",
-    "arxiv": "2026-09-17T17:32:00.010213+00:00",
-    "github": "2026-09-17T17:32:59.492585+00:00",
-    "research_desk": "2026-09-17T17:37:20.180263+00:00"
+    "orchestrator": "2026-09-18T17:07:13.887042+00:00",
+    "hn": "2026-09-18T16:59:07.320174+00:00",
+    "arxiv": "2026-09-18T16:59:53.490581+00:00",
+    "github": "2026-09-18T17:00:49.468505+00:00",
+    "research_desk": "2026-09-18T17:03:42.666881+00:00"
   }
 }
