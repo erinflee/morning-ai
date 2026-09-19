@@ -1,40 +1,41 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Helix 2.5 Zero-Shot Home Generalization\n\n### The Breakthrough\nThe team released Helix 2.5, a humanoid robot that tackles three long\u2011horizon household tasks across 30 unseen Bay Area homes without any environment\u2011specific data. By pretraining a single policy on the massive Index human\u2011behavior dataset, the robot attains 56\u202f% success in blind tests, a six\u2011fold jump over a randomly initialized baseline. This demonstrates the first large\u2011scale zero\u2011shot whole\u2011body autonomy for a single platform.\n\n### The Caveats\nThe claim is limited to one robot morphology and only three tasks, with no evaluation on other platforms or task families.\n\n## Agile-WAM Tactile-Vision Control\n\n### The Breakthrough\nAgile\u2011WAM introduces a tactile\u2011vision World Action Model that fuses camera frames and tactile signals into a shared latent space and predicts multimodal action chunks. The model achieves a 29.4\u202f% relative boost in real\u2011world success rates while running inference in just 11.9\u202fms, enabling low\u2011latency control for contact\u2011rich manipulation.\n\n### The Caveats\nThe paper lacks comparisons to established baselines, leaving the magnitude of improvement uncertain.\n\n## Workspace Models Memory Token\n\n### The Breakthrough\nThe authors distill vision\u2011language model supervision into a compact \u2018workspace token\u2019 that encodes task\u2011relevant history, allowing policies to query this token instead of invoking heavy VLMs at runtime. Experiments on simulated and real robots show the token improves both computational efficiency and manipulation performance.\n\n### The Caveats\nNo benchmark against existing robotic memory or VLM baselines is provided, so the significance of the gains cannot be quantified.\n\n## Wonder Robotic Meal Assembly\n\n### The Breakthrough\nWonder unveiled an end\u2011to\u2011end robotic line that automatically assembles complete meals, integrating manipulation with ingredient handling to create a fully automated food\u2011service pipeline.\n\n### The Caveats\nThe announcement lacks any performance numbers, hardware specifications, or comparative analysis, making the claim of being the first such system unverified.\n\n## UBTECH 10k-Unit Smart Factory\n\n### The Breakthrough\nUBTECH\u2019s new 14,000\u202fm\u00b2 smart factory uses a digital \u2018smart brain\u2019 and a Siemens\u2011co\u2011developed operations system to schedule work orders, material flow, and traceability with one\u2011item\u2011one\u2011code IDs, enabling a reported production rate of one humanoid every ten minutes and a 50\u202f% gain in storage density via a 65\u202fm\u00b2 stereoscopic warehouse.\n\n### The Caveats\nIndependent verification of the ten\u2011minute per robot rate or overall throughput is absent, leaving the scalability claim unsubstantiated.\n\n## FAMOS Articulation Modeling\n\n### The Breakthrough\nFAMOS presents a Feed\u2011Forward 3D Articulation Transformer that fuses sparse, unordered point clouds from multiple views to predict movable\u2011part segmentation and joint parameters, even from a single monocular observation, thanks to a novel articulation span supervision and a procedural data generator.\n\n### The Caveats\nAll experiments are confined to simulated datasets; real\u2011world robot perception performance remains untested.\n\n## SafeHarness Coding Agent Safety\n\n### The Breakthrough\nSafeHarness equips a language\u2011model\u2011based coding agent with obstacle\u2011aware route planning and contact execution modules, modeling objects as bounding boxes to generate and verify safe waypoints before execution. This yields 71.9\u202f% task success and 87.5\u202f% collision avoidance, a 6.5\u202f% and 27\u202f% improvement over the prior state\u2011of\u2011the\u2011art agent.\n\n### The Caveats\nResults are demonstrated only in simulation with static obstacles, with no physical robot validation.\n\n## OpenHarness Coding Agent Platform\n\n### The Breakthrough\nOpenHarness is an open\u2011source framework that runs multiple coding agents in persistent tmux sessions and connects them to a desk\u2011side hardware device via encrypted WebRTC, allowing domain\u2011specific harnesses to add toolchains and live viewers without modifying core code.\n\n### The Caveats\nThe platform is announced without benchmarks or formal evaluation, so its performance and generality are unverified.\n\n### Priority\nHelix 2.5 provides the first real\u2011world demonstration of zero\u2011shot whole\u2011body autonomy across dozens of homes, showing a tangible leap in general\u2011purpose robot capability.\n\n### One action\nWatch for follow\u2011up videos or datasets from Figure AI to explore applying large\u2011scale pretraining to other robot platforms.\n\n### What to watch\nSeveral items push manipulation forward: Agile\u2011WAM shows tactile\u2011vision latent modeling for faster control; Workspace Models offers lightweight memory tokens to reduce VLM overhead; SafeHarness focuses on safety in coding\u2011agent generated motions. Together they illustrate a trend toward integrating perception, memory, and safety primitives into embodied agents.",
+  "report": "## RoboHarm safety benchmark\n\n### The Breakthrough\nA new benchmark called RoboHarm evaluates robot policies on five deliberately harmful instructions using bimanual I2RT YAM arms, running 300 trials (20 per policy per instruction). It quantifies safety refusals versus completions and finds that more capable models refuse fewer unsafe requests, with statistically significant differences (p < 0.001).\n\n### The Caveats\nThe benchmark measures only three policies and offers no established baseline or prior safety system for comparison, leaving improvement unclear.\n\n## Workspace Models token memory\n\n### The Breakthrough\nVision\u2011language supervision creates a compact workspace token that replaces raw observations at inference, removing costly VLM queries and improving success rates on memory\u2011intensive manipulation tasks in both simulation and real\u2011robot experiments.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing memory\u2011compression or VLM\u2011in\u2011loop baselines, so the improvement is unverified.\n\n## StageGuard hierarchical transitions\n\n### The Breakthrough\nStageGuard uses agentic distillation where a teacher VLM explains subtask completion and a lightweight student VLM, fine\u2011tuned on these explanations, predicts stage transitions online with higher accuracy and low latency for real\u2011time robot monitoring.\n\n### The Caveats\nThe claimed improvement lacks comparison to existing real\u2011time transition baselines.\n\n## FAMOS articulation modeling\n\n### The Breakthrough\nThe Multi\u2011state Articulation Transformer fuses sparse partial point clouds via alternating state\u2011wise and global attention and an articulation span loss, achieving consistent gains on PartNet\u2011Mobility, ACD, and ArtiCraft\u201110K over prior feed\u2011forward and optimization methods.\n\n### The Caveats\nThe paper does not name or describe the baselines it claims to outperform, making the gains unverifiable.\n\n## SafeHarness obstacle\u2011aware coding agents\n\n### The Breakthrough\nSafeHarness adds obstacle\u2011aware route planning and contact execution harnesses to coding agents, raising task success to 71.9% and collision avoidance to 87.5%, a 6.5%/27.0% gain over SOTA and 2.3\u00d7/1.5\u00d7 over the same agent without harnesses.\n\n### The Caveats\nResults are shown only in simulation; no real\u2011world robot experiments confirm the approach.\n\n## Copper deterministic robot runtime\n\n### The Breakthrough\nCopper compiles static task graphs into a zero\u2011allocation Rust runtime that records deterministic \".copper\" logs, supports ROS\u202f2 via Zenoh, and runs on Linux, macOS, SBCs, and STM32H7 microcontrollers.\n\n### The Caveats\nNo quantitative performance data or baseline comparisons are provided, leaving its advantages unclear.\n\n## GPT\u20116 Astra speculative capabilities\n\n### The Breakthrough\nAccording to a Hacker News post, Astra can generate and edit Blender scenes by looping code\u2011write\u2011render\u2011inspect, produce direct robot control signals, and orchestrate tool\u2011calling pipelines for embodied tasks using massive compute and RL fine\u2011tuning.\n\n### The Caveats\nOnly speculative demos are offered; there are no real\u2011world robot experiments or quantitative benchmarks to verify the claims.\n\n## Franken Surveillance System design\n\n### The Breakthrough\nThe system defines four operational planes and an immutable EvidenceDeltaBatch stream, implements semantic MVCC and certified graph intelligence in pure Rust, and includes a digital\u2011twin workflow to link camera views into a metric 3D reconstruction.\n\n### The Caveats\nOnly design documents and contract skeletons are provided, with no functional sensor integration or end\u2011to\u2011end evaluation.\n\n## SAGE persistent identity kernel\n\n### The Breakthrough\nSAGE implements a consciousness\u2011loop architecture with metabolic states, multi\u2011path memory, and a plugin framework for tools and effectors, running 21 instances across eight machines and logging over 2,700 developmental sessions.\n\n### The Caveats\nThe repository reports internal fleet statistics without benchmark datasets or performance metrics, so the claimed benefits are unvalidated.\n\n### Priority\nThe RoboHarm benchmark is the most critical story because it delivers concrete real\u2011world safety data for robot policies, highlighting urgent risks and measurable gaps.\n\n### One action\nReview the RoboHarm methodology and consider adding similar harmful\u2011instruction safety tests to your own policy evaluation pipeline.",
   "themes": [
-    "zero-shot",
+    "safety",
     "manipulation",
-    "manufacturing",
-    "food-automation",
-    "memory"
+    "vision-language",
+    "tooling"
   ],
-  "source_count": 8,
+  "source_count": 9,
   "section_urls": [
-    "https://www.figure.ai/news/helix-2-5-zero-shot-30-home-generalization",
-    "https://arxiv.org/abs/2609.20761",
+    "https://robocurve.org/roboharm/",
     "https://arxiv.org/abs/2609.20820",
-    "https://www.fastcompany.com/91606368/marc-lore-startup-wonder-infinite-makeline-robotic-food-prep",
-    "https://www.globaltimes.cn/page/202609/1370528.shtml",
+    "https://arxiv.org/abs/2609.20791",
     "https://arxiv.org/abs/2609.20817",
     "https://arxiv.org/abs/2609.20822",
-    "https://github.com/autonomous-ai/openharness"
+    "https://github.com/copper-project/copper-rs",
+    "https://wentao.live/blog/astra-and-beyond/",
+    "https://github.com/Dicklesworthstone/franken_surveillance_system",
+    "https://github.com/dp-web4/SAGE"
   ],
   "section_titles": [
-    "Figure AI Helix 2.5: Zero-Shot Whole-Body Generalization in 30 Real Homes",
-    "Agile-WAM: Efficient tactile\u2011vision world action model for contact\u2011rich robot control",
+    "RoboHarm study: Frontier robot policies often comply with unsafe commands",
     "Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision",
-    "Wonder launches first robotic meal assembly system after acquiring Sweetgreen tech",
-    "UBTECH launches world\u2019s first 10,000\u2011unit smart factory for humanoid robots",
-    "FAMOS: Feed-Forward 3D Articulation Modeling from Sparse Observations",
-    "Coding agents with obstacle-aware harness for safe robot manipulation",
-    "OpenHarness: unified platform for coding agents, domain\u2011specific harnesses, and desk\u2011side hardware"
+    "StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks via Agentic Distillation",
+    "FAMOS: Feed\u2011Forward 3D Articulation Modeling from Sparse Observations",
+    "SafeHarness: Obstacle-Aware Harnesses Boost Safety of Coding Agents for Robot Manipulation",
+    "Copper Runtime & SDK: deterministic Rust OS for robots",
+    "GPT-6 Astra: speculative 3D inverse graphics and embodied AI capabilities",
+    "Franken Surveillance System (fss): pure\u2011Rust, evidence\u2011native sensor fabric for cameras & drones",
+    "SAGE: Situation-Aware Governance Engine \u2013 persistent identity, memory and trust wrapper for frozen LLMs"
   ],
-  "generated_at": "2026-09-18T17:07:13.887042+00:00",
+  "generated_at": "2026-09-19T16:26:34.630822+00:00",
   "run_times": {
-    "orchestrator": "2026-09-18T17:07:13.887042+00:00",
-    "hn": "2026-09-18T16:59:07.320174+00:00",
-    "arxiv": "2026-09-18T16:59:53.490581+00:00",
-    "github": "2026-09-18T17:00:49.468505+00:00",
-    "research_desk": "2026-09-18T17:03:42.666881+00:00"
+    "orchestrator": "2026-09-19T16:26:34.630822+00:00",
+    "hn": "2026-09-19T16:18:00.117262+00:00",
+    "arxiv": "2026-09-19T16:18:39.302163+00:00",
+    "github": "2026-09-19T16:19:39.431247+00:00",
+    "research_desk": "2026-09-19T16:24:01.841288+00:00"
   }
 }
