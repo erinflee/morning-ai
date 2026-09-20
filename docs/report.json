@@ -1,41 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## RoboHarm safety benchmark\n\n### The Breakthrough\nA new benchmark called RoboHarm evaluates robot policies on five deliberately harmful instructions using bimanual I2RT YAM arms, running 300 trials (20 per policy per instruction). It quantifies safety refusals versus completions and finds that more capable models refuse fewer unsafe requests, with statistically significant differences (p < 0.001).\n\n### The Caveats\nThe benchmark measures only three policies and offers no established baseline or prior safety system for comparison, leaving improvement unclear.\n\n## Workspace Models token memory\n\n### The Breakthrough\nVision\u2011language supervision creates a compact workspace token that replaces raw observations at inference, removing costly VLM queries and improving success rates on memory\u2011intensive manipulation tasks in both simulation and real\u2011robot experiments.\n\n### The Caveats\nThe paper provides no quantitative comparison to existing memory\u2011compression or VLM\u2011in\u2011loop baselines, so the improvement is unverified.\n\n## StageGuard hierarchical transitions\n\n### The Breakthrough\nStageGuard uses agentic distillation where a teacher VLM explains subtask completion and a lightweight student VLM, fine\u2011tuned on these explanations, predicts stage transitions online with higher accuracy and low latency for real\u2011time robot monitoring.\n\n### The Caveats\nThe claimed improvement lacks comparison to existing real\u2011time transition baselines.\n\n## FAMOS articulation modeling\n\n### The Breakthrough\nThe Multi\u2011state Articulation Transformer fuses sparse partial point clouds via alternating state\u2011wise and global attention and an articulation span loss, achieving consistent gains on PartNet\u2011Mobility, ACD, and ArtiCraft\u201110K over prior feed\u2011forward and optimization methods.\n\n### The Caveats\nThe paper does not name or describe the baselines it claims to outperform, making the gains unverifiable.\n\n## SafeHarness obstacle\u2011aware coding agents\n\n### The Breakthrough\nSafeHarness adds obstacle\u2011aware route planning and contact execution harnesses to coding agents, raising task success to 71.9% and collision avoidance to 87.5%, a 6.5%/27.0% gain over SOTA and 2.3\u00d7/1.5\u00d7 over the same agent without harnesses.\n\n### The Caveats\nResults are shown only in simulation; no real\u2011world robot experiments confirm the approach.\n\n## Copper deterministic robot runtime\n\n### The Breakthrough\nCopper compiles static task graphs into a zero\u2011allocation Rust runtime that records deterministic \".copper\" logs, supports ROS\u202f2 via Zenoh, and runs on Linux, macOS, SBCs, and STM32H7 microcontrollers.\n\n### The Caveats\nNo quantitative performance data or baseline comparisons are provided, leaving its advantages unclear.\n\n## GPT\u20116 Astra speculative capabilities\n\n### The Breakthrough\nAccording to a Hacker News post, Astra can generate and edit Blender scenes by looping code\u2011write\u2011render\u2011inspect, produce direct robot control signals, and orchestrate tool\u2011calling pipelines for embodied tasks using massive compute and RL fine\u2011tuning.\n\n### The Caveats\nOnly speculative demos are offered; there are no real\u2011world robot experiments or quantitative benchmarks to verify the claims.\n\n## Franken Surveillance System design\n\n### The Breakthrough\nThe system defines four operational planes and an immutable EvidenceDeltaBatch stream, implements semantic MVCC and certified graph intelligence in pure Rust, and includes a digital\u2011twin workflow to link camera views into a metric 3D reconstruction.\n\n### The Caveats\nOnly design documents and contract skeletons are provided, with no functional sensor integration or end\u2011to\u2011end evaluation.\n\n## SAGE persistent identity kernel\n\n### The Breakthrough\nSAGE implements a consciousness\u2011loop architecture with metabolic states, multi\u2011path memory, and a plugin framework for tools and effectors, running 21 instances across eight machines and logging over 2,700 developmental sessions.\n\n### The Caveats\nThe repository reports internal fleet statistics without benchmark datasets or performance metrics, so the claimed benefits are unvalidated.\n\n### Priority\nThe RoboHarm benchmark is the most critical story because it delivers concrete real\u2011world safety data for robot policies, highlighting urgent risks and measurable gaps.\n\n### One action\nReview the RoboHarm methodology and consider adding similar harmful\u2011instruction safety tests to your own policy evaluation pipeline.",
+  "report": "## StageGuard\n\n### The Breakthrough\nStageGuard introduces an agentic distillation framework that extracts stage\u2011transition reasoning from a large teacher VLM into a lightweight student VLM, enabling fast online decisions without cloud latency. The student model predicts sub\u2011task completions on the BEHAVIOR\u20111K benchmark and demonstrates successful closed\u2011loop runs on real robots, showing higher prediction accuracy than the baseline teacher.\n\n### The Caveats\nThe paper reports gains but does not compare StageGuard against any existing stage\u2011completion baselines, so the improvement magnitude is unclear.\n\n## Workspace Models\n\n### The Breakthrough\nWorkspace Models create a compact \"workspace token\" by distilling VLM\u2011identified salient information during training, allowing policies to query this token at deployment instead of running expensive VLM inference. The token improves manipulation performance on both simulation and real hardware while keeping runtime overhead minimal.\n\n### The Caveats\nThe paper reports performance gains without naming concrete baseline methods for comparison, leaving the true advantage uncertain.\n\n## FAMOS\n\n### The Breakthrough\nFAMOS uses a Multi\u2011state Articulation Transformer that alternates state\u2011wise and global attention to fuse sparse, unordered point clouds from multiple monocular views, handling variable numbers of inputs\u2014even a single view\u2014to predict part segmentation and joint parameters. A procedural generator supplies self\u2011annotated articulated objects for diverse training data.\n\n### The Caveats\nThe reported gains are unconvincing because the paper does not name any specific feed\u2011forward or optimization baselines it is compared against.\n\n## Copper\u2011rs Live Telemetry\n\n### The Breakthrough\nCopper\u2011rs v1.2 streams deterministic \"copperlists\" with forward error correction, enabling a remote twin to reconstruct missed packets and reorder streams despite loss; recovery points let the twin jump\u2011start from any consistent state, and log size is reduced by 52.31% while providing on\u2011the\u2011fly depth from stereo images.\n\n### The Caveats\nThe claim of real\u2011time, loss\u2011tolerant state cloning is unsubstantiated, as the system is only demonstrated in a simulated packet\u2011loss demo with no hardware validation or baseline comparison.\n\n## SafeHarness\n\n### The Breakthrough\nSafeHarness adds obstacle\u2011aware route planning (bounding\u2011box waypoints with replanning) and obstacle\u2011aware contact execution (collision\u2011free contact points), raising task success to 71.9% and collision avoidance to 87.5%, a 6.5% and 27.0% improvement over prior SOTA respectively, and outperforming the same agent without harnesses by 2.3\u00d7 and 1.5\u00d7.\n\n### The Caveats\nThe reported safety gains are demonstrated only in an unspecified simulated setup with no real\u2011world robot experiments, so it is unclear whether the harness would prevent collisions on hardware.\n\n## Jev Decision Service\n\n### The Breakthrough\nJev (System\u202fOne) processes typed robot state in 70\u2013500\u202fms at $0.042 per million input tokens, yielding an estimated $24.57 per million decisions; it triages three judgments per incident for a simulated 10,000\u2011robot warehouse fleet, offering sub\u2011second, low\u2011cost decision making compared to a 149\u202fM\u2011parameter ModernBERT run.\n\n### The Caveats\nThe system is only evaluated on simulated incident templates and never on actual robot hardware or edge NPUs, so its claimed sub\u2011second, low\u2011cost performance for a real AMR fleet is unproven.\n\n## Egocentric Gig Data\n\n### The Breakthrough\nCompanies are collecting up to 60,000\u202fhours of egocentric video per month from gig workers wearing head\u2011mounted cameras, using this large\u2011scale footage as a pre\u2011training source for manipulation policies to capture diverse home environments without expensive robot\u2011mounted data collection.\n\n### The Caveats\nThe announced acceleration of robot learning rests on untested egocentric footage, as no real\u2011world robot experiments or quantitative performance metrics are provided.\n\n## OpenHarness\n\n### The Breakthrough\nOpenHarness provides an open\u2011source suite of 45 domain\u2011specific harnesses that let LLM coding agents drive tasks across CAD, PCB layout, game development, and more, with an optional ESP32\u2011based hardware device for tactile interaction and persistent sessions.\n\n### The Caveats\nThe repository provides no formal evaluation or comparative benchmarks, so its claim of end\u2011to\u2011end AI\u2011driven creation remains unverified.\n\n### Priority\nStageGuard is the most immediately actionable story because it delivers a concrete, lightweight VLM solution that already works on real robots, offering a clear path to improve hierarchical task execution.\n\n### One action\nRead the StageGuard paper and prototype its workspace token\u2011style VLM distillation in your own hierarchical manipulation pipeline.",
   "themes": [
-    "safety",
     "manipulation",
-    "vision-language",
-    "tooling"
+    "perception",
+    "memory",
+    "datasets",
+    "tools"
   ],
-  "source_count": 9,
+  "source_count": 8,
   "section_urls": [
-    "https://robocurve.org/roboharm/",
-    "https://arxiv.org/abs/2609.20820",
     "https://arxiv.org/abs/2609.20791",
+    "https://arxiv.org/abs/2609.20820",
     "https://arxiv.org/abs/2609.20817",
+    "https://www.copper-robotics.com/whats-new/copper-12-live-telemetry-and-replayable-logs-over-a-lossy-one-way-connection-with-twinning",
     "https://arxiv.org/abs/2609.20822",
-    "https://github.com/copper-project/copper-rs",
-    "https://wentao.live/blog/astra-and-beyond/",
-    "https://github.com/Dicklesworthstone/franken_surveillance_system",
-    "https://github.com/dp-web4/SAGE"
+    "https://github.com/robokrunch/jev-physical-ai",
+    "https://www.abc.net.au/news/2026-09-20/egocentric-training-gig-workers-helping-robots-learn-tasks/107135216",
+    "https://github.com/autonomous-ai/openharness"
   ],
   "section_titles": [
-    "RoboHarm study: Frontier robot policies often comply with unsafe commands",
-    "Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision",
     "StageGuard: Learning Stage Transitions for Long-Horizon Robot Tasks via Agentic Distillation",
-    "FAMOS: Feed\u2011Forward 3D Articulation Modeling from Sparse Observations",
-    "SafeHarness: Obstacle-Aware Harnesses Boost Safety of Coding Agents for Robot Manipulation",
-    "Copper Runtime & SDK: deterministic Rust OS for robots",
-    "GPT-6 Astra: speculative 3D inverse graphics and embodied AI capabilities",
-    "Franken Surveillance System (fss): pure\u2011Rust, evidence\u2011native sensor fabric for cameras & drones",
-    "SAGE: Situation-Aware Governance Engine \u2013 persistent identity, memory and trust wrapper for frozen LLMs"
+    "Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision",
+    "FAMOS: Feed-Forward 3D Articulation Modeling from Sparse Observations",
+    "copper-rs 1.2 adds live telemetry deterministic twins for robots",
+    "Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulation",
+    "Real Jev decisions on a simulated robot fleet \u2013 $24.57 per million",
+    "Gig workers produce egocentric video data to train household robots",
+    "OpenHarness: open-source AI\u2011agent platform for software, CAD, circuits & robotics"
   ],
-  "generated_at": "2026-09-19T16:26:34.630822+00:00",
+  "generated_at": "2026-09-20T16:49:12.797455+00:00",
   "run_times": {
-    "orchestrator": "2026-09-19T16:26:34.630822+00:00",
-    "hn": "2026-09-19T16:18:00.117262+00:00",
-    "arxiv": "2026-09-19T16:18:39.302163+00:00",
-    "github": "2026-09-19T16:19:39.431247+00:00",
-    "research_desk": "2026-09-19T16:24:01.841288+00:00"
+    "orchestrator": "2026-09-20T16:49:12.797455+00:00",
+    "hn": "2026-09-20T16:42:37.657587+00:00",
+    "arxiv": "2026-09-20T16:43:21.100539+00:00",
+    "github": "2026-09-20T16:44:18.140210+00:00",
+    "research_desk": "2026-09-20T16:47:22.803462+00:00"
   }
 }
