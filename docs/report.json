@@ -1,42 +1,41 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Toyota's ELEY Humanoid Robot Training\n\n### The Breakthrough\nToyota is scaling up its factory workforce to teach wheel\u2011based ELEY humanoid robots hand\u2011task skills using custom jigs that map human finger motions directly onto robot grippers, targeting 400,000 robots by 2028 across its plants and group facilities.\n\n### The Caveats\nThe announcement lacks independent performance data or analysis of labor impacts, leaving the scale and coexistence claims unverified.\n\n## Upcycling Imperfect Data for High\u2011Precision Manipulation (\u03b24P)\n\n### The Breakthrough\nThe paper presents \u03b24P, which injects low\u2011precision task data at high noise levels and high\u2011precision mismatched data at low noise, enabling vision\u2011language\u2011action models to achieve up to a 31.7\u202f% performance boost on real\u2011robot tasks while only losing 4.2\u202f% when swapping high\u2011quality data for imperfect data.\n\n### The Caveats\nBaseline methods are not named or compared, so the reported gains lack a clear reference.\n\n## NavSafe\u221e Benchmark for Closed\u2011Loop Driving Safety\n\n### The Breakthrough\nNavSafe\u221e offers 280 photorealistic scenarios covering 28 traffic\u2011safety event types with a taxonomy that scores crashes, violations, and incidents, revealing that improvements on open\u2011loop benchmarks often do not translate to safe closed\u2011loop behavior.\n\n### The Caveats\nThe benchmark does not name baseline driving policies, making the safety scores of the 20 evaluated models hard to contextualize.\n\n## DreamStream Generative Closed\u2011Loop Driving Simulator\n\n### The Breakthrough\nDreamStream distills a large pretrained video model into an autoregressive simulator that preserves traffic layout while varying visual appearance, reporting a 1.6\u00d7 improvement over the strongest prior closed\u2011loop simulator on nuScenes and 4.7\u00d7 on NAVSIM using a new FD\u03c0 metric.\n\n### The Caveats\nNo existing simulators are explicitly benchmarked, so the claimed improvements lack concrete baselines.\n\n## \u03c6\u2011RIE Interactive Simulation from 3D Gaussian Reconstructions\n\n### The Breakthrough\n\u03c6\u2011RIE converts 3D Gaussian\u2011splatting reconstructions into registered simulator assets and removes their original Gaussians, raising matched F1 at 20\u202fmm from 0.336 to 0.383 on 50 ScanNet++ scenes and improving manipulation test performance while keeping visual fidelity.\n\n### The Caveats\nEvaluations compare only against a single\u2011generator baseline, without stronger state\u2011of\u2011the\u2011art references.\n\n## Meta Ray\u2011Ban Smart Glasses for Egocentric Robot Learning\n\n### The Breakthrough\nMeta\u2019s Ray\u2011Ban glasses record continuous first\u2011person video, audio, and Live AI interactions, offering an egocentric dataset that could train embodied AI for hand\u2011object interaction and intuitive physics.\n\n### The Caveats\nNo robot experiments or quantitative comparisons to existing data\u2011collection methods are provided, leaving the training claim unsubstantiated.\n\n## NVIDIA NeMo Gym for Scalable Agent Evaluation\n\n### The Breakthrough\nNeMo Gym introduces extensible abstractions for agents, environments, and tasks, enabling thousands of concurrent runs across GPUs or Slurm nodes with token\u2011level diagnostics for reproducible large\u2011scale RL training.\n\n### The Caveats\nThe release lacks empirical evaluation or baseline comparisons, so reproducibility claims are unverified.\n\n## DJI Drone Teardown Reveals High Margins & Custom Silicon\n\n### The Breakthrough\nA teardown reconstructs the bill of materials for the Mavic Mini and Mini\u202f4\u202fPro, showing DJI\u2019s hardware gross margins rising from 72\u202f% to 79\u202f% and custom ASICs accounting for 26\u202f% of the Mini\u202f4\u202fPro\u2019s BOM cost.\n\n### The Caveats\nThe analysis relies solely on teardown data and unverified cost estimates, offering no prototype testing or validation of replicability.\n\n## Cognex to Acquire Intel RealSense Sensors\n\n### The Breakthrough\nCognex announced the acquisition of Intel\u2019s RealSense sensor line, aiming to broaden its machine\u2011vision portfolio for robotics perception.\n\n### The Caveats\nNo evidence or timeline is provided for integration, leaving the market\u2011expansion claim unverified.\n\n### Priority\nToyota\u2019s massive rollout of ELEY humanoid robots provides the most concrete hardware deployment and workforce integration story, setting the immediate direction for industrial robotics.\n\n### One action\nMonitor Toyota\u2019s training workflow releases and consider adopting finger\u2011motion jigs for rapid skill transfer to your own robot platforms.\n\n### What to watch\nThe NavSafe\u221e benchmark, DreamStream simulator, and \u03c6\u2011RIE pipeline each target safer or more realistic evaluation of embodied agents: NavSafe\u221e diagnoses policy safety gaps, DreamStream aims to close the visual sim\u2011to\u2011real gap for driving, and \u03c6\u2011RIE brings photorealistic scene assets into interactive simulators. Together they signal a push toward tighter simulation\u2011real\u2011world loops across manipulation and autonomous driving.",
+  "report": "## LEAP-CBF Safety Filter\n\n### The Breakthrough\nLEAP-CBF introduces a disturbance\u2011effort metric that serves as a control barrier function, enabling a robust safety filter for uncertain legged robots and drones. By learning Least\u2011Effort Adversarial Potentials with on\u2011policy deep RL, the method yields a certifiable safety guarantee and is demonstrated on both simulated multi\u2011agent systems and real quadruped and quadrotor hardware.\n\n### The Caveats\nThe paper provides no comparison against existing safety\u2011filter baselines, leaving performance relative to prior work unclear.\n\n## PointCast World Model\n\n### The Breakthrough\nPointCast encodes objects as mesh\u2011free 3D point sets and uses a 19.8\u202fM\u2011parameter diffusion transformer to predict future point trajectories, handling rigid bodies, cloth, rope, and articulated cabinets with top or near\u2011top results across four manipulation regimes.\n\n### The Caveats\nBaseline methods are not named, so the claimed superiority cannot be verified.\n\n## LiMA Dexterous Manipulation\n\n### The Breakthrough\nLiMA separates long\u2011horizon intent generation from fast motion refinement via an asynchronous diffusion bridge, cutting inference latency by 45.8\u202f% versus Cosmos\u2011Policy and achieving a 70.8\u202f% overall success rate on six bimanual tasks in simulation.\n\n### The Caveats\nAll results are limited to simulation; no real\u2011world robot experiments are presented.\n\n## Robot Group Joining via Language\n\n### The Breakthrough\nThe system predicts socially compliant group\u2011joining poses by ranking language\u2011conditioned image\u2011geometry candidates, using recursive spectral partitioning and a multimodal energy\u2011orientation map, and runs inference in sub\u2011second time with superior pose prediction on real\u2011robot trials.\n\n### The Caveats\nImprovements are reported without naming or comparing to any existing baselines.\n\n## Quadruped Marathon Robot\n\n### The Breakthrough\nA power\u2011efficient gait and battery\u2011management system is claimed to let a quadruped robot travel the full 42\u202fkm marathon distance on a single charge.\n\n### The Caveats\nThe endurance claim lacks real\u2011world testing or comparative data.\n\n## Automated Lettuce Farm\n\n### The Breakthrough\nNorway\u2019s fully automated vertical farm integrates robotic handling with a multilevel hydroponic system, delivering a two\u2011week growth cycle and extending lettuce shelf life to up to 12\u202fweeks.\n\n### The Caveats\nPerformance, cost, and impact metrics are presented without independent verification.\n\n## Franken Surveillance System\n\n### The Breakthrough\nA pure\u2011Rust surveillance fabric stitches cameras, microphones, and drones into an immutable evidence ledger, featuring a built\u2011in YOLOX\u2011Nano detector and crash\u2011safe local ledgers without external FFmpeg or PyTorch dependencies.\n\n### The Caveats\nNo empirical evaluation or baseline comparison is provided.\n\n## SCS2 Visualization GUI\n\n### The Breakthrough\nSCS2 adds YoComposite groups and YoGraphic UI elements to a JavaFX visualizer, enabling remote, real\u2011time plotting and 3D rendering of humanoid robot control data from live servers or logs.\n\n### The Caveats\nThe new visualisation features lack systematic real\u2011world or benchmark testing.\n\n## Amazon Robot Manufacturing Hub\n\n### The Breakthrough\nAmazon announced a $100\u202fM investment to build a new robot\u2011manufacturing hub in Indiana, aiming to expand its robot\u2011making capacity for fulfillment automation.\n\n### The Caveats\nThe announcement offers no concrete production targets, timelines, or performance data.\n\n### Priority\nLEAP\u2011CBF is the most actionable story because it delivers a concrete safety\u2011filter method with real\u2011hardware validation, directly addressing safety challenges in today\u2019s legged and aerial robots.\n\n### One action\nReview the LEAP\u2011CBF paper and consider prototyping its safety filter on your own legged\u2011robot platform.\n\n### What to watch\nPointCast, LiMA, and LEAP\u2011CBF each propose next\u2011generation models for manipulation and safety: PointCast unifies rigid and deformable object prediction, LiMA streamlines long\u2011horizon planning with low\u2011latency refinement, and LEAP\u2011CBF tackles robust safety under uncertainty. Together they signal a shift toward integrated perception\u2011action pipelines that balance foresight, speed, and safety.",
   "themes": [
-    "humanoid",
     "manipulation",
-    "driving",
-    "simulation",
-    "tools"
+    "safety",
+    "legged-robots",
+    "automation"
   ],
   "source_count": 9,
   "section_urls": [
-    "https://arstechnica.com/ai/2026/09/toyota-claims-plan-for-400000-factory-robots-wont-replace-human-workers/",
-    "https://arxiv.org/abs/2609.26672",
-    "https://arxiv.org/abs/2609.26618",
-    "https://arxiv.org/abs/2609.26792",
-    "https://arxiv.org/abs/2609.26795",
-    "https://proton.me/blog/meta-smart-glasses-ai-robots",
-    "https://github.com/NVIDIA-NeMo/Gym",
-    "https://www.arenaphysica.com/publications/dji-teardown",
-    "https://www.cognex.com/en/company/press-releases/cognex-to-acquire-realsense"
+    "https://arxiv.org/abs/2609.28364",
+    "https://arxiv.org/abs/2609.28393",
+    "https://arxiv.org/abs/2609.28431",
+    "https://arxiv.org/abs/2609.28467",
+    "https://www.nature.com/articles/s41586-026-11102-5",
+    "https://phys.org/news/2026-09-robots-package-lettuce-year-norway.html",
+    "https://github.com/Dicklesworthstone/franken_surveillance_system",
+    "https://github.com/ihmcrobotics/scs2",
+    "https://www.wsj.com/tech/amazon-to-expand-robot-making-capacity-with-new-100-million-indiana-hub-87fce322"
   ],
   "section_titles": [
-    "Toyota trains workers to teach humanoid robots, says robots won\u2019t replace humans",
-    "Imperfection for Precision: Upcycling Imperfect Data for High-Precision Robotic Manipulation",
-    "NavSafe-\u221e: Closed-loop driving safety benchmark with 280 photorealistic scenarios",
-    "DreamStream: Generative Closed-Loop Simulator for End-to-End Driving",
-    "\u03c6\u2011RIE: Converting Photorealistic 3D Gaussian Reconstructions into Interactive Simulators",
-    "Meta's Ray\u2011Ban smart glasses could supply first\u2011person data for robot learning",
-    "NVIDIA NeMo Gym: Scalable evaluation & training library for AI agents",
-    "Teardown of DJI Mavic Mini & Mini 4 Pro reveals high margins and custom silicon",
-    "Cognex to Acquire RealSense, Expanding Machine Vision Robotic Perception Market"
+    "LEAP-CBF: Safety Filter for Uncertain Systems via Least-Effort Adversarial Potentials",
+    "PointCast: One World Model for Rigid, Articulated, and Deformable Object Manipulation",
+    "LiMA: Bridging Long-term Imagination to Real-time Dexterous Manipulation via Asynchronous Diffusion",
+    "Where Should I Join? Robot Group Joining via Language-Guided Goal Prediction",
+    "Quadruped robot aims to run a marathon on a single battery charge",
+    "Robots grow and package lettuce year-round at Norway's fully automated farm",
+    "Franken Surveillance System: pure\u2011Rust, evidence\u2011native fabric for cameras & drones",
+    "ihmcrobotics: Simulation Construction Set\u00a02 \u2013 GUI for visualizing robot control data",
+    "Amazon to Expand Robot-Making Capacity with New $100M Indiana Hub"
   ],
-  "generated_at": "2026-09-23T17:56:20.927921+00:00",
+  "generated_at": "2026-09-24T17:52:40.014133+00:00",
   "run_times": {
-    "orchestrator": "2026-09-23T17:56:20.927921+00:00",
-    "hn": "2026-09-23T17:45:20.653102+00:00",
-    "arxiv": "2026-09-23T17:45:59.917581+00:00",
-    "github": "2026-09-23T17:47:01.678926+00:00",
-    "research_desk": "2026-09-23T17:50:07.543677+00:00"
+    "orchestrator": "2026-09-24T17:52:40.014133+00:00",
+    "hn": "2026-09-24T17:47:03.134607+00:00",
+    "arxiv": "2026-09-24T17:47:44.374033+00:00",
+    "github": "2026-09-24T17:48:46.182143+00:00",
+    "research_desk": "2026-09-24T17:52:01.892358+00:00"
   }
 }
