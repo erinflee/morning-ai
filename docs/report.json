@@ -1,41 +1,38 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## LEAP-CBF Safety Filter\n\n### The Breakthrough\nLEAP-CBF introduces a disturbance\u2011effort metric that serves as a control barrier function, enabling a robust safety filter for uncertain legged robots and drones. By learning Least\u2011Effort Adversarial Potentials with on\u2011policy deep RL, the method yields a certifiable safety guarantee and is demonstrated on both simulated multi\u2011agent systems and real quadruped and quadrotor hardware.\n\n### The Caveats\nThe paper provides no comparison against existing safety\u2011filter baselines, leaving performance relative to prior work unclear.\n\n## PointCast World Model\n\n### The Breakthrough\nPointCast encodes objects as mesh\u2011free 3D point sets and uses a 19.8\u202fM\u2011parameter diffusion transformer to predict future point trajectories, handling rigid bodies, cloth, rope, and articulated cabinets with top or near\u2011top results across four manipulation regimes.\n\n### The Caveats\nBaseline methods are not named, so the claimed superiority cannot be verified.\n\n## LiMA Dexterous Manipulation\n\n### The Breakthrough\nLiMA separates long\u2011horizon intent generation from fast motion refinement via an asynchronous diffusion bridge, cutting inference latency by 45.8\u202f% versus Cosmos\u2011Policy and achieving a 70.8\u202f% overall success rate on six bimanual tasks in simulation.\n\n### The Caveats\nAll results are limited to simulation; no real\u2011world robot experiments are presented.\n\n## Robot Group Joining via Language\n\n### The Breakthrough\nThe system predicts socially compliant group\u2011joining poses by ranking language\u2011conditioned image\u2011geometry candidates, using recursive spectral partitioning and a multimodal energy\u2011orientation map, and runs inference in sub\u2011second time with superior pose prediction on real\u2011robot trials.\n\n### The Caveats\nImprovements are reported without naming or comparing to any existing baselines.\n\n## Quadruped Marathon Robot\n\n### The Breakthrough\nA power\u2011efficient gait and battery\u2011management system is claimed to let a quadruped robot travel the full 42\u202fkm marathon distance on a single charge.\n\n### The Caveats\nThe endurance claim lacks real\u2011world testing or comparative data.\n\n## Automated Lettuce Farm\n\n### The Breakthrough\nNorway\u2019s fully automated vertical farm integrates robotic handling with a multilevel hydroponic system, delivering a two\u2011week growth cycle and extending lettuce shelf life to up to 12\u202fweeks.\n\n### The Caveats\nPerformance, cost, and impact metrics are presented without independent verification.\n\n## Franken Surveillance System\n\n### The Breakthrough\nA pure\u2011Rust surveillance fabric stitches cameras, microphones, and drones into an immutable evidence ledger, featuring a built\u2011in YOLOX\u2011Nano detector and crash\u2011safe local ledgers without external FFmpeg or PyTorch dependencies.\n\n### The Caveats\nNo empirical evaluation or baseline comparison is provided.\n\n## SCS2 Visualization GUI\n\n### The Breakthrough\nSCS2 adds YoComposite groups and YoGraphic UI elements to a JavaFX visualizer, enabling remote, real\u2011time plotting and 3D rendering of humanoid robot control data from live servers or logs.\n\n### The Caveats\nThe new visualisation features lack systematic real\u2011world or benchmark testing.\n\n## Amazon Robot Manufacturing Hub\n\n### The Breakthrough\nAmazon announced a $100\u202fM investment to build a new robot\u2011manufacturing hub in Indiana, aiming to expand its robot\u2011making capacity for fulfillment automation.\n\n### The Caveats\nThe announcement offers no concrete production targets, timelines, or performance data.\n\n### Priority\nLEAP\u2011CBF is the most actionable story because it delivers a concrete safety\u2011filter method with real\u2011hardware validation, directly addressing safety challenges in today\u2019s legged and aerial robots.\n\n### One action\nReview the LEAP\u2011CBF paper and consider prototyping its safety filter on your own legged\u2011robot platform.\n\n### What to watch\nPointCast, LiMA, and LEAP\u2011CBF each propose next\u2011generation models for manipulation and safety: PointCast unifies rigid and deformable object prediction, LiMA streamlines long\u2011horizon planning with low\u2011latency refinement, and LEAP\u2011CBF tackles robust safety under uncertainty. Together they signal a shift toward integrated perception\u2011action pipelines that balance foresight, speed, and safety.",
+  "report": "## RAPID: Robot Agentic Programming from Demonstrations\n\n### The Breakthrough\nRAPID automatically generates, verifies, and refines robot programs from a single visual human demonstration. It infers an object\u2011centric relational program and uses trajectory\u2011optimization primitives that adapt to scene geometry at run time, enabling reuse across eight contact\u2011rich tasks, LIBERO\u2011Pro benchmarks, and a real Franka arm with pose, shape, material, and environment generalization.\n\n### The Caveats\nThe paper reports improvements without comparing against any existing baselines, so it\u2019s unclear whether RAPID actually outperforms prior methods.\n\n## Self-Adaptive VLA for Robust Robot Deployment\n\n### The Breakthrough\nA post\u2011training recipe lets Vision\u2011Language\u2011Action models self\u2011adapt during deployment by injecting hardware shifts, creating shift\u2011conditioned expert demos, and adding a lightweight context encoder with adaptive layer\u2011norm; this restores over 80% of the base policy\u2019s performance under actuation bias and encoder offsets on four bi\u2011manual and dexterous manipulation tasks.\n\n### The Caveats\nThe paper evaluates only against the non\u2011adaptive VLA baseline and does not compare to any existing adaptation or calibration methods.\n\n## Capability-Tradeoff Contact Selection (CTCS) for Legged Loco\u2011Manipulation\n\n### The Breakthrough\nCTCS screens and groups candidate contacts, predicts their capabilities via local sensitivity analysis, and performs selective exact evaluations, achieving roughly 3\u00d7 planning speedup while preserving task quality on a Unitree Go2 quadruped with an AgileX NERO arm, outperforming ground\u2011only and fixed\u2011contact baselines.\n\n### The Caveats\nThe method is validated only on a single quadruped\u2011arm platform and nine support surfaces.\n\n## Rolling\u2011WAM: Faster Closed\u2011Loop Manipulation via Rolling Imagination\n\n### The Breakthrough\nA sliding\u2011window rolling noise schedule fully denoises the imminent action chunk while partially refining future chunks, eliminating full\u2011horizon denoising each cycle and delivering a 4.5\u00d7 replanning speedup with comparable success on LIBERO, RoboTwin, and a real Unitree G1 humanoid.\n\n### The Caveats\nThe speedup is shown only on those benchmarks and a single robot, leaving broader applicability unproven.\n\n## Agentic CUDA Kernel Optimizer\n\n### The Breakthrough\nThe tool stitches a C++ harness, CUDA execution, and Nsight profiling under AI\u2011agent control, enabling prompts to drive kernel selection, execution, and benchmark reporting in an end\u2011to\u2011end pipeline.\n\n### The Caveats\nThe demo provides only a handcrafted harness with no quantitative results, hardware diversity, or comparison to existing CUDA optimization tools.\n\n## osprey: Agentic interface and safety harness for scientific control systems\n\n### The Breakthrough\nOsprey adds an agentic orchestration layer that decomposes operator requests into auditable steps, inserts mandatory human\u2011approval gates, and checks channel boundaries before any hardware write, supporting protocol\u2011agnostic connectors for large facilities.\n\n### The Caveats\nThe repository provides no formal evaluation or baseline comparison, so its safety\u2011gate and human\u2011in\u2011the\u2011loop claims remain unvalidated.\n\n## OpenHarness: unified, encrypted command center for multiple AI coding agents\n\n### The Breakthrough\nOpenHarness runs a per\u2011machine daemon that launches agents in real tmux panes and streams text over ChaCha20\u2011Poly1305\u2011encrypted WebRTC channels with automatic path selection, achieving 11\u201313\u202fms median latency and ~0.1\u202f% CPU core usage.\n\n### The Caveats\nThe latency and resource use claims are unsubstantiated; no comparison to existing remote\u2011development solutions is provided.\n\n### Priority\nRAPID offers a concrete path to turn single\u2011demo teaching into reusable robot programs, directly accelerating prototyping and deployment for a wide range of manipulation tasks.\n\n### One action\nVisit the RAPID paper and repository, and try reproducing the Franka arm demo on your own hardware to evaluate its generalization potential.",
   "themes": [
     "manipulation",
-    "safety",
-    "legged-robots",
-    "automation"
+    "self-adaptation",
+    "agentic-programming",
+    "legged-robotics",
+    "tooling"
   ],
-  "source_count": 9,
+  "source_count": 7,
   "section_urls": [
-    "https://arxiv.org/abs/2609.28364",
-    "https://arxiv.org/abs/2609.28393",
-    "https://arxiv.org/abs/2609.28431",
-    "https://arxiv.org/abs/2609.28467",
-    "https://www.nature.com/articles/s41586-026-11102-5",
-    "https://phys.org/news/2026-09-robots-package-lettuce-year-norway.html",
-    "https://github.com/Dicklesworthstone/franken_surveillance_system",
-    "https://github.com/ihmcrobotics/scs2",
-    "https://www.wsj.com/tech/amazon-to-expand-robot-making-capacity-with-new-100-million-indiana-hub-87fce322"
+    "https://arxiv.org/abs/2609.30249",
+    "https://arxiv.org/abs/2609.30092",
+    "https://arxiv.org/abs/2609.30140",
+    "https://arxiv.org/abs/2609.30247",
+    "https://github.com/bertaye/agentic-cuda-optimizer",
+    "https://github.com/als-apg/osprey",
+    "https://github.com/autonomous-ai/openharness"
   ],
   "section_titles": [
-    "LEAP-CBF: Safety Filter for Uncertain Systems via Least-Effort Adversarial Potentials",
-    "PointCast: One World Model for Rigid, Articulated, and Deformable Object Manipulation",
-    "LiMA: Bridging Long-term Imagination to Real-time Dexterous Manipulation via Asynchronous Diffusion",
-    "Where Should I Join? Robot Group Joining via Language-Guided Goal Prediction",
-    "Quadruped robot aims to run a marathon on a single battery charge",
-    "Robots grow and package lettuce year-round at Norway's fully automated farm",
-    "Franken Surveillance System: pure\u2011Rust, evidence\u2011native fabric for cameras & drones",
-    "ihmcrobotics: Simulation Construction Set\u00a02 \u2013 GUI for visualizing robot control data",
-    "Amazon to Expand Robot-Making Capacity with New $100M Indiana Hub"
+    "RAPID: Robot Agentic Programming from Demonstrations",
+    "Self-Adaptive VLA for Robust Robot Deployment",
+    "Capability-Tradeoff Contact Selection (CTCS) for Legged Loco\u2011Manipulation",
+    "Rolling-WAM: Faster Closed-Loop Manipulation via Rolling Imagination",
+    "Agentic CUDA Kernel Optimizer: AI-driven kernel testing and profiling",
+    "osprey: Agentic interface and safety harness for scientific control systems",
+    "OpenHarness: unified, encrypted command center for multiple AI coding agents"
   ],
-  "generated_at": "2026-09-24T17:52:40.014133+00:00",
+  "generated_at": "2026-09-25T17:56:21.600493+00:00",
   "run_times": {
-    "orchestrator": "2026-09-24T17:52:40.014133+00:00",
-    "hn": "2026-09-24T17:47:03.134607+00:00",
-    "arxiv": "2026-09-24T17:47:44.374033+00:00",
-    "github": "2026-09-24T17:48:46.182143+00:00",
-    "research_desk": "2026-09-24T17:52:01.892358+00:00"
+    "orchestrator": "2026-09-25T17:56:21.600493+00:00",
+    "hn": "2026-09-25T17:48:46.262353+00:00",
+    "arxiv": "2026-09-25T17:49:28.843421+00:00",
+    "github": "2026-09-25T17:50:29.567634+00:00",
+    "research_desk": "2026-09-25T17:53:02.323340+00:00"
   }
 }
