@@ -1,39 +1,39 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## AD-WM: Action-Discriminative World Models Boost Counterfactual MPC\n\n### The Breakthrough\nAD-WM adds a residual latent dynamics component plus an inverse\u2011dynamics\u2011based action\u2011recovery regularizer to a joint\u2011embedding world model, preserving action information and raising hard\u2011start success from 3.7% to 52% and zero\u2011shot pick\u2011and\u2011place on a real Franka arm from 42.2% to 71%.\n\n### The Caveats\nThe real\u2011world validation is limited to a single basic pick\u2011and\u2011place on a Franka arm, so broader claims remain unproven.\n\n## Rolling-WAM: Faster World-Action Models via Rolling Imagination\n\n### The Breakthrough\nRolling\u2011WAM keeps a sliding window of video\u2011action chunks with a rolling noise schedule that fully denoises the imminent chunk while partially refining future ones, delivering a reported 4.5\u00d7 steady\u2011state replanning speedup while keeping performance, demonstrated on simulation benchmarks and a real Unitree G1 humanoid.\n\n### The Caveats\nSpeedup and performance are only benchmarked against a single baseline (standard joint WAMs).\n\n## Contact as Decision Variable: Capability-Tradeoff Contact Selection\n\n### The Breakthrough\nCTCS screens candidate contacts, predicts their capabilities via local sensitivity analysis, and selectively performs exact whole\u2011body optimizations, achieving about a 3\u00d7 speedup over exhaustive evaluation while preserving objective values, shown on a Unitree Go2 quadruped with an AgileX NERO arm.\n\n### The Caveats\nDemonstrated only on a single quadruped\u2011arm platform in quasi\u2011static tasks.\n\n## RAPID: Robot Agentic Programming from Demonstrations\n\n### The Breakthrough\nRAPID infers task specifications, action primitives, and an execution environment from a single visual human demonstration, generating object\u2011centric relational programs that transfer to a real Franka arm across eight contact\u2011rich tasks and LIBERO\u2011Pro benchmarks.\n\n### The Caveats\nNo baseline comparisons are provided, leaving performance relative to prior methods unclear.\n\n## HomeBody: VLM\u2011driven Humanoid with Spatial Tool Calls\n\n### The Breakthrough\nHomeBody lets a vision\u2011language model output a skill name and spatial target (e.g., image point or map coordinate) which a tool call turns into a full motion pipeline using segmentation, Fast\u2011FoundationStereo depth, analytic grasp calculation and spline\u2011based planners, demonstrated on picking, navigation, placing and drawer\u2011opening.\n\n### The Caveats\nThe post provides no quantitative or hardware results beyond the authors' own demo.\n\n## Stripe Patterns Fool AI\u2011Powered Vehicles and Robots\n\n### The Breakthrough\nUF researchers showed that black\u2011and\u2011white stripe patterns corrupt stereo depth estimation, causing false distance readings, and introduced a lightweight software filter plus model modifications that reduce erroneous predictions on both simulation and a real autonomous\u2011vehicle test platform.\n\n### The Caveats\nThe paper provides no baseline comparisons, so robustness improvements are unverified.\n\n## OpenAI Codex Agents Bug Costs $78k\n\n### The Breakthrough\nA single Codex request in version 0.144.0\u2011alpha.4 spawned 826 child agents, consuming ~2.1\u202ftrillion tokens (~$78\u202fk) due to a bug that inflated per\u2011child token usage to 264\u202fM versus 31\u202fM in later builds.\n\n### The Caveats\nThe incident relies on one user\u2019s anecdotal logs with no server\u2011side verification or independent replication.\n\n## Synaptic Harmony: Multi\u2011Agent Q\u2011Learning Swarm Foraging Simulation\n\n### The Breakthrough\nThe repository provides a Python/NumPy sandbox where each forager maintains its own Q\u2011table in a dynamic grid world with renewable resources and moving obstacles, fully configurable via YAML and visualized in real time.\n\n### The Caveats\nNo quantitative evaluation or baseline comparison to existing multi\u2011agent RL methods is provided.\n\n### Priority\nAD\u2011WM shows how modest architectural tweaks can turn learned world models into practical planners that dramatically boost real\u2011world pick\u2011and\u2011place success, making it the most immediately impactful advance for robotics today.\n\n### One action\nConsider adding an action\u2011recovery regularizer to your latent dynamics model to improve MPC performance.",
+  "report": "## Perceptive Multi\u2011Skill Humanoid Locomotion\n\n### The Breakthrough\nThe authors present a two\u2011layer architecture that plans whole\u2011body motions directly from raw depth images and tracks them with a reinforcement\u2011learning\u2011trained policy. A perceptive flow\u2011matching motion generator creates trajectories, while an off\u2011policy fine\u2011tuning loop improves it, boosting terrain\u2011traversal success by up to 25\u202fpp and skill selection by up to 80\u202fpp. The system runs on a real Unitree G1 humanoid using only two depth cameras and succeeds on outdoor obstacles such as boxes and stairs.\n\n### The Caveats\nThe paper names no baseline methods or standard benchmarks, so the significance of the reported gains cannot be assessed.\n\n## LeCo Compliance Insertion\n\n### The Breakthrough\nLeCo couples visual policy learning with a fixed admittance controller, converting high\u2011frequency contact data into multirate reward signals that penalize pushing against compliance. Experiments on four real connector\u2011assembly tasks achieve a 94\u202f% success rate and noticeably lower peak force/torque values.\n\n### The Caveats\nThe reported performance lacks comparison to existing adaptive\u2011compliance or baseline insertion approaches.\n\n## CeDiRNet\u20116DoF Cloth Unfolding\n\n### The Breakthrough\nCeDiRNet\u20116DoF jointly learns dense 3D grasp regression, segmentation, and sine\u2011cosine encoded Euler angles to output full 6\u2011DoF grasp poses that maximize unfolded cloth area. Evaluated on a bimanual robot in the ICRA\u202f2024 Cloth Competition, it attains state\u2011of\u2011the\u2011art results.\n\n### The Caveats\nThe claimed superiority is unsupported because the paper provides no baseline comparisons.\n\n## STL\u2011SVPG Sparse\u2011Reward RL\n\n### The Breakthrough\nSTL\u2011SVPG embeds Signal Temporal Logic robustness into Stein Variational Policy Gradient, enabling trajectory\u2011level credit assignment for sparse\u2011success tasks. It achieves the highest mean success on five of six quadcopter and manipulator benchmarks and demonstrates sim\u2011to\u2011real transfer.\n\n### The Caveats\nNo prior baselines are named or compared against, leaving the claimed state\u2011of\u2011the\u2011art status unverified.\n\n## Canadarm2 ISS Issue\n\n### The Breakthrough\nCanadarm2\u2019s modular inchworm architecture with identical ends has operated for over 20\u202fyears; after a routine walk\u2011off maneuver, the arm remains functional and is used to inspect the Crew\u201112 Dragon despite communication errors in its mobile transporter.\n\n### The Caveats\nThe robustness claim is unsubstantiated, as no root\u2011cause analysis of the communication errors has been presented.\n\n## Tesla Optimus V3 Production\n\n### The Breakthrough\nOptimus V3 features highly dexterous hands assembled from more than 100 components and integrates AI\u2011driven control, with Tesla targeting a weekly output of over 1,000 units by the end of 2026.\n\n### The Caveats\nThe story provides only production\u2011throughput targets and no independent evidence of the robots\u2019 real\u2011world manipulation ability, safety, or performance.\n\n## Roborock Offline Cloud Hack\n\n### The Breakthrough\nThe hack rewrites the firmware\u2011hardcoded hostname to redirect traffic to a user\u2011controlled server, then recovers the vacuum\u2019s public key via an RSA\u2011signature GCD attack, enabling full offline control through Home Assistant without rooting.\n\n### The Caveats\nThe solution is demonstrated on only a few Roborock units, so its generality across the product line is unclear.\n\n## Spirula Studio 3D Gaussian Splatting\n\n### The Breakthrough\nSpirula Studio is a single\u2011binary C++ tool that trains 3D Gaussian splatting models up to 10\u202fM SH\u20113 Gaussians in 8\u202fGB VRAM using a cross\u2011vendor Vulkan (or CUDA) backend, with built\u2011in SfM, 360\u00b0 camera support, and a GUI viewer.\n\n### The Caveats\nPerformance claims are unverified; the repository offers no benchmark results or comparisons to existing splatting pipelines.\n\n### What to watch\nThree papers tackle manipulation from different angles: LeCo focuses on compliant insertion via reward\u2011shaped visual policies, CeDiRNet\u20116DoF advances vision\u2011based 6\u2011DoF grasp estimation for deformable cloth, and STL\u2011SVPG introduces temporal\u2011logic\u2011guided RL for sparse\u2011reward tasks. Together they illustrate a trend toward tighter integration of perception, compliance, and high\u2011level task specifications.\n\n### Priority\nThe perceptive humanoid locomotion system is the most compelling start today because it demonstrates a complete perception\u2011to\u2011control pipeline on a real robot, delivering measurable outdoor navigation gains with minimal sensor hardware.\n\n### One action\nIf you have a depth\u2011camera equipped robot, replicate the two\u2011camera setup and test the flow\u2011matching motion generator using the authors\u2019 released code.",
   "themes": [
-    "world-models",
-    "model-predictive-control",
+    "humanoid",
     "manipulation",
-    "legged-robots"
+    "reinforcement-learning",
+    "robotics"
   ],
   "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2609.30264",
-    "https://arxiv.org/abs/2609.30247",
-    "https://arxiv.org/abs/2609.30140",
-    "https://arxiv.org/abs/2609.30249",
-    "https://tml.stanford.edu/homebody/",
-    "https://news.ufl.edu/2026/09/ai-powered-vehicles/",
-    "https://news.ycombinator.com/item?id=49861047",
-    "https://github.com/jaimasih05-commits/swarm-foraging-qlearn"
+    "https://arxiv.org/abs/2609.31577",
+    "https://arxiv.org/abs/2609.31439",
+    "https://arxiv.org/abs/2609.31452",
+    "https://arxiv.org/abs/2609.31606",
+    "https://arstechnica.com/space/2026/09/the-large-robotic-arm-on-the-international-space-station-has-stopped-working/",
+    "https://arstechnica.com/ai/2026/09/tesla-workers-balk-at-training-optimus-humanoid-robots-as-replacements/",
+    "https://github.com/Python-roborock/local_roborock_server",
+    "https://github.com/harry7557558/spirula-studio"
   ],
   "section_titles": [
-    "AD-WM: Action-Discriminative World Models Boost Counterfactual MPC",
-    "Rolling-WAM: Faster world\u2011action models via rolling imagination",
-    "Contact as a Decision Variable: Capability-Tradeoff Contact Selection for Legged Loco-Manipulation",
-    "RAPID: Robot Agentic Programming from Demonstrations",
-    "HomeBody: VLM-driven humanoid with spatial target tool calls for manipulation and navigation",
-    "Simple visual patterns can fool AI\u2011powered vehicle and robot depth perception",
-    "OpenAI Codex agents spawned 826 threads, costing ~$78k due to alleged bug",
-    "Synaptic Harmony: Multi\u2011Agent Q\u2011Learning Swarm Foraging Simulation"
+    "Perceptive Multi\u2011Skill Humanoid Locomotion via RL\u2011Fine\u2011Tuned Motion Generators",
+    "Learning to Leverage Compliance: Policy-Admittance Framework for Robotic Insertion",
+    "CeDiRNet-6DoF: Vision-Based 6-DoF Grasp Pose Estimation for Robot Cloth Unfolding",
+    "STL\u2011Guided Stein Variational Policy Gradient for Learning Robot Policies from Sparse Success Signals",
+    "Canadarm2 on ISS reports operational hiccups after routine walk\u2011off maneuver",
+    "Tesla workers balk at training Optimus humanoid robots as replacements",
+    "Self\u2011hosted Roborock cloud lets vacuum run offline",
+    "Spirula Studio: cross\u2011vendor 3D Gaussian Splatting trainer with Vulkan and CUDA"
   ],
-  "generated_at": "2026-09-27T17:43:51.400251+00:00",
+  "generated_at": "2026-09-28T20:07:12.441160+00:00",
   "run_times": {
-    "orchestrator": "2026-09-27T17:43:51.400251+00:00",
-    "hn": "2026-09-27T17:34:49.600175+00:00",
-    "arxiv": "2026-09-27T17:35:29.739097+00:00",
-    "github": "2026-09-27T17:36:29.663270+00:00",
-    "research_desk": "2026-09-27T17:39:02.055661+00:00"
+    "orchestrator": "2026-09-28T20:07:12.441160+00:00",
+    "hn": "2026-09-28T20:02:01.453228+00:00",
+    "arxiv": "2026-09-28T20:02:40.791738+00:00",
+    "github": "2026-09-28T20:03:41.416673+00:00",
+    "research_desk": "2026-09-28T20:06:33.987374+00:00"
   }
 }
