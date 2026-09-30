@@ -1,35 +1,37 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## DexRoam\n\n### The Breakthrough\nDexRoam introduces a tracker\u2011free pipeline using a consumer VR headset and a head\u2011mounted stereo camera to capture egocentric whole\u2011body human demonstrations. Three explicit alignment stages (embodiment, action\u2011semantic, temporal) map the captured motion into the robot\u2019s action space, preserving fine\u2011grained dynamics. Policies trained on these demos raise success on two mobile bimanual tasks from ~30% to >55%, matching robot\u2011only training with half the robot data.\n\n### The Caveats\nThe approach is demonstrated on only two tasks with a single mobile bimanual robot, leaving its generalization to other morphologies or domains unproven.\n\n## RoboCompiler\n\n### The Breakthrough\nRoboCompiler builds a graph\u2011native representation of closed\u2011chain mechanisms, generating closure paths, analytic residual Jacobians, and constraint\u2011curvature corrections that stay consistent across control and simulation pipelines. On the Kangaroo platform it cuts residual\u2011and\u2011Jacobian evaluation time by 96.7% and reduces closed\u2011loop rollout wall time by 66.8%.\n\n### The Caveats\nThe paper reports large computational speedups but provides no baseline comparison to existing closed\u2011chain modeling or control pipelines.\n\n## Holo-M\n\n### The Breakthrough\nHolo-M extends a language model with discrete vision\u2011language\u2011action tokens that split humanoid actions into end\u2011effector, body, hand, and kinematics streams, and uses grouped discrete diffusion decoding for real\u2011time control. The system achieves record success on the SIMPLE benchmark, outperforming prior approaches.\n\n### The Caveats\nThe work reports benchmark records without naming baselines, making it unclear how it compares to existing methods.\n\n## LQR\u2011ArUco Fusion\n\n### The Breakthrough\nThe framework fuses an offboard ArUco\u2011marker vision module for global waypoint guidance with an onboard LQR loop that uses inertial and encoder data to reject disturbances in real time. This dual\u2011loop design lets a narrow\u2011wheelbase two\u2011wheeled inverted\u2011pendulum robot balance while performing asymmetric manipulation on uneven terrain.\n\n### The Caveats\nThe paper provides no comparison against existing control approaches, so performance improvements are unverified.\n\n## JBR\u2011001 Desktop Robot\n\n### The Breakthrough\nJBR\u2011001 is an open\u2011source, 3D\u2011printable desktop companion robot powered by an Arduino UNO Q, featuring a camera, distance sensor, servos for head and arms, and an animated display. All mechanical parts are supplied as STL files and the firmware is fully open\u2011source, enabling rapid replication and customization.\n\n### The Caveats\nObject\u2011recognition capability is shown only in an informal hobbyist demo, with no quantitative evaluation or comparison to existing perception methods.\n\n## GPT\u20116.1 Sol\n\n### The Breakthrough\nGPT\u20116.1\u202fSol introduces cached input pricing at $0.10 per million tokens (45% cheaper) and a reduced output cost while delivering same or better benchmark scores than GPT\u20116\u202fAstra, improving scores by 2\u20137\u202fpercentage points and cutting factual error rates by ~32% at low reasoning effort. An \u201cUltrafast\u201d variant promises up to 8\u00d7 faster generation for coding use cases.\n\n### The Caveats\nThe near\u2011Astra performance claim rests solely on language\u2011only benchmarks, with no real\u2011world robot or multimodal tests to substantiate the advertised agentic capabilities.\n\n### Priority\nDexRoam offers a practical, low\u2011cost pipeline to capture rich human demonstrations and delivers a more than two\u2011fold boost in real\u2011world success on mobile bimanual tasks, making it the most immediately actionable advance for embodied\u2011AI labs today.\n\n### One action\nTry reproducing DexRoam\u2019s tracker\u2011free demo capture using a consumer VR headset and a stereo camera to generate training data for your own manipulation robot.\n\n### What to watch\nSeveral papers (DexRoam, Holo\u2011M, LQR\u2011ArUco Fusion) push toward richer, vision\u2011grounded control pipelines for embodied agents, while RoboCompiler tackles the long\u2011standing closed\u2011chain modeling bottleneck. Watching how these approaches integrate\u2014especially whether discrete VLA models can be combined with graph\u2011native compilation\u2014will indicate the next wave of scalable robot learning and deployment.",
+  "report": "## Mind-1: Physical AI framework cuts inference latency\n\n### The Breakthrough\nMind-1 introduces a high\u2011precision data pipeline, a hierarchical control stack, and a custom FlashRT inference engine that together slash model inference latency from 82\u202fms to 32\u202fms (61% reduction) and halve end\u2011to\u2011end decision latency to 77.5\u202fms, enabling logistics\u2011task cycle times that match or exceed human speed on three robot embodiments.\n\n### The Caveats\nThe work provides no comparison to external state\u2011of\u2011the\u2011art methods, so its claim of human\u2011level performance remains unverified.\n\n## PRISM: Counterfactual video generation for humanoid loco\u2011manipulation\n\n### The Breakthrough\nPRISM expands a handful of real human\u2011object interaction videos into hundreds of counterfactual clips via video\u2011to\u2011video generation, reconstructs physically plausible trajectories, and trains a single policy that directly controls a real humanoid robot (depth\u2011only) to pick, carry, and drop diverse objects such as boxes and barrels.\n\n### The Caveats\nNo baseline comparison to existing imitation or sim\u2011to\u2011real approaches is provided.\n\n## Rho: Efficiently adaptable VLA models for dual\u2011arm manipulation\n\n### The Breakthrough\nRho combines embodiment\u2011midtraining with a lightweight online adaptation module, achieving strong performance on three dual\u2011arm platforms (YAM Box, UR AI Trainer, FR3 Duo) with as few as 15 corrected episodes and matching or exceeding open\u2011weight VLA baselines.\n\n### The Caveats\nThe baselines are unnamed, making it unclear how strong the reported improvements are.\n\n## SimpleICL: Democratized in\u2011context robot learning\n\n### The Breakthrough\nSimpleICL defines a clear ICL problem, uses a visual prompt encoder and inexpensive data collection, and attains competitive results on both simulated and real\u2011world manipulation benchmarks without massive pretraining.\n\n### The Caveats\nThe paper lacks comparison to existing ICL or large\u2011pretrained baselines.\n\n## Skill\u2011Space Shooting for autonomous robot policy improvement\n\n### The Breakthrough\nThe method treats corrective actions as sequences of reusable skills, steers a sampling process with a foundation model, and harvests successful roll\u2011outs as supervised data, enabling robots to iteratively refine policies and transfer skills to new tasks without human demonstrations.\n\n### The Caveats\nImprovements are shown only in ad\u2011hoc real\u2011world trials with no quantitative baseline.\n\n## mesozoic\u2011labs: dinosaur\u2011inspired locomotion research platform\n\n### The Breakthrough\nThe open\u2011source repo bundles articulated MJCF models, a curriculum manager, and Stable\u2011Baselines3/JAX pipelines to train RL agents on MuJoCo environments that simulate various dinosaurs and a crocodylomorph, facilitating unconventional locomotion studies.\n\n### The Caveats\nResults are limited to simulation and lack comparison to established RL baselines.\n\n## China ships 19k humanoid robots H1 2026, 78% of global market\n\n### The Breakthrough\nIDC reports China shipped over 19,000 humanoid robots in H1\u202f2026, accounting for 77.9% of global shipments; total global shipments rose ~432% YoY to ~25,000 units, with a forecast of >750,000 units by 2030.\n\n### The Caveats\nThe figures rely solely on IDC data with no independent verification of robot capabilities or real\u2011world deployment.\n\n### Priority\nMind-1\u2019s dramatic latency reduction and demonstrated human\u2011speed cycle times across multiple robots make it the most immediately actionable advance for developers seeking faster embodied AI.\n\n### One action\nExplore Mind\u20111\u2019s open\u2011source inference engine (FlashRT) and benchmark its 32\u202fms latency on your own hardware.\n\n### What to watch\nSeveral stories target faster, more adaptable manipulation: Mind\u20111 focuses on low\u2011latency inference, Rho on data\u2011efficient policy adaptation, PRISM on synthetic video data for sim\u2011to\u2011real transfer, SimpleICL on cheap in\u2011context learning, and Skill\u2011Space Shooting on autonomous skill composition. Together they signal a shift toward reducing engineering overhead while boosting real\u2011world performance.",
   "themes": [
     "manipulation",
-    "learning-from-demonstration",
-    "robot-modeling",
-    "large-language-models"
+    "low-latency",
+    "simulation",
+    "humanoid"
   ],
-  "source_count": 6,
+  "source_count": 7,
   "section_urls": [
-    "https://arxiv.org/abs/2609.35761",
-    "https://arxiv.org/abs/2609.35717",
-    "https://arxiv.org/abs/2609.35709",
-    "https://arxiv.org/abs/2609.35700",
-    "https://projecthub.arduino.cc/syntheticaidata/jbr-001-a-desktop-companion-robot-powered-by-arduino-uno-q-b11c96",
-    "https://openai.com/index/introducing-gpt-6-1-sol/"
+    "https://www.mindon.tech/blog/mind-1/index.html",
+    "https://arxiv.org/abs/2609.38172",
+    "https://arxiv.org/abs/2609.38164",
+    "https://arxiv.org/abs/2609.38173",
+    "https://arxiv.org/abs/2609.38178",
+    "https://github.com/kuds/mesozoic-labs",
+    "https://technode.com/2026/09/29/china-accounts-for-77-9-of-global-humanoid-robot-shipments-in-h1-idc-says/"
   ],
   "section_titles": [
-    "DexRoam: Learning Mobile Bimanual Dexterous Manipulation from Egocentric Whole-Body Human Demonstrations",
-    "RoboCompiler: Graph-Native Compilation for Consistent Modeling, Control, and Simulation of Closed-Chain Robots",
-    "Holo-M: Discrete Vision-Language-Action Model for Humanoid Loco-Manipulation",
-    "LQR-ArUco Fusion: Robust Hierarchical Control for Navigation and Asymmetric Manipulation in Two-Wheeled Robots",
-    "JBR-001: Open-source 3D\u2011printable desktop robot with Arduino UNO Q",
-    "OpenAI launches GPT-6.1 Sol: near-Astra intelligence at one-fifth the cost"
+    "Mind-1: Physical AI framework cuts robot inference latency from 82\u202fms to 32\u202fms",
+    "PRISM: Counterfactual Video Generation for Scalable Humanoid Loco-Manipulation",
+    "Rho: Efficiently Adaptable VLA Models for Dual\u2011Arm Manipulation",
+    "In-context Robot Learning Made Simple: A Democratized Recipe for Manipulation Tasks",
+    "Skill-Space Shooting for Autonomous Robot Policy Improvement",
+    "mesozoic-labs: dinosaur\u2011inspired locomotion research platform with MuJoCo RL environments",
+    "China ships 19k humanoid robots H1 2026, 78% of global market"
   ],
-  "generated_at": "2026-09-29T18:34:21.596206+00:00",
+  "generated_at": "2026-09-30T18:23:16.280270+00:00",
   "run_times": {
-    "orchestrator": "2026-09-29T18:34:21.596206+00:00",
-    "hn": "2026-09-29T18:29:38.140589+00:00",
-    "arxiv": "2026-09-29T18:30:20.321204+00:00",
-    "github": "2026-09-29T18:34:21.596206+00:00",
-    "research_desk": "2026-09-29T18:33:21.082200+00:00"
+    "orchestrator": "2026-09-30T18:23:16.280270+00:00",
+    "hn": "2026-09-30T18:18:16.645055+00:00",
+    "arxiv": "2026-09-30T18:18:56.933820+00:00",
+    "github": "2026-09-30T18:19:59.046064+00:00",
+    "research_desk": "2026-09-30T18:23:03.088050+00:00"
   }
 }
