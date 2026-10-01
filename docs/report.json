@@ -1,37 +1,38 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Mind-1: Physical AI framework cuts inference latency\n\n### The Breakthrough\nMind-1 introduces a high\u2011precision data pipeline, a hierarchical control stack, and a custom FlashRT inference engine that together slash model inference latency from 82\u202fms to 32\u202fms (61% reduction) and halve end\u2011to\u2011end decision latency to 77.5\u202fms, enabling logistics\u2011task cycle times that match or exceed human speed on three robot embodiments.\n\n### The Caveats\nThe work provides no comparison to external state\u2011of\u2011the\u2011art methods, so its claim of human\u2011level performance remains unverified.\n\n## PRISM: Counterfactual video generation for humanoid loco\u2011manipulation\n\n### The Breakthrough\nPRISM expands a handful of real human\u2011object interaction videos into hundreds of counterfactual clips via video\u2011to\u2011video generation, reconstructs physically plausible trajectories, and trains a single policy that directly controls a real humanoid robot (depth\u2011only) to pick, carry, and drop diverse objects such as boxes and barrels.\n\n### The Caveats\nNo baseline comparison to existing imitation or sim\u2011to\u2011real approaches is provided.\n\n## Rho: Efficiently adaptable VLA models for dual\u2011arm manipulation\n\n### The Breakthrough\nRho combines embodiment\u2011midtraining with a lightweight online adaptation module, achieving strong performance on three dual\u2011arm platforms (YAM Box, UR AI Trainer, FR3 Duo) with as few as 15 corrected episodes and matching or exceeding open\u2011weight VLA baselines.\n\n### The Caveats\nThe baselines are unnamed, making it unclear how strong the reported improvements are.\n\n## SimpleICL: Democratized in\u2011context robot learning\n\n### The Breakthrough\nSimpleICL defines a clear ICL problem, uses a visual prompt encoder and inexpensive data collection, and attains competitive results on both simulated and real\u2011world manipulation benchmarks without massive pretraining.\n\n### The Caveats\nThe paper lacks comparison to existing ICL or large\u2011pretrained baselines.\n\n## Skill\u2011Space Shooting for autonomous robot policy improvement\n\n### The Breakthrough\nThe method treats corrective actions as sequences of reusable skills, steers a sampling process with a foundation model, and harvests successful roll\u2011outs as supervised data, enabling robots to iteratively refine policies and transfer skills to new tasks without human demonstrations.\n\n### The Caveats\nImprovements are shown only in ad\u2011hoc real\u2011world trials with no quantitative baseline.\n\n## mesozoic\u2011labs: dinosaur\u2011inspired locomotion research platform\n\n### The Breakthrough\nThe open\u2011source repo bundles articulated MJCF models, a curriculum manager, and Stable\u2011Baselines3/JAX pipelines to train RL agents on MuJoCo environments that simulate various dinosaurs and a crocodylomorph, facilitating unconventional locomotion studies.\n\n### The Caveats\nResults are limited to simulation and lack comparison to established RL baselines.\n\n## China ships 19k humanoid robots H1 2026, 78% of global market\n\n### The Breakthrough\nIDC reports China shipped over 19,000 humanoid robots in H1\u202f2026, accounting for 77.9% of global shipments; total global shipments rose ~432% YoY to ~25,000 units, with a forecast of >750,000 units by 2030.\n\n### The Caveats\nThe figures rely solely on IDC data with no independent verification of robot capabilities or real\u2011world deployment.\n\n### Priority\nMind-1\u2019s dramatic latency reduction and demonstrated human\u2011speed cycle times across multiple robots make it the most immediately actionable advance for developers seeking faster embodied AI.\n\n### One action\nExplore Mind\u20111\u2019s open\u2011source inference engine (FlashRT) and benchmark its 32\u202fms latency on your own hardware.\n\n### What to watch\nSeveral stories target faster, more adaptable manipulation: Mind\u20111 focuses on low\u2011latency inference, Rho on data\u2011efficient policy adaptation, PRISM on synthetic video data for sim\u2011to\u2011real transfer, SimpleICL on cheap in\u2011context learning, and Skill\u2011Space Shooting on autonomous skill composition. Together they signal a shift toward reducing engineering overhead while boosting real\u2011world performance.",
+  "report": "## GPU-Accelerated Exploration Gains\n\n### The Breakthrough\nThe authors introduce a GPU\u2011based method to compute path\u2011dependent marginal information gain for sampling\u2011based exploration planners, achieving speed\u2011ups of 118\u00d7 on a desktop GPU and 28\u00d7 on an NVIDIA Jetson Orin\u202fNX while staying within 5\u201110% of exact voxel\u2011hash\u2011map gain; integrated into two planners it reduces time to reach 95% coverage in tested scenarios.\n\n### The Caveats\nThe speedup and coverage\u2011time reductions are shown only on three simulators and a single robot, with no tests in larger\u2011scale or outdoor environments, so the benefits may not generalize.\n\n## AI-Generated Three-Point Turn for Sherpa\u202f10K\n\n### The Breakthrough\nAn LLM\u2011driven workflow automatically drafted specifications, generated a 200\u2011line kinematic simulator, and collapsed eight design knobs to two aisle\u2011width parameters, enabling a reliable forward\u2011reverse\u2011forward three\u2011point turn on the real Sherpa\u202f10K haul robot.\n\n### The Caveats\nThe work offers no comparison to existing planning methods, so the claimed reliability cannot be benchmarked against prior approaches.\n\n## Ego4WAM: Scaling Egocentric Human Data\n\n### The Breakthrough\nEgo4WAM isolates key factors of egocentric video (alignment, duration, diversity, supervision) within a fixed backbone, showing that aligned human demos dramatically improve out\u2011of\u2011distribution generalization and cut required robot\u2011specific data, with video\u2011only supervision remaining surprisingly effective; results are validated on real robots and the RoboDojo simulator.\n\n### The Caveats\nGains are reported without comparing to prior methods or strong baselines, leaving it unclear whether improvements stem from the studied data factors.\n\n## DynaHarness: Dynamic Physical Harness\n\n### The Breakthrough\nDynaHarness separates a symbolic \u201cbrain\u201d that proposes capabilities from a fast \u201cbrain\u201d that grounds and monitors actions via an execution contract, using paired regression checks to reject or revise commands; on the LIBERO\u2011Pro benchmark this raises success from 17.5% (frozen policy) to 75.2% across 800 new initial states, surpassing nominal replanning.\n\n### The Caveats\nThe reported gains are confined to simulated LIBERO\u2011Pro tasks, with no hardware experiments to confirm the framework works on real robots.\n\n## AssemblyWorld Benchmark\n\n### The Breakthrough\nAssemblyWorld provides a simulated 3D environment where agents infer geometry from rendered views only; its benchmark of 100 assembly tasks across 80 objects shows the best open\u2011source agent reaches 80.9% part\u2011level accuracy but only 59.4% full\u2011assembly success, highlighting the challenge of visual\u2011interactive assembly.\n\n### The Caveats\nWithout established baselines, it is impossible to tell whether the reported 80.9% part accuracy truly advances the state of the art.\n\n## XTechHumanoid Competition Winners\n\n### The Breakthrough\nThe XTechHumanoid competition announced winners that demonstrated capabilities relevant to military applications, signalling growing defense interest in deploying humanoid platforms.\n\n### The Caveats\nThe announcement provides no formal evaluation or baseline comparison, so the claim of advancing military humanoid capabilities is unsupported.\n\n## Understanding AI That Drives Robots\n\n### The Breakthrough\nAn essay surveys recent funding and the rise of vision\u2011language\u2011action (VLA) models, highlighting Physical Intelligence\u2019s open\u2011weight 0.5 VLA transformer that fuses text, images, and robot telemetry via attention to output action sequences, now common in commercial humanoid robots.\n\n### The Caveats\nThe essay offers no empirical results, benchmarks, or baseline comparisons, leaving the claimed advantages of VLA models unsubstantiated.\n\n### Priority\nThe GPU\u2011accelerated information\u2011gain planner delivers massive speedups that immediately cut exploration time on real robots, making it the most impactful advance to watch today.\n\n### One action\nCheck the authors' repository for the GPU implementation and benchmark it on your own robot\u2019s exploration pipeline.",
   "themes": [
-    "manipulation",
-    "low-latency",
-    "simulation",
-    "humanoid"
+    "exploration",
+    "gpu-acceleration",
+    "motion-planning",
+    "embodied-ai",
+    "manipulation"
   ],
   "source_count": 7,
   "section_urls": [
-    "https://www.mindon.tech/blog/mind-1/index.html",
-    "https://arxiv.org/abs/2609.38172",
-    "https://arxiv.org/abs/2609.38164",
-    "https://arxiv.org/abs/2609.38173",
-    "https://arxiv.org/abs/2609.38178",
-    "https://github.com/kuds/mesozoic-labs",
-    "https://technode.com/2026/09/29/china-accounts-for-77-9-of-global-humanoid-robot-shipments-in-h1-idc-says/"
+    "https://arxiv.org/abs/2609.40297",
+    "https://www.atirobotics.ai/resources/blogs/teaching-a-three-point-turn/",
+    "https://arxiv.org/abs/2609.40341",
+    "https://arxiv.org/abs/2609.40306",
+    "https://arxiv.org/abs/2609.40353",
+    "https://www.war.gov/News/News-Stories/Article/Article/4613847/robotics-competition-winners-advance-military-exploration-of-humanoid-capabilit/",
+    "https://www.construction-physics.com/p/understanding-the-ai-that-drives"
   ],
   "section_titles": [
-    "Mind-1: Physical AI framework cuts robot inference latency from 82\u202fms to 32\u202fms",
-    "PRISM: Counterfactual Video Generation for Scalable Humanoid Loco-Manipulation",
-    "Rho: Efficiently Adaptable VLA Models for Dual\u2011Arm Manipulation",
-    "In-context Robot Learning Made Simple: A Democratized Recipe for Manipulation Tasks",
-    "Skill-Space Shooting for Autonomous Robot Policy Improvement",
-    "mesozoic-labs: dinosaur\u2011inspired locomotion research platform with MuJoCo RL environments",
-    "China ships 19k humanoid robots H1 2026, 78% of global market"
+    "GPU-Accelerated Path-Dependent Marginal Information Gain for Faster Autonomous Exploration",
+    "AI\u2011generated three\u2011point turn for heavy\u2011duty Sherpa 10K robot",
+    "Ego4WAM: Systematic study of scaling egocentric human data for robot learning",
+    "DynaHarness: A Dynamic Physical Harness for Self-Evolving Robot Agents",
+    "AssemblyWorld: Interactive 3D Assembly Benchmark for General\u2011Purpose Agents",
+    "XTechHumanoid winners advance military exploration of humanoid capabilities",
+    "Understanding the AI That Drives Robots \u2013 a look at vision\u2011language\u2011action models"
   ],
-  "generated_at": "2026-09-30T18:23:16.280270+00:00",
+  "generated_at": "2026-10-01T18:51:30.773247+00:00",
   "run_times": {
-    "orchestrator": "2026-09-30T18:23:16.280270+00:00",
-    "hn": "2026-09-30T18:18:16.645055+00:00",
-    "arxiv": "2026-09-30T18:18:56.933820+00:00",
-    "github": "2026-09-30T18:19:59.046064+00:00",
-    "research_desk": "2026-09-30T18:23:03.088050+00:00"
+    "orchestrator": "2026-10-01T18:51:30.773247+00:00",
+    "hn": "2026-10-01T18:43:31.348205+00:00",
+    "arxiv": "2026-10-01T18:44:08.291211+00:00",
+    "github": "2026-10-01T18:45:08.776632+00:00",
+    "research_desk": "2026-10-01T18:47:44.605829+00:00"
   }
 }
