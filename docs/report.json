@@ -1,42 +1,38 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Boston Dynamics Atlas Hand\n\n### The Breakthrough\nBoston Dynamics unveiled a redesigned Atlas robot hand that expands from 7 to 13 degrees of freedom, adds a fourth finger and finger\u2011splay, and embeds larger direct\u2011drive actuators with replaceable packs for force feedback. The architecture is designed for rugged, low\u2011cost, mass\u2011production and mirrors a hand shape suitable for learning from human demonstrations, enabling more versatile tool use.\n\n### The Caveats\nThe claim of rugged, low\u2011cost, mass\u2011producible performance lacks any independent metrics or real\u2011world testing data.\n\n## GlassGuard Navigation Mapping\n\n### The Breakthrough\nGlassGuard fuses foundation\u2011vision glass masks with structural 3D cues and depth\u2011free projective checks to reconstruct planar glass surfaces, achieving 85% glass coverage and a 5\u201117\u00d7 reduction in false voxels per frame compared to baselines while mapping on real robots across nine building\u2011scale scenes.\n\n### The Caveats\nNo specific baseline methods are named, so the reduction claim lacks a concrete reference point.\n\n## InterEvolve Test\u2011Time Reward Evolution\n\n### The Breakthrough\nInterEvolve equips a pre\u2011trained humanoid controller with a forward\u2011backward behavioral model and an LLM\u2011driven planner that rewrites reward programs on\u2011the\u2011fly; the system discovers new loco\u2011manipulation strategies on a Unitree G1 robot without extra training data.\n\n### The Caveats\nThe study never benchmarks InterEvolve against existing test\u2011time adaptation approaches, leaving its advantage unsubstantiated.\n\n## RPG Guided Self\u2011Improvement\n\n### The Breakthrough\nRPG extracts capabilities from offline datasets, generates simulation practice tasks, and iteratively expands a symbolic skill library and system prompt, raising success on 22 held\u2011out manipulation tasks from 28.6% to 95.0% and achieving full success on 30 real\u2011world trials across three tasks on a single robot.\n\n### The Caveats\nReal\u2011world validation is limited to three tasks on one robot, with no broader hardware evaluation.\n\n## OpenAI Astra Robot\u2011Control Model\n\n### The Breakthrough\nAstra, a trillion\u2011parameter LLM, directly outputs precise gripper positions, eliminating a separate low\u2011level controller, and topped the RoboDojo robot\u2011control benchmark, surpassing specialized models such as \u03a9.5 and MolmoAct2.\n\n### The Caveats\nClaims rest on informal video demos and a single leaderboard ranking, lacking quantitative hardware tests, latency measurements, or robustness analysis.\n\n## SkeleWAM Skeleton World\u2011Action Model\n\n### The Breakthrough\nSkeleWAM replaces dense visual predictions with a lightweight 3D skeleton and introduces Medoid Action Consensus to infer actions from the skeleton and language instructions, reaching 85.9% success on the LIBERO\u2011Plus benchmark with only 57.1\u202fM parameters, beating the Cosmos\u2011Policy baseline.\n\n### The Caveats\nResults are demonstrated solely in simulation; no real\u2011world robot experiments are provided.\n\n## Company Knowledge Bench Retrieval\n\n### The Breakthrough\nKapa\u2019s Company Knowledge Bench offers a 1,000\u2011case real\u2011world retrieval set; a simple grep\u2011based frontier model scores 0.61 while the tuned Kapa Deep reaches 0.65 in about five seconds, using a two\u2011stage agent pipeline trained on a 170\u2011case labelled subset.\n\n### The Caveats\nBenchmarks are limited to Kapa\u2011built retrievers with no comparison to public or third\u2011party systems.\n\n## crowd Pedestrian Behaviour Dataset\n\n### The Breakthrough\nThe crowd\u2011dataset pipeline scrapes 33,645\u202fhours of YouTube dashcam video from 238 countries and applies YOLOv11 at scale, producing over 94\u202fk annotated pedestrian video segments for cross\u2011cultural autonomous\u2011vehicle safety research.\n\n### The Caveats\nNo quantitative detection accuracy or baseline comparison is provided, leaving dataset reliability unverified.\n\n## VisionState Home\u2011Assistant Add\u2011on\n\n### The Breakthrough\nVisionState runs a DINOv2\u2011based model locally on CPUs, retraining in about one second after a user click, and outputs MQTT sensors for Home Assistant, supporting object, state, and OCR detection without cloud services.\n\n### The Caveats\nThe project offers no benchmark or accuracy numbers and lacks comparison to existing vision add\u2011ons.\n\n### Priority\nBoston Dynamics' new Atlas hand sets a concrete hardware baseline for mass\u2011produced, high\u2011DOF manipulation, making it the most actionable development for today\u2019s robotics community.\n\n### One action\nReview the released design specs and simulation models from Boston Dynamics to prototype similar high\u2011DOF grippers in your own lab.\n\n### What to watch\nInterEvolve, RPG, and SkeleWAM all target scalable robot skill acquisition\u2014via reward\u2011program evolution, self\u2011improving symbolic libraries, or lightweight skeleton representations. Future releases that validate these approaches on diverse real robots will clarify which paradigm best bridges simulation gains to hardware performance.",
+  "report": "## RPG: Guided Self\u2011Improvement for Embodied Agents\n\n### The Breakthrough\nRPG lets robots close skill gaps without changing model weights: it diagnoses failures from simulator state and execution feedback, generates new symbolic skills and updates an LLM\u2011driven prompt, then practices in simulation. Across 22 held\u2011out manipulation tasks success climbs from 28.6% after one round to 95.0% after 15 rounds, beating ASPIRE (75.5%) and CaP\u2011Agent0 (60.0%). After a standard calibration, the frozen system solves all 30 real\u2011world trials (10 per task).\n\n### The Caveats\nThe self\u2011improvement loop is demonstrated on only three manipulation tasks, so broader generalisation remains unverified.\n\n## Self\u2011Organizing Spiking Neural Network Walks Robot Dog\n\n### The Breakthrough\nA robot dog learns to walk using a spiking neural network that self\u2011organizes motor patterns via intrinsic plasticity, encoding proprioceptive feedback into spike trains and requiring no external reward signal. The SNN discovers stable gait cycles autonomously and achieves sustained walking in its test environment.\n\n### The Caveats\nThe demo is unverified beyond a Hacker News post and lacks formal evaluation or baseline comparisons.\n\n## GlassGuard: Verified Glass Plane Mapping\n\n### The Breakthrough\nGlassGuard fuses foundation\u2011model glass instance masks with LiDAR cues, generates metric plane hypotheses and applies depth\u2011free projective checks, yielding 85% panoramic glass coverage (82% with pinhole inputs) and reducing false voxels by 5\u201117\u00d7 per frame compared to reported baselines.\n\n### The Caveats\nBaseline methods are unnamed and undescribed, preventing a clear assessment of the claimed improvement.\n\n## HumanoidToolBench Benchmark for Tool Use\n\n### The Breakthrough\nHumanoidToolBench introduces an 18\u2011task benchmark that evaluates tool selection, manipulation and locomotion, backed by the ToolBook dataset of 3.1\u202fk demos collected in simulation and on a real Unitree G1 robot, revealing large drops in performance on unseen tools and unrelated instructions.\n\n### The Caveats\nNo prior baselines are reported, so the benchmark\u2019s difficulty relative to existing methods is unclear.\n\n## SkeleWAM Skeleton\u2011Based Manipulation Model\n\n### The Breakthrough\nSkeleWAM builds an online 3D skeleton from RGB\u2011D and proprioception, uses Medoid Action Consensus to refine stochastic action samples, and with only 57.1\u202fM parameters attains 85.9% success on the LIBERO\u2011Plus benchmark, surpassing Cosmos\u2011Policy by 3.7 points.\n\n### The Caveats\nResults are confined to simulation; real\u2011robot transfer has not been demonstrated.\n\n## Kolibri Open\u2011Weight German/English LLM\n\n### The Breakthrough\nKolibri is a 78\u202fB\u2011parameter mixture\u2011of\u2011experts LLM (50 layers, 384 experts per layer, routing each token to 6 experts) that runs at ~3.5\u202fB FLOPs per token, achieves 87.5% on the German AIME benchmark and supports up to 1\u202fM\u2011token contexts via sliding\u2011window attention.\n\n### The Caveats\nPerformance is shown only on synthetic language benchmarks, with no robotic or hardware experiments.\n\n## Robot Harness C++17 Execution Framework\n\n### The Breakthrough\nRobot Harness is an open\u2011source C++17 library that links embodied AI agents, robot skills and environments through three safety checks, provides ROS2\u202fNav2 and Gazebo integration, and demonstrates composable, interruptible actions with demo result sums of 29 and 61.\n\n### The Caveats\nThe framework is evaluated only in Gazebo and lacks comparison to existing robot runtimes, leaving its claimed advantages unverified.\n\n### Priority\nRPG showcases a weight\u2011free self\u2011improvement loop that achieves near\u2011perfect real\u2011world manipulation performance, making it the most actionable breakthrough for today\u2019s robotics teams.\n\n### One action\nConsider adding a failure\u2011diagnosis and symbolic\u2011skill generation module to your frozen LLM\u2011driven manipulation pipeline to replicate RPG\u2019s self\u2011improvement gains.\n\n### What to watch\nRPG, SkeleWAM and HumanoidToolBench all target manipulation improvement\u2014RPG with real\u2011world self\u2011practice, SkeleWAM with a compact skeleton representation in simulation, and HumanoidToolBench providing a new benchmark that stresses tool selection and locomotion. Progress across these strands will reveal whether simulation\u2011centric efficiency (SkeleWAM) or autonomous practice loops (RPG) can close the gaps highlighted by the benchmark.",
   "themes": [
     "manipulation",
-    "perception",
-    "hardware",
-    "large-language-models",
-    "datasets"
+    "self-improvement",
+    "benchmark",
+    "mapping",
+    "language-models"
   ],
-  "source_count": 9,
+  "source_count": 7,
   "section_urls": [
-    "https://spectrum.ieee.org/robust-robot-hand",
-    "https://arxiv.org/abs/2610.02110",
-    "https://arxiv.org/abs/2610.02196",
     "https://arxiv.org/abs/2610.02204",
-    "https://www.understandingrobots.org/p/openais-astra-model-is-shockingly",
+    "https://www.reddit.com/r/Petoi/comments/1u5vgey/my_bittle_taught_itself_to_walk_with_a_spiking/",
+    "https://arxiv.org/abs/2610.02110",
+    "https://arxiv.org/abs/2610.02089",
     "https://arxiv.org/abs/2610.02120",
-    "https://www.kapa.ai/blog/company-knowledge-bench",
-    "https://github.com/crowd-dataset/crowd",
-    "https://github.com/oleost/VisionState"
+    "https://tej.as/blog/aleph-alpha-kolibri",
+    "https://github.com/xiao-yang25/robot-harness"
   ],
   "section_titles": [
-    "Boston Dynamics unveils robust, mass\u2011production Atlas robot hand",
+    "RPG: Guided Self\u2011Improvement Framework Boosts Manipulation Success to 95%",
+    "Robot dog learns to walk via spiking neural network without reward",
     "GlassGuard: Verified Glass Plane Mapping for Robot Navigation",
-    "InterEvolve: Test-Time Evolution of Reward Programs for Humanoid Loco-Manipulation",
-    "Reconstruct, Practice, Go Real: Guided Self-Improvement for Embodied Agents",
-    "OpenAI's Astra model shows strong robot-control abilities in demos",
-    "SkeleWAM: Sparse 3D Skeleton World-Action Modeling for Efficient Manipulation",
-    "Company Knowledge Bench: real-world retrieval benchmark for AI agents",
-    "crowd: YouTube\u2011sourced cross\u2011cultural pedestrian behavior dataset with YOLOv11 detections",
-    "VisionState: local AI sensor add\u2011on for Home Assistant cameras"
+    "HumanoidToolBench: Benchmarking Humanoid Tool Use from Selection to Mobile Execution",
+    "SkeleWAM: Skeleton World-Action Modeling for Efficient Robotic Manipulation",
+    "Aleph Alpha releases Kolibri: open-weight German/English MoE LLM with 78B parameters",
+    "Robot Harness: C++17 execution framework linking agents, skills, and the physical world"
   ],
-  "generated_at": "2026-10-02T18:26:16.042500+00:00",
+  "generated_at": "2026-10-03T17:08:50.805764+00:00",
   "run_times": {
-    "orchestrator": "2026-10-02T18:26:16.042500+00:00",
-    "hn": "2026-10-02T18:15:24.037673+00:00",
-    "arxiv": "2026-10-02T18:16:06.584118+00:00",
-    "github": "2026-10-02T18:17:09.490844+00:00",
-    "research_desk": "2026-10-02T18:21:45.908041+00:00"
+    "orchestrator": "2026-10-03T17:08:50.805764+00:00",
+    "hn": "2026-10-03T17:02:29.746548+00:00",
+    "arxiv": "2026-10-03T17:03:00.213999+00:00",
+    "github": "2026-10-03T17:03:58.613565+00:00",
+    "research_desk": "2026-10-03T17:06:35.150660+00:00"
   }
 }
