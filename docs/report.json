@@ -1,40 +1,35 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Long-WAM: Scaling the Context of World-Action Models\n\n### The Breakthrough\nLong-WAM expands visual history for causal world\u2011action models by pretraining video foundations autoregressively, enabling a context window up to 19.2\u202fs and raising RoboCasa GR\u20111 success from 63.3\u202f% to 78.7\u202f% while keeping inference latency under ~107\u202fms on RTX\u202f5090, and runs on real robots such as Unitree G1 and YAM.\n\n### The Caveats\nThe study reports a single 19.2\u202fs context length without any ablation of shorter or intermediate windows, so the claimed advantage of scaling visual history is demonstrated only for that one setting.\n\n## Agentic RSR: Real-to-Sim-to-Real via Scene Reconstruction\n\n### The Breakthrough\nAgentic RSR jointly reconstructs a metric\u2011scaled scene from a workspace video, trains a policy in MuJoCo, and executes it on hardware, achieving 80\u202f% of simulation success rate across 18 scenes with reconstruction errors of 0.1057\u202fmm depth MAE and 0.699 SSIM.\n\n### The Caveats\nThe paper reports 80\u202f% transfer fidelity but provides no comparison to existing sim\u2011to\u2011real or scene\u2011reconstruction baselines, so it\u2019s unclear whether the approach actually improves over prior methods.\n\n## Walking Robotic Hand Crawls on Fingertips\n\n### The Breakthrough\nResearchers equipped a commercial hand with a Raspberry\u202fPi\u202fZero backpack and trained RL policies that use per\u2011finger target positions and asymmetric penalties as virtual springs, enabling the hand to crawl up to 9\u202fcm/s on 14 surface types, turn, right itself, and push a cube to targets.\n\n### The Caveats\nThe demo offers no comparison to prior walking\u2011hand systems, leaving its claimed advantage unverified.\n\n## Factorized Tactile Representation for Sim-to-Real Manipulation\n\n### The Breakthrough\nThe factorized tactile framework separates geometry, force distribution, and temporal change, feeding them to a Tactile Gated Policy that attains sub\u2011mm contact localization, 1.69\u202fN force\u2011tracking error on unseen shapes, and a 35\u202f% boost in real\u2011world peg\u2011insertion success versus an unfactorized baseline.\n\n### The Caveats\nThe work provides no ablation of the geometry, force\u2011distribution, and temporal factors, so it\u2019s unclear which component actually accounts for the reported improvements.\n\n## RoboPrompt: Steering Robot Policies with Sparse Human Input\n\n### The Breakthrough\nRoboPrompt adds a lightweight module that maps sparse human cues into draft actions in the diffusion policy\u2019s noise space, then refines them with the base policy, improving task success by up to 21.3\u202f% and cutting human interventions by up to 81.9\u202f% after a few DAgger\u2011style iterations.\n\n### The Caveats\nThe approach is tested only in simulation on three tasks and three policies, with no real\u2011world robot experiments, so its claimed real\u2011world deployability is unproven.\n\n## LichtFeld Studio: Native C++ Gaussian Splatting Tool\n\n### The Breakthrough\nLichtFeld Studio bundles the full Gaussian splatting pipeline\u2014training, interactive rendering, Gaussian selection editing, and multi\u2011format export\u2014in a native C++23/CUDA app with a Python plugin system, enabling responsive performance on NVIDIA GPUs for dense 3\u2011D scene mapping.\n\n### The Caveats\nThe tool\u2019s claimed responsive performance is unsupported, as no quantitative benchmarks or robot\u2011hardware tests are provided.\n\n## NVIDIA NeMo Gym: Scalable LLM Agent Evaluation Library\n\n### The Breakthrough\nNeMo Gym introduces Environment Servers that manage session lifecycle and token\u2011level trajectory capture for thousands of concurrent sandboxed environments, allowing exact replay and debugging of LLM agents at scale.\n\n### The Caveats\nThe library\u2019s claim of reproducible, scalable evaluation is unsupported, as the release provides no empirical results or benchmark comparisons to any baseline.\n\n## Microrobots Startup Aims for AI-Designed Microrobots\n\n### The Breakthrough\nThe startup proposes to use AI\u2011driven generative design and learning\u2011based control to engineer sub\u2011millimeter microrobots, aiming to automate morphology optimization and behavior synthesis that are traditionally manual.\n\n### The Caveats\nThe startup\u2019s claim rests on no prototype or real\u2011world testing, so its AI\u2011driven microrobot vision remains unverified.\n\n### Priority\nLong-WAM shows a clear path to immediate real\u2011world impact by scaling visual context for world\u2011action models while staying within real\u2011time constraints.\n\n### One action\nTry extending the visual history window in your own world\u2011action pipeline (e.g., start with a 5\u2011second context) and benchmark the effect on task success.",
+  "report": "## SANDO UAV Safety Planner\n\n### The Breakthrough\nMIT introduced SANDO, a trajectory planner that builds spatiotemporal safety corridors around moving obstacles using their maximum speed bounds. By surrounding each obstacle with a predictive sphere and employing a heat\u2011map planner, SANDO can replan on\u2011board in real time and provably guarantee collision\u2011free paths. In simulation and twelve real\u2011world UAV flights it reached goals faster than several prior planners with zero collisions.\n\n### The Caveats\nThe superiority claim lacks concrete baseline methods or standard benchmark comparisons.\n\n## JengaBot Pez Dispenser\n\n### The Breakthrough\nA follow\u2011up to the JengaBot project adds a compact, spring\u2011loaded Pez\u2011style mechanism that a robot arm can grasp and actuate to dispense single items. The design emphasizes simplicity and repeatable release for handling small objects such as candy. The demo shows the dispenser working end\u2011to\u2011end with a robot manipulator.\n\n### The Caveats\nNo systematic evaluation, metrics, or quantitative evidence of effectiveness are provided beyond the informal demo.\n\n## NeuDecide Voice\u2011First Model\n\n### The Breakthrough\nNeuDecide is a 43\u202fMB end\u2011to\u2011end model that converts spoken commands directly into JSON tool calls without an intermediate transcript, running on a single CPU thread via ONNX Runtime. It combines a streaming speech encoder with a compact tool\u2011calling encoder\u2011decoder and outperforms five ASR\u2011plus\u2011decision cascades on the SLURP benchmark, achieving over five\u2011times higher exact\u2011match accuracy for 10\u2011tool selection. The model processes up to 30\u202fseconds of audio with under 175\u202fMB RAM.\n\n### The Caveats\nIts suitability for household robots is unproven, as it has never been tested on actual robot hardware and real\u2011world latency on embedded platforms is not reported.\n\n## OpenHarness Agent Hub\n\n### The Breakthrough\nOpenHarness is an open\u2011source native app that runs multiple LLM\u2011based coding agents side\u2011by\u2011side, multiplexing each into its own tmux pane and streaming terminals over end\u2011to\u2011end encrypted WebRTC or relay links. It achieves sub\u201115\u202fms UI latency on an M2\u202fMax while using only ~0.1\u202f% CPU and 304\u202fMiB RAM, providing a lightweight command center for tasks ranging from CAD to robotics.\n\n### The Caveats\nPerformance claims are not benchmarked against existing remote\u2011terminal or agent\u2011orchestration solutions, leaving the advantage unverified.\n\n## Torch\u2011TensorRT Compiler\n\n### The Breakthrough\nTorch\u2011TensorRT is an open\u2011source compiler that converts PyTorch, TorchScript, or FX models into TensorRT engines, enabling up to 5\u00d7 lower inference latency with a single line of code. It integrates with torch.compile and leverages TensorRT optimizations such as FP8 quantization and dynamic shape handling, accelerating diffusion models, Stable Diffusion, and LLMs on NVIDIA GPUs including Jetson.\n\n### The Caveats\nSpeedup figures are only compared to eager PyTorch without formal evaluation or comparison to other TensorRT or optimization baselines.\n\n## awesome\u2011isaac\u2011gym Resource List\n\n### The Breakthrough\nThe awesome\u2011isaac\u2011gym repository curates 799+ links to frameworks, papers, tutorials, and tools around NVIDIA\u2019s GPU\u2011accelerated Isaac Gym simulator, organized by releases, guides, research areas, and community projects. By structuring these resources in searchable markdown, it lowers the entry barrier for researchers building reinforcement\u2011learning or robot\u2011learning pipelines on Isaac Gym.\n\n### The Caveats\nThe list provides no systematic evidence of completeness or up\u2011to\u2011date coverage.\n\n### Priority\nStart with SANDO because its formally verified, real\u2011world UAV safety guarantees directly advance autonomous navigation and present a ready\u2011to\u2011deploy solution.\n\n### One action\nCheck the MIT project page and consider reproducing the safety corridor planner on your own UAV platform.",
   "themes": [
+    "uav",
     "manipulation",
-    "sim-to-real",
-    "world-action",
-    "human-robot",
+    "voice",
     "tooling"
   ],
-  "source_count": 8,
+  "source_count": 6,
   "section_urls": [
-    "https://arxiv.org/abs/2610.10528",
-    "https://arxiv.org/abs/2610.10479",
-    "https://spectrum.ieee.org/walking-robotic-hand",
-    "https://arxiv.org/abs/2610.10510",
-    "https://arxiv.org/abs/2610.10534",
-    "https://github.com/MrNeRF/LichtFeld-Studio",
-    "https://github.com/NVIDIA-NeMo/Gym",
-    "https://www.nytimes.com/2026/10/07/science/atomic-machines-ai-micro-robots.html"
+    "https://news.mit.edu/2026/planning-system-ensures-robots-flight-path-will-remain-collision-free-1007",
+    "https://medium.com/@rob.bercik/jenga-bot-pt2-pez-for-robots-a37786b165dc",
+    "https://huggingface.co/neuphonic/neudecide",
+    "https://github.com/autonomous-ai/openharness",
+    "https://github.com/pytorch/TensorRT",
+    "https://github.com/robotlearning123/awesome-isaac-gym"
   ],
   "section_titles": [
-    "Long-WAM: Scaling the Context of World-Action Models for Real-Time Robot Control",
-    "Agentic RSR: Real-to-Sim-to-Real via Scene Reconstruction and Execution\u2011Grounded Policies",
-    "ETH Zurich walking robotic hand crawls on its fingers using learned AI control",
-    "Factorized Tactile Representation and Control for Sim-to-Real Manipulation",
-    "RoboPrompt: Intuitive Robot Policy Steering with Sparse Human Input",
-    "LichtFeld Studio: native C++ app for training, editing, and exporting 3D Gaussian Splatting scenes",
-    "NVIDIA NeMo Gym: scalable library for evaluating and training LLM agents in stateful environments",
-    "Startup aims to build microrobots using AI"
+    "SANDO: Planning system ensures UAV flight paths remain collision\u2011free",
+    "JengaBot part 2: Pez\u2011style candy dispenser for robots",
+    "NeuDecide: tiny voice\u2011first decision model for robotics (43\u202fMB)",
+    "OpenHarness: unified, encrypted command center for AI coding agents",
+    "Torch\u2011TensorRT: PyTorch\u2011to\u2011TensorRT compiler for fast NVIDIA GPU inference",
+    "awesome-isaac-gym: curated list of NVIDIA Isaac Gym resources"
   ],
-  "generated_at": "2026-10-08T19:18:37.889632+00:00",
+  "generated_at": "2026-10-09T18:46:16.187071+00:00",
   "run_times": {
-    "orchestrator": "2026-10-08T19:18:37.889632+00:00",
-    "hn": "2026-10-08T19:10:46.290146+00:00",
-    "arxiv": "2026-10-08T19:11:24.319285+00:00",
-    "github": "2026-10-08T19:12:27.290552+00:00",
-    "research_desk": "2026-10-08T19:15:49.167454+00:00"
+    "orchestrator": "2026-10-09T18:46:16.187071+00:00",
+    "hn": "2026-10-09T18:41:24.469094+00:00",
+    "arxiv": "2026-10-09T18:46:16.187071+00:00",
+    "github": "2026-10-09T18:42:21.625461+00:00",
+    "research_desk": "2026-10-09T18:45:46.125305+00:00"
   }
 }
