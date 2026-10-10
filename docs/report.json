@@ -1,35 +1,38 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## SANDO UAV Safety Planner\n\n### The Breakthrough\nMIT introduced SANDO, a trajectory planner that builds spatiotemporal safety corridors around moving obstacles using their maximum speed bounds. By surrounding each obstacle with a predictive sphere and employing a heat\u2011map planner, SANDO can replan on\u2011board in real time and provably guarantee collision\u2011free paths. In simulation and twelve real\u2011world UAV flights it reached goals faster than several prior planners with zero collisions.\n\n### The Caveats\nThe superiority claim lacks concrete baseline methods or standard benchmark comparisons.\n\n## JengaBot Pez Dispenser\n\n### The Breakthrough\nA follow\u2011up to the JengaBot project adds a compact, spring\u2011loaded Pez\u2011style mechanism that a robot arm can grasp and actuate to dispense single items. The design emphasizes simplicity and repeatable release for handling small objects such as candy. The demo shows the dispenser working end\u2011to\u2011end with a robot manipulator.\n\n### The Caveats\nNo systematic evaluation, metrics, or quantitative evidence of effectiveness are provided beyond the informal demo.\n\n## NeuDecide Voice\u2011First Model\n\n### The Breakthrough\nNeuDecide is a 43\u202fMB end\u2011to\u2011end model that converts spoken commands directly into JSON tool calls without an intermediate transcript, running on a single CPU thread via ONNX Runtime. It combines a streaming speech encoder with a compact tool\u2011calling encoder\u2011decoder and outperforms five ASR\u2011plus\u2011decision cascades on the SLURP benchmark, achieving over five\u2011times higher exact\u2011match accuracy for 10\u2011tool selection. The model processes up to 30\u202fseconds of audio with under 175\u202fMB RAM.\n\n### The Caveats\nIts suitability for household robots is unproven, as it has never been tested on actual robot hardware and real\u2011world latency on embedded platforms is not reported.\n\n## OpenHarness Agent Hub\n\n### The Breakthrough\nOpenHarness is an open\u2011source native app that runs multiple LLM\u2011based coding agents side\u2011by\u2011side, multiplexing each into its own tmux pane and streaming terminals over end\u2011to\u2011end encrypted WebRTC or relay links. It achieves sub\u201115\u202fms UI latency on an M2\u202fMax while using only ~0.1\u202f% CPU and 304\u202fMiB RAM, providing a lightweight command center for tasks ranging from CAD to robotics.\n\n### The Caveats\nPerformance claims are not benchmarked against existing remote\u2011terminal or agent\u2011orchestration solutions, leaving the advantage unverified.\n\n## Torch\u2011TensorRT Compiler\n\n### The Breakthrough\nTorch\u2011TensorRT is an open\u2011source compiler that converts PyTorch, TorchScript, or FX models into TensorRT engines, enabling up to 5\u00d7 lower inference latency with a single line of code. It integrates with torch.compile and leverages TensorRT optimizations such as FP8 quantization and dynamic shape handling, accelerating diffusion models, Stable Diffusion, and LLMs on NVIDIA GPUs including Jetson.\n\n### The Caveats\nSpeedup figures are only compared to eager PyTorch without formal evaluation or comparison to other TensorRT or optimization baselines.\n\n## awesome\u2011isaac\u2011gym Resource List\n\n### The Breakthrough\nThe awesome\u2011isaac\u2011gym repository curates 799+ links to frameworks, papers, tutorials, and tools around NVIDIA\u2019s GPU\u2011accelerated Isaac Gym simulator, organized by releases, guides, research areas, and community projects. By structuring these resources in searchable markdown, it lowers the entry barrier for researchers building reinforcement\u2011learning or robot\u2011learning pipelines on Isaac Gym.\n\n### The Caveats\nThe list provides no systematic evidence of completeness or up\u2011to\u2011date coverage.\n\n### Priority\nStart with SANDO because its formally verified, real\u2011world UAV safety guarantees directly advance autonomous navigation and present a ready\u2011to\u2011deploy solution.\n\n### One action\nCheck the MIT project page and consider reproducing the safety corridor planner on your own UAV platform.",
+  "report": "## SpatialHarness: Test-Time Spatial Scaffolding\n\n### The Breakthrough\nSpatialHarness adds virtual camera views at test time to improve spatial observability for fine manipulation. By keeping an online simulated replica and generating complementary virtual perspectives, it feeds a frozen GPT\u201116 Astra policy, raising success from 26.7% to 66.7% on plug insertion and from 0% to 100% on a Tower of Hanoi task. The results highlight that many failures stem from missing visual cues rather than weak policies.\n\n### The Caveats\nThe work benchmarks only the frozen GPT\u201116 Astra policy and offers no comparison to alternative policies or stronger baselines, so the gains may not be solely due to the scaffolding.\n\n## VersaCamVLA: Camera-Configurable VLA\n\n### The Breakthrough\nVersaCamVLA separates camera\u2011set representation from action learning, encoding any number of posed RGB images into a constant\u2011size latent scene token via multi\u2011signal target\u2011view prediction. Wrist\u2011Augmented Pose Sampling provides free diverse training poses, and the tokens are injected into a pretrained VLA as an extra visual condition, enabling policies that adapt to arbitrary camera configurations. The method outperforms existing VLA and multi\u2011view baselines on simulated benchmarks and a real\u2011robot testbed.\n\n### The Caveats\nThe paper never ablates its central scene\u2011token encoder or the WAPS training trick, leaving the source of the reported gains unclear.\n\n## Dex-One2Many: One-Demo Dexterous Manipulation\n\n### The Breakthrough\nThe framework converts a single human video into sequential scene graphs that serve as reset\u2011state samplers and dense stage\u2011wise rewards, dramatically narrowing RL exploration. Graph\u2011based constraints focus on relational information, allowing policies trained entirely in simulation to transfer zero\u2011shot to a real multi\u2011fingered hand across five tool\u2011use tasks, with a 6.5% improvement in seen setups and up to 71% in unseen scenarios.\n\n### The Caveats\nBaseline methods are not named or described, so the reported gains cannot be verified against existing approaches.\n\n## CSF: Contextual Safety Filtering\n\n### The Breakthrough\nCSF introduces a training\u2011free safety filter that grounds natural\u2011language safety rules in paired safe and unsafe reference trajectories, creating affine safety values enforced via a control\u2011barrier\u2011function QP. Demonstrated on a Unitree G1 robot, it cuts dangerous event rates by up to 90% while preserving 88\u2011100% of benign motions across four pretrained whole\u2011body motion generators.\n\n### The Caveats\nNo baseline comparison to existing safety methods is provided, leaving the improvement unsubstantiated.\n\n## rosnav: Full-Stack ROS2 Navigation Suite\n\n### The Breakthrough\nrosnav stitches Nav2, SLAM Toolbox, RTAB\u2011Map, ORB\u2011SLAM3 VSLAM, and an MPPI controller under a behavior\u2011tree framework, exposing a single launch that starts Gazebo Harmonic, SLAM, navigation, and RViz visualisation. It adds collaborative loop\u2011closure, coordinated frontier exploration for fleet\u2011level mapping, and a Gaussian\u2011Splatting overlay, with optional YOLO detection and LLM\u2011driven voice commands.\n\n### The Caveats\nPerformance is never benchmarked against any baseline or quantitative metric; evaluation is confined to Gazebo simulations with no real\u2011world robot tests.\n\n## SAGE: Persistent Identity Engine for Frozen LLMs\n\n### The Breakthrough\nSAGE wraps a frozen LLM with a metabolic\u2011state loop, salience\u2011gated attention, multi\u2011path memory, and identity/trust tensors, enabling agents that retain state across interactions. A fleet of eight heterogeneous machines runs 21 instances, logging over 2,700 developmental sessions, demonstrating scalable, persistent deployments.\n\n### The Caveats\nThe repository provides no comparison to existing baselines, so it is unclear whether its scaffolding actually improves over standard frozen\u2011LLM approaches.\n\n## Tessary: Open-Source AI Agent Failure Detection\n\n### The Breakthrough\nTessary monitors every production AI\u2011agent trace with a two\u2011layer approach: cheap L1 classifiers flag suspicious traces at 2\u20113 orders of magnitude lower cost, then state\u2011of\u2011the\u2011art L2 models diagnose root causes. On 1\u202fM traces it achieves roughly a 5\u00d7 cost reduction versus a sampled\u2011evaluation baseline.\n\n### The Caveats\nNo comparison to other monitoring tools or latency/hardware overhead measurements is provided, leaving the claimed efficiency unverified.\n\n### Priority\nSpatialHarness shows how adding test\u2011time virtual views can instantly double or even fully eliminate failure rates in fine manipulation, making it the most actionable breakthrough today.\n\n### One action\nIntegrate a test\u2011time virtual\u2011view generation module into your manipulation pipeline to boost spatial observability and success rates.",
   "themes": [
-    "uav",
     "manipulation",
-    "voice",
+    "vision",
+    "safety",
+    "simulation",
     "tooling"
   ],
-  "source_count": 6,
+  "source_count": 7,
   "section_urls": [
-    "https://news.mit.edu/2026/planning-system-ensures-robots-flight-path-will-remain-collision-free-1007",
-    "https://medium.com/@rob.bercik/jenga-bot-pt2-pez-for-robots-a37786b165dc",
-    "https://huggingface.co/neuphonic/neudecide",
-    "https://github.com/autonomous-ai/openharness",
-    "https://github.com/pytorch/TensorRT",
-    "https://github.com/robotlearning123/awesome-isaac-gym"
+    "https://arxiv.org/abs/2610.12457",
+    "https://arxiv.org/abs/2610.12451",
+    "https://arxiv.org/abs/2610.12470",
+    "https://arxiv.org/abs/2610.12467",
+    "https://github.com/darshmenon/rosnav",
+    "https://github.com/dp-web4/SAGE",
+    "https://github.com/tessaryai/tessary"
   ],
   "section_titles": [
-    "SANDO: Planning system ensures UAV flight paths remain collision\u2011free",
-    "JengaBot part 2: Pez\u2011style candy dispenser for robots",
-    "NeuDecide: tiny voice\u2011first decision model for robotics (43\u202fMB)",
-    "OpenHarness: unified, encrypted command center for AI coding agents",
-    "Torch\u2011TensorRT: PyTorch\u2011to\u2011TensorRT compiler for fast NVIDIA GPU inference",
-    "awesome-isaac-gym: curated list of NVIDIA Isaac Gym resources"
+    "SpatialHarness: Test-Time Spatial Scaffolding for Fine Robotic Manipulation",
+    "VersaCamVLA: Camera-Configurable Vision-Language-Action Policies for Manipulation",
+    "Dex-One2Many: Learning Dexterous Manipulation from a Single Human Demonstration",
+    "CSF: Contextual Safety Filtering for Motion Generators",
+    "rosnav: full\u2011stack ROS\u202f2 autonomous navigation with SLAM, multi\u2011robot fleet and Gaussian Splatting",
+    "SAGE: Persistent Identity & Governance Engine for Frozen LLMs",
+    "Tessary: open\u2011source platform to detect AI agent failures missed by sampled evals"
   ],
-  "generated_at": "2026-10-09T18:46:16.187071+00:00",
+  "generated_at": "2026-10-10T17:47:10.872436+00:00",
   "run_times": {
-    "orchestrator": "2026-10-09T18:46:16.187071+00:00",
-    "hn": "2026-10-09T18:41:24.469094+00:00",
-    "arxiv": "2026-10-09T18:46:16.187071+00:00",
-    "github": "2026-10-09T18:42:21.625461+00:00",
-    "research_desk": "2026-10-09T18:45:46.125305+00:00"
+    "orchestrator": "2026-10-10T17:47:10.872436+00:00",
+    "hn": "2026-10-10T17:40:55.269036+00:00",
+    "arxiv": "2026-10-10T17:41:36.590548+00:00",
+    "github": "2026-10-10T17:42:38.948322+00:00",
+    "research_desk": "2026-10-10T17:46:01.701376+00:00"
   }
 }
