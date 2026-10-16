@@ -1,40 +1,29 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## AA\u2011Robotics v0.1 Benchmark\n\n### The Breakthrough\nA new benchmark gives zero\u2011shot access to a Hiwonder NexArm robot via a simple HTTP API, four external cameras, and a coding\u2011agent container. GPT\u201116 Astra achieved the highest score of 69 out of 100 while costing $16.36 per task, revealing that frontier language models are still slower and more expensive than humans.\n\n### The Caveats\nThe benchmark only evaluates eight simple tabletop tasks on a single robot arm, so it provides no evidence that frontier language models can handle more complex manipulations or generalize across different hardware setups.\n\n## Graph\u2011Reweighted Behavior Cloning (GR\u2011BC)\n\n### The Breakthrough\nGR\u2011BC builds a goal\u2011reachability graph from demonstrations and human\u2011intervened rollouts, weighting action chunks by their contribution to success. The method attains 91% success on four precise manipulation tasks after only a few offline iterations and works across three VLA backbones without extra critics.\n\n### The Caveats\nThe work compares against only a single\u2011round supervised fine\u2011tuning baseline, leaving it unknown whether GR\u2011BC truly beats stronger reward\u2011model or reinforcement\u2011learning methods.\n\n## Hierarchical Residual Policy Learning (HiRe\u2011MoMa)\n\n### The Breakthrough\nHiRe\u2011MoMa fine\u2011tunes a frozen mobile\u2011manipulation base policy with separate residual heads for the base and arm, using sparse human interventions (<20% of steps). With roughly 30\u202fminutes of online data it improves real\u2011world task performance, demonstrating a practical way to adapt complex systems on\u2011robot.\n\n### The Caveats\nThe paper reports performance gains but provides no comparison against any existing fine\u2011tuning or residual\u2011learning baselines, leaving the claimed improvement unverified.\n\n## Diffusion\u2011Generated Humanoid Controllers\n\n### The Breakthrough\nA latent diffusion model trained on compressed actor\u2011network weights can be sampled to generate functional humanoid controllers, which were deployed on a Unitree G1 robot to walk, dance and perform a spin kick. Analysis of the latent space reveals a consistent kinematic prior in the first\u2011layer weights.\n\n### The Caveats\nThe paper never compares its diffusion\u2011generated controllers to any existing generative or policy\u2011learning baselines, so the claimed advantage over prior methods remains unsubstantiated.\n\n## Tiered\u2011Resolution Volumetric Mapping\n\n### The Breakthrough\nA single map structure stores fine resolution only near the robot\u2019s planned corridor and coarse resolution elsewhere, cutting map size by 13\u201315\u00d7 and integration CPU time by 6\u20138\u00d7 while keeping navigation quality comparable to full\u2011resolution maps. Evaluated on two real\u2011world outdoor teleoperation datasets.\n\n### The Caveats\nThe claimed real\u2011time planning\u2011mapping performance is only demonstrated offline on recorded datasets, with no live robot deployment to confirm the approach works under real\u2011world timing and feedback conditions.\n\n## lidar_slam_ros2 (ROS2 LiDAR SLAM)\n\n### The Breakthrough\nThe ROS2 package pairs the RKO\u2011LIO front\u2011end with a graph\u2011based backend, achieving 99.7% scan tracking and 0.55\u202fmm RMSE APE on the Koide Hard outdoor dataset, and runs faster than real time (factor 0.44) while outputting Autoware\u2011compatible map bundles.\n\n### The Caveats\nThe reported tracking rate and RMSE are shown only on a single dataset with no baseline SLAM systems for comparison, leaving the claimed performance unsubstantiated.\n\n## OOMWOO Open\u2011Source Robot Vacuum\n\n### The Breakthrough\nThe project provides complete hardware designs, firmware, and a ROS2\u2011based navigation stack (Nav2) with a modular micro\u2011ROS firmware architecture, plus a Gazebo URDF simulation that lets developers test cleaning logic, SLAM and Home Assistant integration without any physical robot.\n\n### The Caveats\nNo physical robot has been built or evaluated, so claims about real\u2011world performance, privacy, and modularity remain unproven.\n\n## lampOS Open\u2011Source OS for Physical AI\n\n### The Breakthrough\nlampOS is a Python\u2011based operating system that integrates LLM agents (Hermes, Claude\u2011Code, Codex) with robot hardware via a modular skill framework, intent routing and runtime hooks, supporting voice, vision and motor control and a BYOR workflow; the repo has 455\u202fstars.\n\n### The Caveats\nThe repository offers no empirical evaluation or baseline comparisons, so the claimed general\u2011purpose OS capabilities remain unverified.\n\n### Priority\nThe AA\u2011Robotics benchmark provides the first quantitative comparison of frontier LLMs on a real robot arm, setting a clear yardstick for embodied AI progress.\n\n### One action\nTrack the AA\u2011Robotics leaderboard and consider using its API to evaluate your own LLM\u2011controlled robot experiments.",
+  "report": "## AA\u2011Robotics Benchmark\n\n### The Breakthrough\nAA\u2011Robotics v0.1 is a research preview that lets frontier language models directly command a 6\u2011axis Hiwonder NexArm robot arm on eight tabletop manipulation tasks. The system bundles the arm with four external cameras, exposes a simple HTTP API, and runs the LLMs in isolated containers to generate and send movement code zero\u2011shot, scoring each run out of 100 automatically. It shows that models like GPT\u20116 Astra and Gemini\u20114 Argon can complete simple tasks, but they are still an order of magnitude slower and more costly than a human operator.\n\n### The Caveats\nThe demo never benchmarks against traditional robot\u2011control or learning\u2011based baselines, so it\u2019s unclear whether the LLM\u2011driven approach actually offers any advantage.\n\n## Tiny Sewer\u2011Crawling Robot\n\n### The Breakthrough\nThe new tiny robot is built for extreme miniaturization and uses a bespoke locomotion mechanism to travel through narrow, wet sewer conduits that larger platforms cannot reach. Its compact form factor promises direct visual inspection and possible intervention in underground utility networks, opening new possibilities for infrastructure monitoring.\n\n### The Caveats\nThe announcement provides no field trials, performance metrics, or comparisons, so its real\u2011world crawling ability remains unverified.\n\n## Crowd Pedestrian Detection Dataset\n\n### The Breakthrough\nThe crowd\u2011dataset repository harvests 77,937 YouTube dash\u2011cam videos and runs YOLOv11 to detect pedestrians and vehicles, producing a 34,761\u2011hour, cross\u2011cultural dataset covering 238 countries with 31\u202fM pedestrian and 82\u202fM car instances. Detailed per\u2011country statistics and open FAIR storage make it a huge resource for training and evaluating autonomous\u2011vehicle perception and behavior\u2011prediction models worldwide.\n\n### The Caveats\nThe dataset is released without any validation of YOLOv11 detection quality, leaving its usefulness for AV training or evaluation unproven.\n\n### Priority\nAA\u2011Robotics is the most actionable story because it delivers the first quantitative benchmark of LLM\u2011driven manipulation on real hardware, directly informing future robot\u2011learning research.\n\n### One action\nClone the AA\u2011Robotics repo, try the HTTP API with your own LLM, and compare its score to the published baselines.",
   "themes": [
     "manipulation",
-    "benchmark",
-    "mapping",
-    "open-source",
-    "embodied-ai"
+    "language-models",
+    "infrastructure",
+    "datasets"
   ],
-  "source_count": 8,
+  "source_count": 3,
   "section_urls": [
     "https://artificialanalysis.ai/articles/aa-robotics",
-    "https://arxiv.org/abs/2610.20504",
-    "https://arxiv.org/abs/2610.20607",
-    "https://arxiv.org/abs/2610.20606",
-    "https://arxiv.org/abs/2610.20476",
-    "https://github.com/rsasaki0109/lidar_slam_ros2",
-    "https://www.ikkaro.net/oomwoo-open-source-robot-vacuum/",
-    "https://github.com/autonomous-ai/lampOS"
+    "https://www.wsj.com/tech/the-tiny-robot-designed-to-solve-a-massive-underground-crisis-953fdccb",
+    "https://github.com/crowd-dataset/crowd"
   ],
   "section_titles": [
-    "AA-Robotics v0.1: Benchmark for Frontier Language Models on a 6\u2011axis Robot Arm",
-    "Graph-Reweighted Behavior Cloning with Human Interventions for Precise Manipulation",
-    "Hierarchical Residual Policy Learning for Real\u2011World Mobile Manipulation with Sparse Human Guidance",
-    "Modeling and Understanding Neural Weights of Humanoid Policies with Diffusion",
-    "Tiered-Resolution Volumetric Mapping for Real-Time Planning in Outdoor Environments",
-    "lidar_slam_ros2: ROS\u202f2 LiDAR SLAM for Autoware\u2011compatible map authoring and benchmarking",
-    "OOMWOO: Fully open\u2011source, cloud\u2011free robot vacuum kit",
-    "lampOS: Open\u2011source operating system for physical AI agents"
+    "AA-Robotics v0.1: benchmark of language models controlling a 6\u2011axis robot arm",
+    "Tiny sewer\u2011crawling robot aims to tackle underground crises",
+    "crowd-dataset/crowd: massive cross\u2011cultural YouTube pedestrian detection dataset"
   ],
-  "generated_at": "2026-10-15T17:48:54.383118+00:00",
+  "generated_at": "2026-10-16T17:14:45.078427+00:00",
   "run_times": {
-    "orchestrator": "2026-10-15T17:48:54.383118+00:00",
-    "hn": "2026-10-15T17:39:25.124180+00:00",
-    "arxiv": "2026-10-15T17:40:05.259035+00:00",
-    "github": "2026-10-15T17:41:06.086422+00:00",
-    "research_desk": "2026-10-15T17:44:43.134095+00:00"
+    "orchestrator": "2026-10-16T17:14:45.078427+00:00",
+    "hn": "2026-10-16T17:12:25.875789+00:00",
+    "arxiv": "2026-10-16T17:14:45.078427+00:00",
+    "github": "2026-10-16T17:13:13.420858+00:00",
+    "research_desk": "2026-10-16T17:14:22.289040+00:00"
   }
 }
