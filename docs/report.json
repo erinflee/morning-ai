@@ -1,29 +1,35 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## AA\u2011Robotics Benchmark\n\n### The Breakthrough\nAA\u2011Robotics v0.1 is a research preview that lets frontier language models directly command a 6\u2011axis Hiwonder NexArm robot arm on eight tabletop manipulation tasks. The system bundles the arm with four external cameras, exposes a simple HTTP API, and runs the LLMs in isolated containers to generate and send movement code zero\u2011shot, scoring each run out of 100 automatically. It shows that models like GPT\u20116 Astra and Gemini\u20114 Argon can complete simple tasks, but they are still an order of magnitude slower and more costly than a human operator.\n\n### The Caveats\nThe demo never benchmarks against traditional robot\u2011control or learning\u2011based baselines, so it\u2019s unclear whether the LLM\u2011driven approach actually offers any advantage.\n\n## Tiny Sewer\u2011Crawling Robot\n\n### The Breakthrough\nThe new tiny robot is built for extreme miniaturization and uses a bespoke locomotion mechanism to travel through narrow, wet sewer conduits that larger platforms cannot reach. Its compact form factor promises direct visual inspection and possible intervention in underground utility networks, opening new possibilities for infrastructure monitoring.\n\n### The Caveats\nThe announcement provides no field trials, performance metrics, or comparisons, so its real\u2011world crawling ability remains unverified.\n\n## Crowd Pedestrian Detection Dataset\n\n### The Breakthrough\nThe crowd\u2011dataset repository harvests 77,937 YouTube dash\u2011cam videos and runs YOLOv11 to detect pedestrians and vehicles, producing a 34,761\u2011hour, cross\u2011cultural dataset covering 238 countries with 31\u202fM pedestrian and 82\u202fM car instances. Detailed per\u2011country statistics and open FAIR storage make it a huge resource for training and evaluating autonomous\u2011vehicle perception and behavior\u2011prediction models worldwide.\n\n### The Caveats\nThe dataset is released without any validation of YOLOv11 detection quality, leaving its usefulness for AV training or evaluation unproven.\n\n### Priority\nAA\u2011Robotics is the most actionable story because it delivers the first quantitative benchmark of LLM\u2011driven manipulation on real hardware, directly informing future robot\u2011learning research.\n\n### One action\nClone the AA\u2011Robotics repo, try the HTTP API with your own LLM, and compare its score to the published baselines.",
+  "report": "## PSA-PPO: Sim-to-Real Lettuce Harvesting\n\n### The Breakthrough\nThe paper presents PSA\u2011PPO, a proximal\u2011policy\u2011optimization algorithm that adds target\u2011conditioned observations and corridor\u2011aware safety constraints for lettuce harvesting. By preserving the standard PPO objective while integrating spatial corridor constraints and trajectory\u2011history safety encoding, the method achieved 94.7\u202f% reaching success on a real\u2011world UR10e arm, outperforming classical planners and reducing motion jerk by up to 39.8\u202f%.\n\n### The Caveats\nThe study provides no comparison to other reinforcement\u2011learning baselines nor any statistical variance reporting, so it\u2019s unclear whether PSA\u2011PPO truly outperforms existing RL methods beyond the selected classical planners.\n\n## Spark-0 Tactile Pretraining\n\n### The Breakthrough\nThe authors release Spark\u20110, a vision\u2011tactile\u2011language\u2011action model pretrained on a 1,000\u2011hour HumanTouch dataset that aligns visual tokens with contact maps and encodes regional force histories. This multimodal pretraining lets a single model run vision\u2011only or tactile\u2011conditioned policies, yielding substantial performance gains on dexterous manipulation tasks on a real robot compared to vision\u2011only baselines.\n\n### The Caveats\nThe reported state\u2011of\u2011the\u2011art gains are demonstrated on only a single dexterous robot, so it remains unclear whether Spark\u20110\u2019s tactile pretraining generalizes to other hardware platforms.\n\n## Value as Memory (VaM) Post\u2011training\n\n### The Breakthrough\nThe Value as Memory (VaM) framework augments generalist robot policies with a short\u2011term value\u2011caching memory and an online RL schedule that blends offline demos, off\u2011policy corrections, and on\u2011policy rollouts. Empirically, value caching lifts success rates by 29.4\u202f% and the online learning adds a further 32.8\u202f% gain while running eight times more iterations at double the speed per gradient step.\n\n### The Caveats\nThe paper reports large gains but provides no comparison to any existing baselines, so it\u2019s unclear whether the improvements stem from the value\u2011caching scheme or merely from extra data or training time.\n\n## LIBERO\u2011PeRM Benchmark\n\n### The Breakthrough\nThe LIBERO\u2011PeRM benchmark isolates preference satisfaction from task completion by providing 312 paired demonstrations across five suites, each annotated with motion, skill, and user\u2011profile preferences expressed in language. This enables systematic zero\u2011shot personalization and preference\u2011learning evaluation for manipulation policies.\n\n### The Caveats\nThe study reports results only in simulation with no real\u2011world robot experiments, so it\u2019s unclear whether the benchmark\u2019s insights about personalized manipulation will hold on actual hardware.\n\n## OpenReality 3D Reconstruction\n\n### The Breakthrough\nThe OpenReality repository turns handheld phone video into a persistent 3D scene that AI agents can query via 41 Model\u2011Context\u2011Protocol tools, supporting measurement, path planning, and robot\u2011training exports. It builds reconstruction on the VGGT\u2011SLAM library and offers an offline simulator for development without GPU or cloud resources.\n\n### The Caveats\nThe repo offers no quantitative evaluation or comparison to existing SLAM/reconstruction systems, so its claimed general\u2011purpose accuracy and usefulness remain unverified.\n\n## Claude Code Team Review Automation\n\n### The Breakthrough\nThe Claude Code team moved most code\u2011review work to AI agents that run before a pull request exists, using Claude to run tests, builds, and screenshots, and flag bugs, style, or security issues. A risk\u2011tier classifier routes only high\u2011risk changes to humans, resulting in merged PRs more than doubling and substantive human comments rising from 16\u202f% to 54\u202f% of PRs.\n\n### The Caveats\nThe reported improvements rely solely on internal metrics with no external or third\u2011party benchmark, so it\u2019s unclear whether the approach would generalize beyond Anthropic\u2019s own codebases.\n\n### Priority\nPSA\u2011PPO demonstrates that a modest augmentation to PPO can deliver near\u2011perfect real\u2011world harvesting performance without any fine\u2011tuning, making it the most actionable breakthrough for today\u2019s robotics practitioners.\n\n### One action\nTry reproducing PSA\u2011PPO\u2019s corridor\u2011aware safety constraints on your own manipulation tasks, starting with the provided Isaac Lab code.\n\n### What to watch\nAcross the manipulation landscape, Spark\u20110 shows how large\u2011scale tactile pretraining can boost dexterous control, VaM illustrates the value of online memory\u2011augmented fine\u2011tuning for generalist policies, and LIBERO\u2011PeRM provides a simulation benchmark to evaluate personalized behavior. Together they highlight a trend toward richer sensory inputs, continual adaptation, and user\u2011centric evaluation.",
   "themes": [
     "manipulation",
-    "language-models",
-    "infrastructure",
-    "datasets"
+    "sim-to-real",
+    "tactile",
+    "benchmark"
   ],
-  "source_count": 3,
+  "source_count": 6,
   "section_urls": [
-    "https://artificialanalysis.ai/articles/aa-robotics",
-    "https://www.wsj.com/tech/the-tiny-robot-designed-to-solve-a-massive-underground-crisis-953fdccb",
-    "https://github.com/crowd-dataset/crowd"
+    "https://arxiv.org/abs/2610.22337",
+    "https://arxiv.org/abs/2610.22342",
+    "https://arxiv.org/abs/2610.22368",
+    "https://arxiv.org/abs/2610.22372",
+    "https://github.com/reality-opened/openreality",
+    "https://claude.dev/blog/solving-code-review-at-anthropic/"
   ],
   "section_titles": [
-    "AA-Robotics v0.1: benchmark of language models controlling a 6\u2011axis robot arm",
-    "Tiny sewer\u2011crawling robot aims to tackle underground crises",
-    "crowd-dataset/crowd: massive cross\u2011cultural YouTube pedestrian detection dataset"
+    "PSA-PPO: Sim-to-Real Path\u2011Safe RL for Robotic Harvesting of Hydroponic Lettuce",
+    "Spark-0: Scaling Spatially Aligned Tactile Pretraining for Dexterous Robot Manipulation",
+    "Value as Memory: Online Value-Guided Post\u2011training for General Robot Policies",
+    "LIBERO-PeRM: Benchmark for Personalized Robotic Manipulation",
+    "OpenReality: phone video to AI\u2011queryable 3D scenes with MCP tools",
+    "Claude Code team\u2019s AI\u2011driven code review cuts human time while lowering revert rates"
   ],
-  "generated_at": "2026-10-16T17:14:45.078427+00:00",
+  "generated_at": "2026-10-17T16:15:20.220399+00:00",
   "run_times": {
-    "orchestrator": "2026-10-16T17:14:45.078427+00:00",
-    "hn": "2026-10-16T17:12:25.875789+00:00",
-    "arxiv": "2026-10-16T17:14:45.078427+00:00",
-    "github": "2026-10-16T17:13:13.420858+00:00",
-    "research_desk": "2026-10-16T17:14:22.289040+00:00"
+    "orchestrator": "2026-10-17T16:15:20.220399+00:00",
+    "hn": "2026-10-17T16:10:33.366627+00:00",
+    "arxiv": "2026-10-17T16:11:17.417215+00:00",
+    "github": "2026-10-17T16:12:15.131408+00:00",
+    "research_desk": "2026-10-17T16:14:54.320393+00:00"
   }
 }
