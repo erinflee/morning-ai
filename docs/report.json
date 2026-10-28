@@ -1,35 +1,40 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Zero\u2011real Agent Policy (ZAP)\n\n### The Breakthrough\nThe authors introduce ZAP, a 27B\u2011parameter vision\u2011language model pretrained on internet data and fine\u2011tuned in simulation using supervised learning and GRPO reinforcement. It attains 96.7% success on real\u2011world manipulation tasks despite never seeing real\u2011robot data, outperforming prior VLA baselines and matching a larger GPT\u201116 Astra model while being 3\u00d7 faster and 17\u00d7 cheaper. This shows large pretrained models can bootstrap sim\u2011to\u2011real transfer at scale.\n\n### The Caveats\nZAP is evaluated only on a single Franka arm, so cross\u2011hardware generalization remains unproven.\n\n## Safe Planning for Agile Quadrupeds\n\n### The Breakthrough\nThe paper presents a real\u2011time motion\u2011planning framework that parameterises trajectories as composite Bernstein polynomials, leveraging their convex\u2011hull property to enforce continuous collision\u2011free and input\u2011bounded constraints. Demonstrations on hardware show the quadruped safely navigating among unknown moving obstacles with agile, coupled lateral and heading motions that simplified models miss.\n\n### The Caveats\nNo baseline comparisons are provided, leaving the magnitude of safety and speed improvements unclear.\n\n## Differentiable Contact Dynamics\n\n### The Breakthrough\nA smooth analytic gradient for frictional contact is derived via a central\u2011path relaxation that is used only in the backward pass, preserving the hard\u2011contact forward solve. This enables training a legged\u2011robot policy in under two minutes and transferring it to hardware without fine\u2011tuning, while also improving contact\u2011implicit trajectory optimization. Results are shown on a trotting robot handling pushes, debris, and slippery ground.\n\n### The Caveats\nThe method is validated only on a single trotting robot, so its broader applicability to other gaits or morphologies is unproven.\n\n## FLORE Force\u2011Reactive Humanoid\n\n### The Breakthrough\nFLORE learns force\u2011reactive loco\u2011manipulation from robot\u2011free demonstrations captured with handheld force\u2011sensing grippers and wearable body trackers; a diffusion\u2011based policy predicts whole\u2011body motions and per\u2011hand force vectors, executed by a hybrid compliance controller. In simulation the approach reaches 80% task success on three contact\u2011rich scenarios, far exceeding a position\u2011only baseline.\n\n### The Caveats\nAll results are confined to simulation; no hardware experiments verify the diffusion policy or hybrid controller on a real humanoid.\n\n## Genie\u202f4 World Simulation\n\n### The Breakthrough\nGoogle\u2019s Genie\u202f4 combines a Gemini\u2011based reasoning engine with a pixel\u2011level generator to produce synchronized video, audio, and dialogue in real time, supporting natural\u2011language scene edits such as weather changes or object insertion. The system is offered as a research preview for trusted testers and is promoted for robot training, content creation, and immersive experiences.\n\n### The Caveats\nClaims are supported only by demo videos; there are no quantitative benchmarks, baseline comparisons, or real\u2011world robot tests.\n\n## MIRA\u2011AI Waste Detection\n\n### The Breakthrough\nMIRA\u2011AI is an open\u2011source Python pipeline that trains a compact YOLO11n detector on a curated waste dataset, achieving ~90.6% mAP50 on a 415\u2011image validation split. It includes live webcam inference, a dashboard, and automated ONNX/TFLite export for edge deployment, aiming to enable automated sorting robots.\n\n### The Caveats\nThe reported accuracy comes solely from a small validation split; a larger independent test set was never evaluated, leaving performance unverified.\n\n### Priority\nZAP is the best starting point today because it demonstrates near\u2011perfect real\u2011world manipulation performance without any real\u2011robot data, opening a cost\u2011effective path for many labs.\n\n### One action\nTry reproducing ZAP\u2019s simulation\u2011only fine\u2011tuning pipeline with a publicly available vision\u2011language model on your own manipulation tasks.\n\n### What to watch\nThe legged papers offer complementary advances: the quadruped work focuses on safety\u2011guaranteed, real\u2011time planning with continuous\u2011time collision checks, while the differentiable contact paper provides a rapid\u2011training gradient that improves policy learning and trajectory optimization. Future research may combine these safety guarantees with differentiable contact to achieve both provable safety and fast, adaptable learning across legged platforms.",
+  "report": "## Visuomotor Quadrotor Through Dynamic Gaps\n\n### The Breakthrough\nThe authors train an end\u2011to\u2011end visual\u2011inertial policy using a novel differentiable moving\u2011gap loss that provides dense gradients, allowing rapid learning on a single GPU. The resulting policy reaches 99.3% success in simulation and 80% success on a real drone across ten trials, showcasing agile aerial navigation with minimal supervision.\n\n### The Caveats\nOnly a score\u2011function gradient baseline is compared; performance against stronger quadrotor control methods remains unclear.\n\n## Zero\u2011Shot In\u2011Hand Object Pose Reaching with LEAP Hand\n\n### The Breakthrough\nA multi\u2011fingered LEAP hand is trained in simulation with diverse resets, synthetic grasp goals, and an adaptive friction curriculum, achieving 95.2% of 4,800 unseen pose goals within 2\u202fcm/0.4\u202frad. A residual safety filter reduces object drops by 75% while maintaining 91.5% overall success, and the policy transfers zero\u2011shot to a real robot using either motion\u2011capture or a wrist\u2011mounted depth camera.\n\n### The Caveats\nNo comparison to existing dexterous\u2011manipulation baselines is provided, leaving superiority unsubstantiated.\n\n## JR East Chainsaw\u2011Wielding Rail Robot\n\n### The Breakthrough\nJR East demonstrated a rail\u2011mounted humanoid robot equipped with a chainsaw and grabber, currently teleoperated but designed for future AI\u2011vision\u2011based autonomous branch detection and cutting, addressing rail\u2011maintenance labor and safety challenges.\n\n### The Caveats\nAutonomy and safety benefits are unproven; only a single demo video exists with no formal evaluation.\n\n## EgoThumb Supernumerary Robotic Thumb\n\n### The Breakthrough\nEgoThumb is a compact supernumerary thumb actuated from the forearm and driven by an egocentric palm\u2011facing camera; an imitation\u2011learning controller maps raw images directly to joint commands, enabling autonomous grasp and hold without explicit hand triggers.\n\n### The Caveats\nThe paper offers no quantitative comparison to prior supernumerary finger systems, so performance gains are unclear.\n\n## ThinkWorld World\u2011Imagination for Action Reasoning\n\n### The Breakthrough\nThinkWorld introduces a Vision\u2011Language\u2011Action framework that encodes actions as Chains\u2011of\u2011Dynamics tokens and refines them via reinforcement learning to align imagined future states with observed outcomes, allowing learning from unannotated human videos and successful transfer to real robots.\n\n### The Caveats\nNo quantitative comparison to existing VLA or world\u2011model baselines is provided.\n\n## Gemini Robotics Embodied Reasoning\u202f2 on Google Cloud\n\n### The Breakthrough\nGemini ER\u202f2 combines spatio\u2011temporal video understanding with long\u2011horizon planning, achieving 91.3% critical\u2011frame accuracy with 0.96\u202fs MAE and running 4\u00d7 faster than larger models; it can classify task progress, read values from 10+ instrument types, and orchestrate low\u2011level control APIs from natural\u2011language commands, integrating with MuJoCo\u2011Warp and NVIDIA Isaac Sim.\n\n### The Caveats\nThe announced capabilities lack real\u2011world robot tests or benchmark comparisons, leaving practical effectiveness uncertain.\n\n## Mesozoic Labs Dinosaur\u2011Inspired Locomotion Simulations\n\n### The Breakthrough\nThe mesozoic\u2011labs repository supplies over a dozen MuJoCo\u2011based Gymnasium environments modeling various dinosaur species and a theropod robot, with hierarchical curriculum learning and PPO/SAC scripts exposing up to 86 observation and 30 action dimensions for high\u2011fidelity locomotion research.\n\n### The Caveats\nNo baseline comparisons or real\u2011world validation are provided, so policy performance remains unverified.\n\n## NVIDIA Agent Skills Catalog\n\n### The Breakthrough\nNVIDIA/skills offers a catalog of portable Agent Skills\u2014instruction sets that let coding agents invoke Physical AI, robotics, simulation, and CUDA libraries via a simple CLI, automatically syncing from product repositories and supporting capability governance.\n\n### The Caveats\nThe repository provides no performance or real\u2011world testing of the advertised skills, so their practical effectiveness is unverified.\n\n### Priority\nThe quadrotor paper is the strongest starting point today because it delivers concrete, hardware\u2011validated results for agile aerial robotics using a novel differentiable simulation technique.\n\n### One action\nExplore the released differentiable moving\u2011gap loss implementation and try training a similar visuomotor policy on your own drone or mobile robot platform.",
   "themes": [
-    "manipulation",
-    "legged",
+    "aerial-robotics",
+    "dexterous-manipulation",
     "simulation",
-    "vision-language"
+    "embodied-ai",
+    "robotics-tools"
   ],
-  "source_count": 6,
+  "source_count": 8,
   "section_urls": [
-    "https://arxiv.org/abs/2610.35817",
-    "https://arxiv.org/abs/2610.35670",
-    "https://arxiv.org/abs/2610.35852",
-    "https://arxiv.org/abs/2610.35862",
-    "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/",
-    "https://github.com/jeremy341/MIRA-AI"
+    "https://arxiv.org/abs/2610.37557",
+    "https://arxiv.org/abs/2610.37652",
+    "https://www.tomshardware.com/tech-industry/robotics/japan-experiments-with-autonomous-ai-chainsaw-wielding-robots-video-shows-rail-truck-mounted-metal-humanoid-cutting-down-tree-branches",
+    "https://arxiv.org/abs/2610.37582",
+    "https://arxiv.org/abs/2610.37666",
+    "https://cloud.google.com/blog/products/ai-machine-learning/gemini-robotics-embodied-reasoning-2-is-now-available-on-google-cloud",
+    "https://github.com/kuds/mesozoic-labs",
+    "https://github.com/NVIDIA/skills"
   ],
   "section_titles": [
-    "Pretraining Knows What, Simulation Teaches How: Zero\u2011real Agent Policy (ZAP) for Compositional Generalization",
-    "Continuous-Time Safe Planning and Control for Agile Quadrupeds",
-    "Differentiable Contact Dynamics for Legged Locomotion: Policy Learning & Trajectory Optimization",
-    "FLORE: Learning Force-Reactive Humanoid Loco-Manipulation",
-    "Genie 4: Google\u2019s multimodal real\u2011time world simulation model",
-    "MIRA-AI: Waste\u2011detection pipeline with YOLO11n and ONNX/TFLite export"
+    "Learning Visuomotor Quadrotor Flight Through Dynamic Narrow Gaps via Differentiable Simulation",
+    "Pushing Dexterity and Safety for In-Hand Object Pose Reaching",
+    "JR East demo: rail\u2011truck\u2011mounted humanoid robot with chainsaw arm",
+    "EgoThumb: Vision-driven supernumerary thumb for autonomous grasp and hold assistance",
+    "ThinkWorld: world imagination reinforces chain-of-dynamics reasoning",
+    "Gemini Robotics Embodied Reasoning 2 now in public preview on Google Cloud",
+    "mesozoic-labs: dinosaur\u2011inspired locomotion research platform with MuJoCo Gymnasium environments",
+    "NVIDIA Agent Skills: portable instruction sets for AI agents in robotics, simulation, CUDA"
   ],
-  "generated_at": "2026-10-27T18:40:05.457631+00:00",
+  "generated_at": "2026-10-28T18:48:25.911743+00:00",
   "run_times": {
-    "orchestrator": "2026-10-27T18:40:05.457631+00:00",
-    "hn": "2026-10-27T18:35:28.643500+00:00",
-    "arxiv": "2026-10-27T18:36:08.590957+00:00",
-    "github": "2026-10-27T18:37:08.194527+00:00",
-    "research_desk": "2026-10-27T18:39:34.752631+00:00"
+    "orchestrator": "2026-10-28T18:48:25.911743+00:00",
+    "hn": "2026-10-28T18:41:13.940181+00:00",
+    "arxiv": "2026-10-28T18:41:54.049764+00:00",
+    "github": "2026-10-28T18:42:55.532794+00:00",
+    "research_desk": "2026-10-28T18:46:38.000449+00:00"
   }
 }
