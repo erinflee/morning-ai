@@ -2,8 +2,8 @@ name: Daily research update
 
 on:
   schedule:
-    # 13:00 UTC = 6 AM Pacific Daylight Time (UTC-7)
-    - cron: "0 13 * * *"
+    # 13:20 UTC = 5:20 AM Pacific Standard Time (UTC-8) / 6:20 AM during daylight time (UTC-7)
+    - cron: "20 13 * * *"
   workflow_dispatch:
 
 permissions:
