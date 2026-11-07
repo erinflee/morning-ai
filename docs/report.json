@@ -1,38 +1,42 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## Agility Robotics SPAC debut\n\n### The Breakthrough\nAgility Robotics went public via a SPAC, raising $465\u202fmillion to mass\u2011produce its next\u2011gen Digit\u202f5 bipedal robot. Digit\u202f5 can lift 50\u2011lb loads repeatedly and place items with 98\u202f% accuracy, backed by 65,000\u202fhours of real\u2011world data, and the company aims to scale production to 10,000 units per year.\n\n### The Caveats\nPerformance and cost\u2011saving claims rely only on company anecdotes with no independent hardware trials or benchmark comparisons.\n\n## Shanghai L4 robotaxi regulation\n\n### The Breakthrough\nShanghai issued its first comprehensive L4 robotaxi rules, mandating factory\u2011built models, police registration, and a remote safety officer covering up to three cars per operator, with a strict 15\u2011minute on\u2011site assistance window for breakdowns.\n\n### The Caveats\nThe regulation provides no empirical evidence that the 15\u2011minute response is achievable or improves traffic safety.\n\n## Social Humanoid interaction system\n\n### The Breakthrough\nThe Social Humanoid system equips a 29\u2011DoF Unitree G1 robot with a two\u2011level architecture that predicts whole\u2011body, socially responsive motion from a tokenized human\u2011robot trajectory model and executes it via a low\u2011level whole\u2011body controller, evaluated on a new 260\u2011hour human\u2011humanoid interaction benchmark.\n\n### The Caveats\nNo baseline methods are reported, making it impossible to assess whether the system truly outperforms existing approaches.\n\n## VisionSIM multi-modal sensor simulator\n\n### The Breakthrough\nVisionSIM introduces a physically grounded sensor stack that simulates modality\u2011specific phenomena\u2014such as LiDAR pile\u2011up, iToF phase wrapping, and event\u2011camera refractory drops\u2014and releases a large indoor dataset with synchronized raw streams and rich annotations for side\u2011by\u2011side cross\u2011modality experiments.\n\n### The Caveats\nThe claimed realism is unverified, as the paper offers no quantitative comparison to real\u2011world sensor data.\n\n## VFlash visual planning breakthrough\n\n### The Breakthrough\nVFlash predicts entire visual primitives (points, boxes, trajectories) in a single forward pass, cutting generation time by ~25\u00d7 on 3D motion forecasting and raising success on four MolmoSpaces tasks from 62.6\u202f% to 70.2\u202f% when used to condition a world\u2011action model.\n\n### The Caveats\nSpeed and success gains are demonstrated only in simulation, with no real\u2011world robot experiments.\n\n## Latent RL Priors for dexterous manipulation\n\n### The Breakthrough\nLatent RL Prior trains a flow\u2011matching action decoder on large\u2011scale privileged RL rollouts, then freezes it while a visual encoder learns to map raw images to the latent task context using only action supervision, dramatically reducing visual demonstration data needed for dexterous manipulation.\n\n### The Caveats\nResults are limited to simulation, with no real\u2011world robot experiments to confirm transferability.\n\n## SoftBank\u2011ABB China acquisition block\n\n### The Breakthrough\nChina\u2019s national\u2011security review halted SoftBank\u2019s $5.4\u202fbillion purchase of ABB Robotics\u2019 Chinese unit, a deal that would have combined ABB\u2019s industrial robots with SoftBank\u2019s AI investments to form a \u201cPhysical AI\u201d platform accessing ~12,700 staff and local robot performance data.\n\n### The Caveats\nThe purported \u201cPhysical AI\u201d benefits are speculative, lacking hardware or performance testing evidence.\n\n### Priority\nAgility Robotics\u2019 public listing signals the first large\u2011scale commercial push for humanoid robots, making it the most consequential development for readers tracking real\u2011world robotics deployments.\n\n### One action\nTrack Agility\u2019s upcoming Digit\u202f5 deployment updates and compare independent benchmarks when they become available.",
+  "report": "## Retail Humanoids at Shanghai Store\n\n### The Breakthrough\nSix G2 AGIBOT humanoids completed 1,730 tasks over a 24\u2011hour shift, handling 683 greetings, 369 item deliveries and 147 coffees without human operators, showing autonomous multi\u2011modal service in a live retail environment.\n\n### The Caveats\nNo baseline or comparative metric is provided, so performance relative to existing solutions or humans is unclear.\n\n## Social Humanoid Interaction\n\n### The Breakthrough\nSocial Humanoid uses a hierarchical policy that tokenizes human and robot motion, enabling a 29\u2011DoF Unitree G1 to generate and execute coordinated whole\u2011body motions aligned with a partner\u2019s movements, demonstrated both in simulation and on the physical robot with a new 260\u2011hour benchmark.\n\n### The Caveats\nNo comparison to existing methods is provided, leaving improvement unverified.\n\n## Heavy\u2011Lift Fire\u2011Fighting Drones\n\n### The Breakthrough\nChinese fire services are deploying heavy\u2011lift cargo drones such as DJI FlyCart 200 retrofitted with water buckets, foam cannons and drone bays on fire trucks, allowing aerial delivery of suppression agents directly to fire scenes.\n\n### The Caveats\nNo field trials or performance data are provided, so effectiveness remains unproven.\n\n## VisionSIM Multi\u2011Modal Perception Simulator\n\n### The Breakthrough\nVisionSIM models raw physical measurements for cameras, event, SPAD, iToF/dToF and thermal sensors, exposing fine\u2011grained parameters that reproduce realistic artefacts like LiDAR pile\u2011up and phase wrapping, and releases a synchronized indoor dataset for side\u2011by\u2011side sensor comparison.\n\n### The Caveats\nThe paper provides no evaluation or comparison to existing simulators, leaving claimed physical accuracy unverified.\n\n## VFlash Visual Planning\n\n### The Breakthrough\nVFlash predicts entire visual primitives in a single forward pass using a lightweight drafter, achieving roughly 25\u00d7 faster generation and higher accuracy (70.2% success vs 62.6% baseline) on 2D/3D trajectory tasks, potentially accelerating perception\u2011to\u2011action pipelines.\n\n### The Caveats\nGains are demonstrated only against a single autoregressive baseline, with no broader comparisons.\n\n## Latent RL Priors for Dexterous Manipulation\n\n### The Breakthrough\nA two\u2011stage framework distills large\u2011scale RL rollouts into a flow\u2011matching decoder using privileged proprioception, then trains a visual encoder to map raw images to the decoder\u2019s latent task context, reducing required visual demos by up to 10\u00d7 on simulated door\u2011lifting and 5\u00d7 on bimanual assembly.\n\n### The Caveats\nResults are limited to simulation on three tasks, with no real\u2011world hardware validation.\n\n## SO101\u2011Nexus Learning Stack\n\n### The Breakthrough\nSO101\u2011Nexus unifies teleoperation recording, behavior cloning and PPO\u2011based RL for the SO\u2011101 arm in MuJoCo, leveraging LeRobot datasets and a GPU\u2011accelerated Warp backend to train end\u2011to\u2011end policies entirely in simulation before transfer to the physical robot.\n\n### The Caveats\nNo quantitative evaluation or comparison to existing frameworks is offered.\n\n## nano\u2011ros Embedded ROS2 Client\n\n### The Breakthrough\nnano\u2011ros provides a no\u2011std Rust ROS2 client for microcontrollers and RTOSes, featuring zero\u2011copy CDR serialization, multiple DDS back\u2011ends and formal verification pipelines, enabling ROS2 connectivity on bare\u2011metal devices.\n\n### The Caveats\nEvaluation is limited to QEMU simulation with no real\u2011hardware benchmarks.\n\n## China Robot Lifetime ID Draft\n\n### The Breakthrough\nThe draft rule mandates a tamper\u2011proof 29\u2011character ID embedded in every domestically manufactured robot, with mandatory registration of components and software within 20 days, extending a scheme already applied to over 28,000 humanoids to roughly 795\u202fk industrial robots produced Jan\u2011Sept\u202f2026.\n\n### The Caveats\nEnforcement details, testing and timeline are absent, so safety benefits are unproven.\n\n### Priority\nThe Shanghai retail demo is the most concrete evidence yet of service\u2011oriented humanoids operating autonomously in a public setting, making it the ideal entry point for today\u2019s scan.\n\n### One action\nWatch the live\u2011stream replay to see how task scheduling and navigation were integrated across the six robots.\n\n### What to watch\nVisionSIM, VFlash, and Latent RL Priors each aim to bridge the gap between simulated training and real\u2011world performance\u2014VisionSIM improves sensor realism, VFlash speeds up visual plan generation, and Latent RL Priors cut demonstration data needs. Together they signal a trend toward more data\u2011efficient and physically accurate pipelines.",
   "themes": [
-    "humanoid",
-    "robotics-business",
-    "autonomous-vehicles",
+    "humanoids",
     "simulation",
-    "manipulation"
+    "robotics-policy",
+    "manipulation",
+    "embedded"
   ],
-  "source_count": 7,
+  "source_count": 9,
   "section_urls": [
-    "https://techcrunch.com/2026/11/05/agility-is-the-first-pure-humanoid-robot-company-on-the-stock-market-are-you-buying/",
-    "https://asia-tech-news.ghost.io/shanghai-sets-rules-for-l4-robotaxis-including-quick-breakdown-response/",
+    "https://www.techspot.com/news/114445-six-humanoid-robots-worked-24-hour-shift-convenience.html",
     "https://arxiv.org/abs/2611.08407",
+    "https://asia-tech-news.ghost.io/chinese-fire-services-turn-to-specialized-drones/",
     "https://arxiv.org/abs/2611.08368",
     "https://arxiv.org/abs/2611.08449",
     "https://arxiv.org/abs/2611.08458",
-    "https://harava.news/en/articles/2026/11/06/china-blocks-abb-robotics-deal-focus"
+    "https://github.com/johnsutor/so101-nexus",
+    "https://github.com/NEWSLabNTU/nano-ros",
+    "https://asia-tech-news.ghost.io/china-drafts-lifetime-id-codes-for-every-robot-it-makes-not-just-humanoids/"
   ],
   "section_titles": [
-    "Agility Robotics lists on Nasdaq as first pure-play humanoid robot company",
-    "Shanghai issues L4 robotaxi rules with 15\u2011minute breakdown response requirement",
-    "Social Humanoid: Socially Responsive Human-Humanoid Interaction",
-    "VisionSIM: Beyond Idealized Sensors \u2013 A Multi-Modal Simulator for Robot Perception",
-    "VFlash: fast, accurate visual planning via flash primitive decoding",
+    "Six AGIBOT humanoid robots run a 24\u2011hour shift at a Shanghai convenience store",
+    "Social Humanoid: Hierarchical Whole\u2011Body Motion for Human\u2011Humanoid Interaction",
+    "Chinese fire services adopt heavy\u2011lift fire\u2011fighting drones",
+    "VisionSIM: Multi-Modal Robot Perception Simulator with Realistic Sensor Modeling",
+    "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
     "Latent RL Priors for Data-Efficient Dexterous Manipulation",
-    "China blocks SoftBank's $5.4B acquisition of ABB Robotics China unit"
+    "SO101\u2011Nexus: full\u2011stack learning library for the SO\u2011101 robot arm",
+    "nano-ros: no_std Rust ROS\u202f2 client for microcontrollers and RTOS",
+    "China drafts lifetime ID codes for all domestically-made robots"
   ],
-  "generated_at": "2026-11-06T20:04:18.832315+00:00",
+  "generated_at": "2026-11-07T18:13:26.921230+00:00",
   "run_times": {
-    "orchestrator": "2026-11-06T20:04:18.832315+00:00",
-    "hn": "2026-11-06T19:59:56.749456+00:00",
-    "arxiv": "2026-11-06T20:00:45.995647+00:00",
-    "github": "2026-11-06T20:04:18.832315+00:00",
-    "research_desk": "2026-11-06T20:03:48.991511+00:00"
+    "orchestrator": "2026-11-07T18:13:26.921230+00:00",
+    "hn": "2026-11-07T18:06:52.593491+00:00",
+    "arxiv": "2026-11-07T18:07:32.245321+00:00",
+    "github": "2026-11-07T18:08:33.569698+00:00",
+    "research_desk": "2026-11-07T18:12:09.041176+00:00"
   }
 }
