@@ -1,41 +1,44 @@
 {
   "title": "Morning Robotics Scan",
-  "report": "## ASTRA builds autonomous space structure\n\n### The Breakthrough\nASTRA robot assembled a 1.4\u202fm reflector segment on orbit using on\u2011board autonomy to pick, position, and lock each piece, proving a viable approach for in\u2011space manufacturing of larger structures.\n\n### The Caveats\nThe claim of scalable autonomous construction is unsubstantiated because only a single 1.4\u202fm segment was tested with no baseline or comparative assessment.\n\n## Skydio F10 Lightrunner asymmetric drone\n\n### The Breakthrough\nSkydio\u2019s F10 places a wing\u2011tip camera on an extended asymmetric wing and runs a single model\u2011predictive control policy that handles hover to 100\u202fmph cruise, while the MegaDock arm autonomously launches, captures, and recharges up to five drones for continuous operation.\n\n### The Caveats\nPerformance claims rely solely on Skydio\u2019s own figures, with no independent benchmarks or comparative data.\n\n## Excavator control via cloud\u2011based LLMs\n\n### The Breakthrough\nDreamscale fine\u2011tuned four frontier models on a Takeuchi TB20e excavator, running inference in the cloud at ~15\u202fHz over satellite links; the best model (\u03d50.5) achieved >50\u202f% success dumping cardboard, showing cloud\u2011only control of heavy machinery.\n\n### The Caveats\nThe demo is limited to a single pick\u2011and\u2011dump task on one excavator, with no testing of other tasks, robots, or conditions.\n\n## RL gives skid\u2011steer loader acrobatic control\n\n### The Breakthrough\nA high\u2011fidelity hydraulic simulator trained RL policies that lifted a 5\u2011tonne John\u202fDeere loader onto two wheels and performed spins, bucket swings, and terrain traversal, demonstrating model\u2011free RL handling extreme hydraulic dynamics.\n\n### The Caveats\nOnly video demonstrations are provided; there are no quantitative metrics or baseline comparisons.\n\n## Reasoning model controls real dual\u2011arm robot\n\n### The Breakthrough\nThe PEAR engine lets a 27B reasoning model learn robot\u2011use reinforcement learning in simulation, raising LIBERO success to 74\u202f% and achieving 60\u202f% real\u2011world task success on a dual\u2011arm robot without demonstrations, while preserving its general reasoning abilities.\n\n### The Caveats\nEvaluation was performed on a single dual\u2011arm platform, leaving broader robot generalization unproven.\n\n## Axonnic EMG sleeve decodes finger motion\n\n### The Breakthrough\nA 64\u2011channel forearm EMG sleeve synchronized with hand\u2011tracking data trains a model that outputs 20 joint angles and force estimates, maintaining sub\u20111.7\u00b0 error after a single 215\u2011second session without recalibration.\n\n### The Caveats\nThe demo only shows one user in a brief test, with no real\u2011world manipulation or multi\u2011user evaluation.\n\n## CS\u2011MPC safety\u2011aware sampling controller\n\n### The Breakthrough\nCS\u2011MPC embeds contraction\u2011certified tracking feedback and a control\u2011barrier safety layer, cutting required rollouts by 7\u201120\u00d7 for a rover and reducing quadrotor tracking error 2\u20114\u00d7 versus MPPI, with zero safety violations in 200 simulated missions.\n\n### The Caveats\nResults are demonstrated only in simulation against a single MPPI baseline, with no hardware validation.\n\n## Hidden start\u2011delay improves hand\u2011over robustness\n\n### The Breakthrough\nInjecting a hidden start\u2011delay randomisation into the giver during self\u2011play training raises receiver success with unseen partners from ~31\u202f% to ~80\u202f% after 300 PPO updates, also reducing high\u2011force contacts 3\u20115\u00d7.\n\n### The Caveats\nFindings are confined to simulation with scripted partners; no real\u2011robot or human experiments were performed.\n\n## pySLAM flexible visual\u2011SLAM framework\n\n### The Breakthrough\npySLAM provides interchangeable Python/C++ modules, integrates state\u2011of\u2011the\u2011art depth predictors (DepthAnythingV3, RAFT\u2011Stereo) and segmentation networks (DeepLabv3, YOLO, CLIP), and supports TSDF voxel hashing and Gaussian splatting for volumetric mapping, enabling rapid SLAM component prototyping.\n\n### The Caveats\nThe framework lacks quantitative benchmark results or real\u2011world hardware validation.\n\n### Priority\nASTRA\u2019s on\u2011orbit autonomous assembly is the first of its kind, showcasing a new paradigm for space manufacturing that could reshape future habitats and infrastructure.\n\n### One action\nTrack follow\u2011up DARPA NOM4D releases and watch for any multi\u2011segment assembly demonstrations.\n\n### What to watch\nHeavy\u2011machinery control is advancing from cloud\u2011inferred LLMs on excavators to RL\u2011driven skid\u2011steer loaders, indicating a trend toward remote\u2011intelligent operation of large equipment without onboard compute.",
+  "report": "## Gemini 4 Hydrogen\n\n### The Breakthrough\nGoogle unveiled Gemini\u202f4\u202fHydrogen, a speed\u2011optimized LLM that plans and controls robot arms directly from camera images and language goals. The Antigravity Robotics plugin automates driver installation, camera\u2011arm calibration, MuJoCo simulation, and real\u2011time code generation, turning the model into an end\u2011to\u2011end workbench. Benchmark results on eight tabletop tasks show fast embodied reasoning in practice.\n\n### The Caveats\nThe evaluation is limited to an internal benchmark and Google baselines, with no third\u2011party or non\u2011Google comparisons.\n\n## TCP4D\n\n### The Breakthrough\nTCP4D introduces a unified 4\u2011D scene representation that simultaneously tracks tool\u2011center\u2011point poses and generates future trajectories from monocular video. The tracker reaches absolute trajectory errors of 7.60\u202fmm (DROID) and 16.07\u202fmm (RoboLab), while the generator attains 69.19\u202f% mean success on RoboTwin and outperforms existing policies on two real\u2011world tasks.\n\n### The Caveats\nPerformance gains are reported without named baseline comparisons, leaving the outperformance claim unsupported.\n\n## CADENCE\n\n### The Breakthrough\nCADENCE learns acyclic gaits for quadrupeds via a tiny discrete action space of up to 65 footstep options every 40\u202fms, trained with RL on top of a convex model\u2011predictive controller. An inverse footstep model built from fewer than 20\u202fk logged steps lets the frozen policy run inside OCS2\u2019s nonlinear MPC, achieving higher simulated success rates than cyclic gaits.\n\n### The Caveats\nSuccess improvements are demonstrated only in simulation, with no hardware validation.\n\n## PAIR\n\n### The Breakthrough\nPAIR integrates the Matter smart\u2011home protocol into a physics\u2011based simulator, modeling 84 devices and providing a 40\u2011task benchmark with 340 human demos. The platform lets agents manipulate objects and call device APIs, exposing both low\u2011level manipulation and high\u2011level planning challenges.\n\n### The Caveats\nFindings are limited to simulated rollouts; no real\u2011world robot experiments or API\u2011latency studies are provided.\n\n## RWM Audit\n\n### The Breakthrough\nThe authors reproduced the Robotic World Model and its uncertainty variant, evaluating 101 trained simulators, 200 compressed copies, and 38 architectures. Training on model\u2011generated rollouts outperformed one\u2011step training after 368 steps, and ensemble disagreement correlated strongly (Spearman\u202f+0.90) with rollout error.\n\n### The Caveats\nAll experiments run on a hand\u2011built MuJoCo model with no real\u2011world ANYmal D validation.\n\n## springrep\n\n### The Breakthrough\nspringrep delivers a dependency\u2011free Rust B\u2011rep kernel covering fillets, sweeps, lofts, shells, offsets, STEP I/O, and exact geometry queries, accompanied by a 3,487\u2011case conformance suite that automatically catches bugs and enables cross\u2011kernel validation.\n\n### The Caveats\nFull conformance is supported only by the proprietary test suite, without comparison to commercial CAD kernels or real\u2011robot tasks.\n\n## RoboFYI\n\n### The Breakthrough\nRoboFYI aggregates robot foundation model benchmark scores, dataset listings, and hardware specs into a searchable portal with comparative charts that track performance over time, continuously updating to reduce manual metric gathering.\n\n### The Caveats\nThe platform\u2019s comprehensiveness is unverified; aggregated entries have not been empirically validated for completeness or accuracy.\n\n## NVIDIA Agent Skills\n\n### The Breakthrough\nNVIDIA\u2019s Agent Skills define a portable instruction\u2011set specification and bundle CLI\u2011installable modules (e.g., cuOpt, Alchemy Toolkit) that let coding agents invoke robotics, simulation, and CUDA workflows end\u2011to\u2011end.\n\n### The Caveats\nThe repository provides no empirical evaluation of agents using the skills, leaving practical effectiveness unproven.\n\n## MimicKit\n\n### The Breakthrough\nMimicKit offers a unified Python framework for multiple motion\u2011imitation algorithms (DeepMimic, AMP, AWR, etc.) across Isaac\u202fGym, Isaac\u202fLab, and Newton, supporting up to 4,096 parallel environments and multi\u2011GPU distributed training.\n\n### The Caveats\nThe library lacks benchmark results or baseline comparisons, so its claimed versatility is unvalidated.\n\n## LichtFeld Studio\n\n### The Breakthrough\nLichtFeld Studio is a native C++ app that trains, edits, and exports 3D Gaussian Splatting scenes, integrating COLMAP\u2011based training, real\u2011time GPU rendering, and a Python plugin system for custom processing and batch automation.\n\n### The Caveats\nOnly a demo video and documentation are provided; no formal evaluation shows whether it speeds up robotics or embodied\u2011AI pipelines.\n\n### Priority\nGemini\u202f4\u202fHydrogen is the strongest starting point because it couples a fast LLM with an end\u2011to\u2011end robotics plugin that already demonstrates real\u2011arm control on multiple tabletop tasks.\n\n### One action\nInstall the Antigravity Robotics plugin and run the provided 8\u2011task benchmark on a supported robot arm to experience rapid LLM\u2011driven control.\n\n### What to watch\nSeveral simulation\u2011centric contributions (PAIR, CADENCE, RWM Audit, TCP4D) are pushing the envelope on benchmark design, gait learning, and learned simulators, while tooling releases (springrep, RoboFYI, NVIDIA Agent Skills) aim to streamline development pipelines. Watch for cross\u2011validation studies that connect these simulated advances to real\u2011world hardware results.",
   "themes": [
-    "space-robotics",
-    "autonomous-drones",
-    "heavy-machinery",
-    "foundational-models"
+    "robotics",
+    "large-language-models",
+    "manipulation",
+    "simulation",
+    "tooling"
   ],
-  "source_count": 9,
+  "source_count": 10,
   "section_urls": [
-    "https://www.sciencealert.com/a-robot-just-built-a-structure-in-space-all-on-its-own-for-the-first-time-ever",
-    "https://spectrum.ieee.org/skydio-f10-lightrunner-asymmetrical-drone",
-    "https://www.dreamscalelabs.com/blog/excavate/",
-    "https://arxiv.org/abs/2611.18365",
-    "https://arxiv.org/abs/2611.18562",
-    "https://news.ycombinator.com/item?id=50522776",
-    "https://arxiv.org/abs/2611.18390",
-    "https://arxiv.org/abs/2611.18491",
-    "https://github.com/luigifreda/pyslam"
+    "https://developers.googleblog.com/gemini-hydrogen-for-robotics/",
+    "https://arxiv.org/abs/2611.23143",
+    "https://arxiv.org/abs/2611.23102",
+    "https://arxiv.org/abs/2611.23070",
+    "https://arxiv.org/abs/2611.23118",
+    "https://springcraft-ai.github.io/springrep/",
+    "https://robofyi.com",
+    "https://github.com/NVIDIA/skills",
+    "https://github.com/xbpeng/MimicKit",
+    "https://github.com/MrNeRF/LichtFeld-Studio"
   ],
   "section_titles": [
-    "ASTRA robot builds first autonomous structure in space",
-    "Skydio F10 Lightrunner: asymmetric fixed\u2011wing drone with wingtip camera and autonomous launch",
-    "Can robotics models control a 4200\u202flb excavator? Cloud fine\u2011tuning experiment",
-    "Heavy Metal Acrobatics: RL Enables Dynamic Control of a 5\u2011tonne Skid\u2011Steer Loader",
-    "Training Reasoning Models in Simulation to Natively Use Real Robots",
-    "Axonnic forearm EMG sleeve decodes finger movements and estimates force",
-    "CS-MPC: Contraction-Certified Sampling-Based MPC for Nonlinear Systems Under Uncertainty",
-    "Hidden start-delay randomisation improves self\u2011play handover robustness to unseen partners",
-    "pySLAM: hybrid Python/C++ visual SLAM pipeline with depth prediction and semantic mapping"
+    "Gemini 4 Hydrogen brings fast embodied reasoning to robotics via Google Antigravity plugin",
+    "TCP4D: A Unified Tool-Center-Point Tracking and Generation Model for Robot Manipulation",
+    "CADENCE: Learning Acyclic Gaits for Model-Based Quadruped Locomotion",
+    "PAIR: Smart\u2011home simulation environment with Matter\u2011protocol appliances",
+    "Auditing a Learned Simulator for Legged Robots: The Robotic World Model on ANYmal D",
+    "springrep: Rust B-rep kernel for robotics CAD with 3,487\u2011case conformance suite",
+    "Show HN: RoboFYI \u2013 unified leaderboard, dataset and hardware catalog for robot foundation models",
+    "NVIDIA Agent Skills: portable instruction sets for AI coding agents to run robotics, simulation, and CUDA workflows",
+    "MimicKit: lightweight suite for motion imitation training",
+    "LichtFeld Studio: native app for training, editing, and exporting 3D Gaussian Splatting scenes"
   ],
-  "generated_at": "2026-11-16T23:12:16.723444+00:00",
+  "generated_at": "2026-11-18T21:42:52.093357+00:00",
   "run_times": {
-    "orchestrator": "2026-11-16T23:12:16.723444+00:00",
-    "hn": "2026-11-16T22:56:58.561126+00:00",
-    "arxiv": "2026-11-16T22:57:41.289827+00:00",
-    "github": "2026-11-16T22:58:43.164806+00:00",
-    "research_desk": "2026-11-16T23:02:35.553297+00:00"
+    "orchestrator": "2026-11-18T21:42:52.093357+00:00",
+    "hn": "2026-11-18T21:29:03.789963+00:00",
+    "arxiv": "2026-11-18T21:29:48.818993+00:00",
+    "github": "2026-11-18T21:30:45.529911+00:00",
+    "research_desk": "2026-11-18T21:35:07.286905+00:00"
   }
 }
